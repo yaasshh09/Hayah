@@ -1586,11 +1586,16 @@ Ask me about any of these and I will make a plan.`;
           if (speakOn) speak(r);
         } catch (e) {
           if (my !== sess) return;
+          // No Gemini key or no internet: answer from the family's own data instead of failing.
+          console.warn("Hayati AI unavailable, using built-in answer:", e.message);
+          const r =
+            demo(text) +
+            "\n\n(Built-in answer from your family data. Connect Gemini for full answers.)";
           bub.classList.remove("sk");
-          bub.classList.add("err");
-          bub.textContent =
-            e.message || "Hayati AI could not be reached. Please try again.";
-          convo.pop();
+          bub.innerHTML = "";
+          await typeOut(bub, r);
+          convo.push({ r: "model", t: r });
+          persist();
         }
         busy = false;
         glow(false);

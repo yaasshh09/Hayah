@@ -10,3 +10,8 @@ fs.mkdirSync(publicAssetsDirectory, { recursive: true });
 fs.cpSync(path.join(projectRoot, "assets"), publicAssetsDirectory, {
   recursive: true,
 });
+// Service worker is served from the site root so it controls every page.
+fs.copyFileSync(
+  path.join(projectRoot, "assets", "sw.js"),
+  path.join(publicDirectory, "sw.js"),
+);

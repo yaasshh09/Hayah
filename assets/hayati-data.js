@@ -341,6 +341,182 @@
     return save(st);
   }
 
+  // How much to put aside each month so an occasion is fully funded on the day.
+  function monthlyNeed(e, t = today()) {
+    const left = Math.max(0, e.b - e.s);
+    if (!left || e.d < t) return 0;
+    const days = (new Date(e.d + "T00:00") - new Date(t + "T00:00")) / 864e5;
+    return Math.ceil(left / Math.max(1, Math.floor(days / 30.44)));
+  }
+
+  // Zakat estimate: 2.5% of zakatable wealth once it reaches the nisab (85 g of gold).
+  const NISAB_GRAMS = 85;
+  function zakat({ cash = 0, gold = 0, debts = 0, goldPrice = 400 }) {
+    const wealth = money(Math.max(0, Number(cash) + Number(gold) - Number(debts))),
+      nisab = money(NISAB_GRAMS * Number(goldPrice));
+    return { wealth, nisab, due: nisab > 0 && wealth >= nisab ? money(wealth * 0.025) : 0 };
+  }
+
+  // Up to three plain-language tips from this month's numbers. Works offline.
+  function insights(st, t = today()) {
+    const sum = monthSummary(st, ym(t)),
+      day = +t.slice(8),
+      dim = new Date(+t.slice(0, 4), +t.slice(5, 7), 0).getDate(),
+      out = [];
+    if (sum.over.length) {
+      const by = sum.over.reduce((n, c) => n + c.spent - c.limit, 0);
+      out.push({
+        tone: "warn",
+        text: `${sum.over.map((c) => c.label).join(" and ")} ${sum.over.length === 1 ? "is" : "are"} ${aed(by)} over the monthly limit.`,
+      });
+    }
+    if (day >= 5) {
+      const pace = sum.cats
+        // Bills and school fees land once a month, so projecting their pace is misleading.
+        .filter((c) => !c.over && c.limit > 0 && c.spent > 0 && !["bills", "school"].includes(c.k))
+        .map((c) => ({ c, projected: Math.round((c.spent / day) * dim) }))
+        .filter((x) => x.projected > x.c.limit * 1.05)
+        .sort((a, b) => b.projected - b.c.limit - (a.projected - a.c.limit))[0];
+      if (pace)
+        out.push({
+          tone: "warn",
+          text: `${pace.c.label} is on pace for ${aed(pace.projected)} this month, ${aed(pace.projected - pace.c.limit)} over its limit.`,
+        });
+    }
+    const occ = events(st)
+      .filter((e) => e.d >= t && e.b > e.s)
+      .map((e) => ({ e, need: monthlyNeed(e, t) }))
+      .sort((a, b) => b.need - a.need)[0];
+    if (occ)
+      out.push({
+        tone: "tip",
+        text: `Put aside ${aed(occ.need)} a month for ${occ.e.t} to be fully ready by ${new Date(occ.e.d + "T00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long" })}.`,
+      });
+    const goal = st.goals
+      .filter((g) => g.saved < g.target)
+      .sort((a, b) => b.saved / b.target - a.saved / a.target)[0];
+    if (goal)
+      out.push({
+        tone: "ok",
+        text: `${goal.t} is ${Math.round((goal.saved / goal.target) * 100)}% funded, only ${aed(goal.target - goal.saved)} to go.`,
+      });
+    if (!sum.over.length && out.every((x) => x.tone !== "warn"))
+      out.unshift({ tone: "ok", text: "Every category is within its limit so far this month." });
+    return out.slice(0, 3);
+  }
+
+  /* ---------- Backup: export / validated import ---------- */
+  const PREF_KEY = "hayati.preferences";
+  function exportAll() {
+    let preferences = {};
+    try {
+      preferences = JSON.parse(store.get(PREF_KEY) || "{}");
+    } catch {}
+    return { app: "hayati", version: VERSION, exported: new Date().toISOString(), finance: load(), events: customEvents(), preferences };
+  }
+
+  // Backup files come from outside the app, so every field is checked and rebuilt.
+  function importAll(data) {
+    const fail = (what) => {
+        throw new Error(`This backup file is not valid (${what}).`);
+      },
+      isObj = (x) => x && typeof x === "object" && !Array.isArray(x),
+      isDate = (x) => typeof x === "string" && /^\d{4}-\d{2}-\d{2}$/.test(x),
+      str = (x, max, what, min = 0) => {
+        if (x === undefined && min === 0) return "";
+        if (typeof x !== "string" || x.length > max || x.trim().length < min) fail(what);
+        return x;
+      },
+      num = (x, what, positive) => {
+        if (!Number.isFinite(x) || x < 0 || x >= 1e7 || (positive && x === 0)) fail(what);
+        return money(x);
+      },
+      list = (x, max, what) => {
+        if (!Array.isArray(x) || x.length > max) fail(what);
+        return x;
+      };
+    if (!isObj(data) || data.app !== "hayati" || data.version !== VERSION) fail("not a Hayati backup");
+    const f = data.finance;
+    if (!isObj(f) || f.v !== VERSION || !isObj(f.limits) || !isObj(f.occ) || !isObj(f.kid)) fail("finance");
+    const limits = {};
+    Object.keys(SPEND).forEach((k) => (limits[k] = f.limits[k] === undefined ? SPEND[k][2] : num(f.limits[k], "limits")));
+    const occ = {};
+    Object.entries(f.occ).forEach(([k, o]) => {
+      str(k, 120, "occasion budgets");
+      if (!isObj(o)) fail("occasion budgets");
+      occ[k] = { b: num(o.b, "occasion budgets"), s: num(o.s, "occasion budgets") };
+    });
+    const k = f.kid;
+    if (!isObj(k.split) || !isObj(k.goal)) fail("kid jars");
+    const split = { save: num(k.split.save, "jar split"), spend: num(k.split.spend, "jar split"), give: num(k.split.give, "jar split") };
+    if (split.save + split.spend + split.give !== 100) fail("jar split");
+    const finance = {
+      v: VERSION,
+      limits,
+      occ,
+      expenses: list(f.expenses, 5000, "expenses").map((x) => {
+        if (!isObj(x) || !isDate(x.d) || !SPEND[x.cat]) fail("expenses");
+        return {
+          id: str(x.id, 40, "expenses", 1),
+          d: x.d,
+          cat: x.cat,
+          amt: num(x.amt, "expenses", true),
+          who: str(x.who, 40, "expenses"),
+          note: str(x.note, 80, "expenses"),
+          ...(x.occ ? { occ: str(x.occ, 120, "expenses") } : {}),
+        };
+      }),
+      goals: list(f.goals, 50, "goals").map((g) => {
+        if (!isObj(g)) fail("goals");
+        return { id: str(g.id, 40, "goals", 1), t: str(g.t, 60, "goals", 1), target: num(g.target, "goals", true), saved: num(g.saved, "goals") };
+      }),
+      contribs: list(f.contribs, 5000, "savings history").map((c) => {
+        if (!isObj(c) || !isDate(c.d) || !["goal", "occ"].includes(c.kind)) fail("savings history");
+        return { id: str(c.id, 40, "savings history", 1), d: c.d, amt: num(c.amt, "savings history", true), kind: c.kind, ref: str(c.ref, 120, "savings history", 1) };
+      }),
+      kid: {
+        name: str(k.name, 40, "kid jars", 1),
+        split,
+        goal: { t: str(k.goal.t, 60, "kid goal", 1), target: num(k.goal.target, "kid goal", true) },
+        log: list(k.log, 2000, "kid history").map((x) => {
+          if (!isObj(x) || !isDate(x.d) || !["in", "spend", "give"].includes(x.type)) fail("kid history");
+          const e = { id: str(x.id, 40, "kid history", 1), d: x.d, type: x.type, amt: num(x.amt, "kid history", true), note: str(x.note, 60, "kid history") };
+          if (x.type === "in") {
+            if (!isObj(x.parts)) fail("kid history");
+            e.parts = { save: num(x.parts.save, "kid history"), spend: num(x.parts.spend, "kid history"), give: num(x.parts.give, "kid history") };
+          }
+          return e;
+        }),
+      },
+      ...(isObj(f.zakat)
+        ? { zakat: Object.fromEntries(["cash", "gold", "debts", "goldPrice"].filter((z) => f.zakat[z] !== undefined).map((z) => [z, num(f.zakat[z], "zakat")])) }
+        : {}),
+    };
+    const evs = list(data.events, 500, "calendar events").map((e) => {
+      if (!isObj(e) || !isDate(e.d) || !CAT[e.c] || ![0, 1].includes(e.tent ?? 0)) fail("calendar events");
+      const time = e.time ?? "";
+      if (time && !/^\d{2}:\d{2}$/.test(time)) fail("calendar events");
+      return { d: e.d, t: str(e.t, 80, "calendar events", 1), c: e.c, tent: e.tent ?? 0, b: num(e.b ?? 0, "calendar events"), s: num(e.s ?? 0, "calendar events"), time };
+    });
+    const p = isObj(data.preferences) ? data.preferences : {},
+      prefs = {},
+      pick = (key, ok) => {
+        if (p[key] !== undefined && ok(p[key])) prefs[key] = p[key];
+      };
+    pick("theme", (x) => ["light", "dark"].includes(x));
+    pick("textSize", (x) => ["small", "medium", "large"].includes(x));
+    pick("highContrast", (x) => typeof x === "boolean");
+    pick("adhdFriendly", (x) => typeof x === "boolean");
+    pick("effects", (x) => ["auto", "full", "reduced"].includes(x));
+    pick("name", (x) => typeof x === "string" && x.length <= 80);
+    pick("email", (x) => typeof x === "string" && x.length <= 120);
+    // Everything checked: now write.
+    save(finance);
+    store.set(EVENTS_KEY, JSON.stringify(evs));
+    store.set(PREF_KEY, JSON.stringify(prefs));
+    return finance;
+  }
+
   // Compact family data for Hayati AI. Children never receive the parents' budgets.
   function aiContext(role, st = load()) {
     const t = today(),
@@ -388,6 +564,7 @@
           budget: e.b,
           saved: e.s,
           alreadySpent: e.spent,
+          monthlyToSave: monthlyNeed(e, t),
         })),
       pocketMoney,
     };
@@ -398,6 +575,7 @@
     seed, load, save, reset, events, addEvent, customEvents,
     monthSummary, addExpense, removeExpense, setLimit, setOccBudget,
     contribute, addGoal, removeGoal, kidJars, kidAdd, aiContext,
+    monthlyNeed, zakat, insights, exportAll, importAll,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.HayatiData = api;

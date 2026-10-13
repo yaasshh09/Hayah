@@ -48,4 +48,40 @@ const kidCtx = H.aiContext("child", st);
 assert.ok(!("thisMonth" in kidCtx) && !("savingsGoals" in kidCtx));
 assert.ok(JSON.stringify(H.aiContext("adult", st)).length < 5000);
 
+// Monthly saving: AED 900 still missing, ~4 months away -> 225/month; past or funded -> 0.
+const occ = { d: "2027-02-14", b: 1800, s: 900 };
+assert.equal(H.monthlyNeed(occ, "2026-10-14"), 225);
+assert.equal(H.monthlyNeed({ ...occ, s: 1800 }, "2026-10-14"), 0);
+assert.equal(H.monthlyNeed(occ, "2027-03-01"), 0);
+assert.equal(H.monthlyNeed({ d: "2026-10-20", b: 500, s: 0 }, "2026-10-14"), 500);
+
+// Zakat: nisab = 85 g x price; 2.5% only at or above it.
+assert.deepEqual(H.zakat({ cash: 40000, gold: 0, debts: 6000, goldPrice: 400 }), { wealth: 34000, nisab: 34000, due: 850 });
+assert.equal(H.zakat({ cash: 30000, goldPrice: 400 }).due, 0);
+assert.equal(H.zakat({ cash: 100, debts: 500 }).wealth, 0);
+
+// Insights flag the over-limit category and never return more than three tips.
+const fresh = H.seed(new Date(2026, 9, 14));
+const tips = H.insights(fresh, "2026-10-14");
+assert.ok(tips.length >= 1 && tips.length <= 3);
+assert.equal(tips[0].tone, "warn");
+assert.match(tips[0].text, /School/);
+
+// Backup round-trip works; tampered files are rejected before anything is written.
+const backup = JSON.parse(JSON.stringify({ app: "hayati", version: 1, finance: fresh, events: [{ d: "2026-11-20", t: "Visit", c: "family", tent: 0, b: 750, s: 0, time: "" }], preferences: { theme: "dark", evil: "<x>" } }));
+assert.equal(H.importAll(backup).expenses.length, fresh.expenses.length);
+assert.equal(H.customEvents()[0].t, "Visit");
+const bad = (mut) => {
+  const b = JSON.parse(JSON.stringify(backup));
+  mut(b);
+  assert.throws(() => H.importAll(b), /not valid/);
+};
+bad((b) => (b.app = "other"));
+bad((b) => (b.events[0].c = "unknown"));
+bad((b) => (b.finance.expenses[0].amt = -5));
+bad((b) => (b.finance.expenses[0].d = "yesterday"));
+bad((b) => (b.finance.kid.split.save = 90));
+bad((b) => (b.finance.goals = "lots"));
+assert.equal(H.load().expenses.length, fresh.expenses.length);
+
 console.log("finance checks passed");

@@ -74,6 +74,13 @@
   let preferences = readPreferences();
   applyPreferences(preferences);
 
+  // Offline support (see assets/sw.js).
+  if ("serviceWorker" in navigator && window.isSecureContext) {
+    window.addEventListener("load", () =>
+      navigator.serviceWorker.register("/sw.js").catch(() => {}),
+    );
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const root = document.documentElement;
     applyPreferences(preferences);
@@ -212,6 +219,47 @@
         } catch {}
         event.currentTarget.textContent = "Demo data restored";
       });
+
+    // Settings › Session: backup to / restore from a JSON file.
+    const backupStatus = (text) => {
+      const el = document.querySelector("[data-backup-status]");
+      if (el) el.textContent = text;
+    };
+    document
+      .querySelector("[data-export-data]")
+      ?.addEventListener("click", () => {
+        const blob = new Blob(
+            [JSON.stringify(window.HayatiData.exportAll(), null, 2)],
+            { type: "application/json" },
+          ),
+          link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `hayati-backup-${window.HayatiData.today()}.json`;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        backupStatus("Backup downloaded.");
+      });
+    const importFile = document.querySelector("[data-import-file]");
+    document
+      .querySelector("[data-import-data]")
+      ?.addEventListener("click", () => importFile.click());
+    importFile?.addEventListener("change", async () => {
+      const file = importFile.files[0];
+      importFile.value = "";
+      if (!file) return;
+      try {
+        if (file.size > 5e6) throw new Error("This file is too large.");
+        window.HayatiData.importAll(JSON.parse(await file.text()));
+        backupStatus("Restored. Reloading…");
+        setTimeout(() => location.reload(), 600);
+      } catch (error) {
+        backupStatus(
+          error instanceof SyntaxError
+            ? "That file is not a Hayati backup."
+            : error.message,
+        );
+      }
+    });
 
     function showEffects() {
       const status = document.querySelector("[data-effects-status]");

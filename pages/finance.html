@@ -782,6 +782,73 @@
         align-items: stretch;
       }
 
+      .need {
+        margin-top: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #4b3fa0;
+      }
+      .zk {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 24px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .zf {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 12px;
+      }
+      @media (max-width: 760px) {
+        .zk,
+        .zf {
+          grid-template-columns: 1fr;
+        }
+      }
+      .insight {
+        margin-top: clamp(20px, 2.4vw, 32px);
+      }
+      .insight ul,
+      .ai-reply {
+        display: grid;
+        gap: 10px;
+        list-style: none;
+        padding: 0;
+      }
+      .insight li {
+        position: relative;
+        padding-left: 22px;
+        font-size: 14px;
+      }
+      .insight li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--mint);
+      }
+      .insight li.warn::before {
+        background: var(--red);
+      }
+      .insight li.tip::before {
+        background: var(--lav);
+      }
+      #aiOut:not(:empty) {
+        margin-top: 16px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(159, 143, 224, 0.1);
+        font-size: 14px;
+      }
+      .ai-reply li {
+        list-style: disc;
+        margin-left: 18px;
+      }
+
       /* Child: jars */
       .jars {
         display: grid;
@@ -1117,6 +1184,9 @@
         background: rgba(63, 191, 156, 0.14);
         color: #8fe0c8;
       }
+      html[data-theme="dark"] .finance-page .need {
+        color: #c4b8f5;
+      }
       html[data-theme="dark"] .finance-page .new {
         border-color: rgba(255, 255, 255, 0.16);
       }
@@ -1164,6 +1234,7 @@
       </div>
       <div class="rule"></div>
       <div id="stats"></div>
+      <div id="insight"></div>
       <div id="tabbar"></div>
       <div id="app" role="tabpanel" tabindex="-1"></div>
     </main>
@@ -1294,6 +1365,14 @@
           `<div class="stats">${s.map((x) => `<div class="sx"><div class="sl">${x[0]}</div><div class="sn${x[3] ? " bad" : ""}">${x[1]}</div><div class="ss">${x[2]}</div></div>`).join("")}</div>`;
       }
 
+      function insightCard() {
+        const tips = H.insights(st, TODAY);
+        $("#insight").innerHTML =
+          role === "child"
+            ? ""
+            : `<section class="card insight"><h3>Hayati insight <em>${fmt(TODAY, { day: "numeric", month: "long" })}</em></h3><ul>${tips.map((x) => `<li class="${x.tone}">${esc(x.text)}</li>`).join("")}</ul><div class="acts"><button class="btn sm" data-act="ai-advice">Get AI advice</button></div><div id="aiOut" aria-live="polite"></div></section>`;
+      }
+
       function tabbar() {
         $("#tabbar").innerHTML =
           role === "child"
@@ -1364,6 +1443,7 @@
             })
             .join("") +
           `<button class="c4 new" data-act="add-goal">+ New savings goal</button>` +
+          zakatCard() +
           askCard(
             "c12",
             [
@@ -1375,6 +1455,29 @@
         );
       }
 
+      // Zakat estimate. Inputs are remembered; cash defaults to what the goals hold.
+      function zakatValues() {
+        const z = st.zakat || {};
+        return {
+          cash: z.cash ?? st.goals.reduce((n, g) => n + g.saved, 0),
+          gold: z.gold ?? 0,
+          debts: z.debts ?? 0,
+          goldPrice: z.goldPrice ?? 400,
+        };
+      }
+      function zakatResult() {
+        const r = H.zakat(zakatValues());
+        return r.due
+          ? `<div class="big">${aed(r.due)}<small>Zakat due (2.5%)</small></div><p class="ss">Zakatable wealth ${aed(r.wealth)} is above the nisab of ${aed(r.nisab)} (85 g of gold).</p>`
+          : `<div class="big">${aed(0)}<small>no Zakat due</small></div><p class="ss">Zakatable wealth ${aed(r.wealth)} is below the nisab of ${aed(r.nisab)} (85 g of gold).</p>`;
+      }
+      function zakatCard() {
+        const v = zakatValues(),
+          inp = (k, label) =>
+            `<label class="fld" for="z-${k}">${label}<input id="z-${k}" type="number" inputmode="decimal" min="0" step="0.01" data-z="${k}" value="${v[k]}"></label>`;
+        return `<section class="card c12"><h3>Zakat helper <em>2.5% above the nisab</em></h3><div class="zk"><div class="zf">${inp("cash", "Cash &amp; savings (AED)")}${inp("gold", "Gold &amp; other assets (AED)")}${inp("debts", "Debts due now (AED)")}${inp("goldPrice", "Gold price today, 24k per gram (AED)")}</div><div id="zr" aria-live="polite">${zakatResult()}</div></div><p class="ss">An estimate to help plan. Update the gold price to today's rate and confirm with a scholar for your situation.</p></section>`;
+      }
+
       function occasionsPanel() {
         const limit = new Date(TODAY + "T00:00");
         limit.setFullYear(limit.getFullYear() + 1);
@@ -1382,21 +1485,23 @@
           list = H.events(st).filter((e) => e.d >= TODAY && e.d <= end),
           budgeted = list.filter((e) => e.b > 0),
           planned = budgeted.reduce((n, e) => n + e.b, 0),
-          saved = budgeted.reduce((n, e) => n + Math.min(e.s, e.b), 0);
+          saved = budgeted.reduce((n, e) => n + Math.min(e.s, e.b), 0),
+          monthly = budgeted.reduce((n, e) => n + H.monthlyNeed(e, TODAY), 0);
         const rows = list
           .map((e) => {
             const c = H.CAT[e.c] || ["Family", "#EE7FAA"],
-              p = pct(e.s, e.b);
+              p = pct(e.s, e.b),
+              need = H.monthlyNeed(e, TODAY);
             return `<div class="oc">${tile(e.d, c[1])}<div><div class="rt"><span class="grow">${esc(e.t)}${e.tent ? '<span class="tent">Tentative</span>' : ""}</span></div><div class="bm" style="margin-top:2px"><span>${c[0]}</span></div>${
               e.b
-                ? `${bar(p)}<div class="bm"><span>${aed(e.s)} saved of ${aed(e.b)}${e.spent ? ` · ${aed(e.spent)} already spent` : ""}</span><span>${p >= 100 ? "Fully funded" : p + "%"}</span></div>`
+                ? `${bar(p)}<div class="bm"><span>${aed(e.s)} saved of ${aed(e.b)}${e.spent ? ` · ${aed(e.spent)} already spent` : ""}</span><span>${p >= 100 ? "Fully funded" : p + "%"}</span></div>${need ? `<p class="need">Save ${aed(need)} a month to be ready</p>` : ""}`
                 : `<div class="bm"><span>No budget yet</span></div>`
             }</div><div class="acts"><button class="ghost" data-act="occ-budget" data-k="${esc(e.k)}">${e.b ? "Edit budget" : "Set budget"}</button>${e.b ? `<button class="btn sm" data-act="occ-save" data-k="${esc(e.k)}">Add savings</button>` : ""}</div></div>`;
           })
           .join("");
         return (
           `<section class="card c7"><h3>Next 12 months <em>${list.length} occasions</em></h3>${rows || '<p class="empty">No upcoming occasions.</p>'}</section>` +
-          `<section class="card c5"><h3>Occasion funds</h3><div class="big">${aed(saved)}<small>saved of ${aed(planned)}</small></div>${bar(pct(saved, planned))}<div class="bm"><span>${budgeted.length} occasions with a budget</span><span>${aed(Math.max(0, planned - saved))} to go</span></div><p class="ss" style="margin-top:18px">Budgets here also appear on the Calendar and Dashboard. Add your own occasions from the <a href="/calendar" style="text-decoration:underline">Calendar</a>.</p></section>` +
+          `<section class="card c5"><h3>Occasion funds</h3><div class="big">${aed(saved)}<small>saved of ${aed(planned)}</small></div>${bar(pct(saved, planned))}<div class="bm"><span>${budgeted.length} occasions with a budget</span><span>${aed(Math.max(0, planned - saved))} to go</span></div>${monthly ? `<div class="alert ok">Saving <b>${aed(monthly)} a month</b> keeps every occasion on track.</div>` : ""}<p class="ss" style="margin-top:18px">Budgets here also appear on the Calendar and Dashboard. Add your own occasions from the <a href="/calendar" style="text-decoration:underline">Calendar</a>.</p></section>` +
           askCard(
             "c12",
             [
@@ -1447,6 +1552,7 @@
         document.body.classList.toggle("child", role === "child");
         header(sum);
         stats(sum);
+        insightCard();
         tabbar();
         const html =
           role === "child"
@@ -1510,7 +1616,38 @@
       });
       const findOcc = (k) => H.events(st).find((e) => e.k === k);
 
+      // Light markdown for AI replies: escape first, then bold and bullet lines.
+      const md = (t) =>
+        esc(t)
+          .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+          .split(/\n+/)
+          .map((l) => (/^\s*[-*] /.test(l) ? `<li>${l.replace(/^\s*[-*] /, "")}</li>` : `<p>${l}</p>`))
+          .join("");
       const ACTIONS = {
+        async "ai-advice"() {
+          const out = $("#aiOut"),
+            btn = document.querySelector('[data-act="ai-advice"]');
+          btn.disabled = true;
+          out.innerHTML = `<p class="ss">Hayati is reading this month's numbers…</p>`;
+          try {
+            const res = await fetch("/api/ai", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                prompt: "Look at our family finances this month. Give three short, specific tips with AED amounts to stay on budget and keep our goals and occasions on track.",
+                role: "adult",
+                system: "You are Hayati AI, a warm, practical money coach inside a UAE family planner. Use only the family data provided. Amounts are in AED. Reply with at most three short bullet points.",
+                context: H.aiContext("adult", st),
+              }),
+            });
+            const d = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(res.status === 503 ? "offline" : d.error || "HTTP " + res.status);
+            out.innerHTML = `<div class="ai-reply">${md(d.reply)}</div>`;
+          } catch (e) {
+            out.innerHTML = `<p class="ss">${e.message === "offline" || e instanceof TypeError ? "Hayati AI isn't connected right now. The tips above are built in and always available." : esc(e.message)}</p>`;
+          }
+          btn.disabled = false;
+        },
         tab(k) {
           tab = k;
           history.replaceState(null, "", `?role=${role}#${k}`);
@@ -1649,6 +1786,14 @@
       document.addEventListener("click", (e) => {
         const b = e.target.closest("[data-act]");
         if (b && ACTIONS[b.dataset.act]) ACTIONS[b.dataset.act](b.dataset.k);
+      });
+      document.addEventListener("input", (e) => {
+        const k = e.target.dataset && e.target.dataset.z;
+        if (!k) return;
+        const n = Number(e.target.value);
+        st.zakat = { ...zakatValues(), [k]: Number.isFinite(n) && n >= 0 ? n : 0 };
+        H.save(st);
+        $("#zr").innerHTML = zakatResult();
       });
       document.addEventListener("change", (e) => {
         const f = e.target.dataset && e.target.dataset.filter;

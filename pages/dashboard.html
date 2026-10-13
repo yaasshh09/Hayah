@@ -1564,7 +1564,7 @@
               .slice(0, 4)
               .map((e) => {
                 const p = Math.min(100, Math.round((e.s / e.b) * 100));
-                return `<div class="fr"><div class="t">${esc(e.t)}<span>${fmt(e.d, { day: "numeric", month: "short" })}</span></div><div class="bar"><i class="bf" style="--w:${p}%"></i></div><div class="bm"><span>AED ${e.s.toLocaleString()} of ${e.b.toLocaleString()}</span><span>${p}%</span></div></div>`;
+                return `<div class="fr"><div class="t">${esc(e.t)}<span>${fmt(e.d, { day: "numeric", month: "short" })}</span></div><div class="bar"><i class="bf" style="--w:${p}%"></i></div><div class="bm"><span>AED ${e.s.toLocaleString()} of ${e.b.toLocaleString()}</span><span>${p}%${HayatiData.monthlyNeed(e, TODAY) ? ` · AED ${HayatiData.monthlyNeed(e, TODAY).toLocaleString()}/mo` : ""}</span></div></div>`;
               })
               .join("") || '<p class="ss">No budgets yet.</p>',
           );

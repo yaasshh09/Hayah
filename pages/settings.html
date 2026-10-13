@@ -556,6 +556,17 @@
         padding: 23px 0;
         border-bottom: 1px solid var(--hayati-rule);
       }
+      .backup-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        flex: none;
+      }
+      [data-backup-status] {
+        display: block;
+        margin-top: 4px;
+        font-weight: 600;
+      }
       .action-row:last-child {
         border-bottom: 0;
       }
@@ -721,6 +732,7 @@
     </style>
     <link rel="stylesheet" href="/assets/preferences.css" />
     <script src="/assets/preferences.js"></script>
+    <script src="/assets/hayati-data.js"></script>
   </head>
   <body class="settings-page">
     <div class="ambient" aria-hidden="true"></div>
@@ -1121,6 +1133,30 @@
               <button class="button secondary" type="button" data-reset-finance>
                 Reset demo data
               </button>
+            </div>
+            <div class="action-row">
+              <div>
+                <div class="setting-title">Back up family data</div>
+                <p class="setting-copy">
+                  Save budgets, expenses, goals, jars, calendar events and
+                  preferences to a file, or restore them from one.
+                  <span data-backup-status role="status"></span>
+                </p>
+              </div>
+              <span class="backup-actions">
+                <button class="button secondary" type="button" data-export-data>
+                  Download
+                </button>
+                <button class="button secondary" type="button" data-import-data>
+                  Restore
+                </button>
+                <input
+                  type="file"
+                  accept="application/json,.json"
+                  data-import-file
+                  hidden
+                />
+              </span>
             </div>
           </div>
           <div data-settings-panel="help" hidden>
