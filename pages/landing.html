@@ -87,6 +87,21 @@
         filter: blur(110px);
         will-change: transform;
         opacity: 0.7;
+        animation: au-drift 30s ease-in-out infinite alternate;
+      }
+      .au i:nth-child(2) {
+        animation-delay: -8s;
+      }
+      .au i:nth-child(3) {
+        animation-delay: -15s;
+      }
+      .au i:nth-child(4) {
+        animation-delay: -22s;
+      }
+      @keyframes au-drift {
+        to {
+          transform: translate3d(4vw, 3vh, 0) scale(1.06);
+        }
       }
       .au i:nth-child(1) {
         background: #dcd3ff;
@@ -1664,43 +1679,6 @@
         });
       });
 
-      const cCursor = $("#cCursor");
-      let mx = -100,
-        my = -100,
-        cx = -100,
-        cy = -100,
-        isDown = false;
-      addEventListener("pointermove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        if (cx === -100) {
-          cx = mx;
-          cy = my;
-        }
-      });
-      addEventListener("pointerdown", () => (isDown = true));
-      addEventListener("pointerup", () => (isDown = false));
-      document.addEventListener("mouseleave", () => {
-        if (cCursor) cCursor.style.opacity = "0";
-      });
-      document.addEventListener("mouseenter", () => {
-        if (cCursor) cCursor.style.opacity = "1";
-      });
-      document
-        .querySelectorAll(
-          'a, button, .btn, .pc, .ios-pill, .ev, [role="button"], input, select',
-        )
-        .forEach((el) => {
-          el.addEventListener(
-            "mouseenter",
-            () => cCursor && cCursor.classList.add("hover"),
-          );
-          el.addEventListener(
-            "mouseleave",
-            () => cCursor && cCursor.classList.remove("hover"),
-          );
-        });
-
       const aiCard = document.getElementById("aiCard");
       const aiFloatWrap = document.getElementById("aiFloatWrap");
       if (aiCard) {
@@ -1734,105 +1712,127 @@
       }
 
       const au = [...document.querySelectorAll(".au i")],
-        trk = $("#trk");
-      let ly = scrollY;
-      (function tick(now) {
+        trk = $("#trk"),
+        nav = $("nav"),
+        navLinks = [...document.querySelectorAll("nav .l a")],
+        reveal = [$("#calendar"), $("#budget"), $("#ai")]
+          .filter(Boolean)
+          .map((el) => ({
+            el,
+            content: el.querySelector(".sc-content"),
+            vz: el.querySelector(".vz"),
+          })),
+        calEl = $("#calendar"),
+        budEl = $("#budget"),
+        view = calEl && calEl.querySelector(".vw"),
+        lite = () => document.documentElement.dataset.fx === "lite";
+      let ly = scrollY,
+        vh = innerHeight,
+        raf = 0,
+        trkShift = 0,
+        lastTot = "",
+        lastBk = "";
+      // Runs only while something is moving: scroll, pointer, settling cards,
+      // or the hero wordmark wave (full effects only, while the hero is visible).
+      const wake = () => {
+        if (!raf) raf = requestAnimationFrame(tick);
+      };
+      addEventListener("scroll", wake, { passive: true });
+      addEventListener("resize", wake, { passive: true });
+      addEventListener("pointermove", wake, { passive: true });
+      addEventListener("click", wake);
+      addEventListener("keydown", wake);
+      function tick(now) {
+        raf = 0;
+        // Read phase: all layout reads before any style writes (no layout thrashing).
         const y = scrollY,
-          dy = y - ly;
-        ((ly = y), (vh = innerHeight));
+          dy = y - ly,
+          heroOn = y < innerHeight,
+          full = !lite();
+        ly = y;
+        vh = innerHeight;
+        const letterRects = heroOn
+            ? L.map((b) => b.getBoundingClientRect())
+            : null,
+          rects = reveal.map((r) => r.el.getBoundingClientRect()),
+          ctaTop = $("#cta").getBoundingClientRect().top,
+          docH = document.body.scrollHeight,
+          viewLeft = view ? view.getBoundingClientRect().left : 0,
+          viewW = view ? view.clientWidth : 0,
+          maxScroll =
+            view && trk ? Math.max(0, trk.scrollWidth - viewW * 0.65) : 0,
+          evZero = view
+            ? evs.map((e) => {
+                const eb = e.getBoundingClientRect();
+                return eb.left + eb.width / 2 + trkShift;
+              })
+            : [];
+
+        // Write phase.
+        let settling = false;
         S.forEach((s) => {
           s.v += dy * 0.005 * s.k + (s.r - s.a) * 0.018;
           s.v *= 0.925;
           s.a = clamp(s.a + s.v, -16, 16);
+          if (Math.abs(s.v) > 0.002 || Math.abs(s.r - s.a) > 0.02)
+            settling = true;
           s.el.style.transform = `rotate(${s.a.toFixed(2)}deg)`;
         });
         const h = clamp(y / vh);
         wm.style.transform = `translateY(${y * 0.32}px) scale(${1 - h * 0.12})`;
         wm.style.opacity = 1 - h * 1.1;
-        L.forEach((b, i) => {
-          const r = b.getBoundingClientRect(),
-            d = Math.abs(mx - (r.left + r.width / 2)),
-            near = clamp(1 - d / 260),
-            w = 520 + 170 * Math.sin(now / 900 + i * 0.8) + 260 * near;
-          b.style.fontVariationSettings = `"wght" ${clamp(w, 300, 800).toFixed(0)},"wdth" ${(100 - 14 * near).toFixed(0)}`;
-        });
+        if (heroOn)
+          L.forEach((b, i) => {
+            const r = letterRects[i],
+              near = clamp(1 - Math.abs(hoverX - (r.left + r.width / 2)) / 260),
+              w =
+                520 +
+                (full ? 170 * Math.sin(now / 900 + i * 0.8) : 0) +
+                260 * near;
+            b.style.fontVariationSettings = `"wght" ${clamp(w, 300, 800).toFixed(0)},"wdth" ${(100 - 14 * near).toFixed(0)}`;
+          });
         $("#lg").style.opacity = clamp((y - vh * 0.5) / (vh * 0.3));
-        $("#prog").style.width =
-          (y / (document.body.scrollHeight - vh)) * 100 + "%";
-
-        cx += (mx - cx) * 0.78;
-        cy += (my - cy) * 0.78;
-        if (cCursor) {
-          const s = isDown ? 0.8 : 1;
-          cCursor.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${s})`;
-        }
-
-        const calEl = $("#calendar"),
-          budEl = $("#budget"),
-          aiEl = $("#ai");
-        au.forEach((a, i) => {
-          a.style.transform = `translate(${Math.sin(now / 3500 + i * 2) * 35 + (i - 1.5) * y * 0.025}px,${y * (0.07 + i * 0.02)}px)`;
-        });
-        $("nav").classList.toggle("scrolled", y > 40);
-        let activeId = "";
-        [calEl, budEl, aiEl].forEach((s) => {
-          if (s && s.getBoundingClientRect().top < vh * 0.45) activeId = s.id;
-        });
-        document.querySelectorAll("nav .l a").forEach((a) => {
-          a.classList.toggle(
-            "active",
-            a.getAttribute("href") === "#" + activeId,
+        prog.style.width = (y / (docH - vh)) * 100 + "%";
+        if (full)
+          au.forEach(
+            (a, i) =>
+              (a.style.translate = `${(i - 1.5) * y * 0.025}px ${y * (0.07 + i * 0.02)}px`),
           );
+        nav.classList.toggle("scrolled", y > 40);
+        let activeId = "";
+        reveal.forEach((r, i) => {
+          if (rects[i].top < vh * 0.45) activeId = r.el.id;
+          const se = ss(clamp((vh * 0.88 - rects[i].top) / (vh * 0.45)));
+          if (r.content) {
+            r.content.style.opacity = 0.15 + 0.85 * se;
+            r.content.style.transform = `translateY(${(1 - se) * 28}px)`;
+          }
+          if (r.vz) {
+            r.vz.style.opacity = 0.15 + 0.85 * se;
+            r.vz.style.transform = `translateY(${(1 - se) * 36}px) scale(${0.97 + 0.03 * se})`;
+          }
         });
-
-        if (calEl) {
-          const cr = calEl.getBoundingClientRect(),
-            cContent = calEl.querySelector(".sc-content"),
-            cVz = calEl.querySelector(".vz");
-          const se = ss(clamp((vh * 0.88 - cr.top) / (vh * 0.45)));
-          if (cContent) {
-            cContent.style.opacity = 0.15 + 0.85 * se;
-            cContent.style.transform = `translateY(${(1 - se) * 28}px)`;
-          }
-          if (cVz) {
-            cVz.style.opacity = 0.15 + 0.85 * se;
-            cVz.style.transform = `translateY(${(1 - se) * 36}px) scale(${0.97 + 0.03 * se})`;
-          }
-          const view = calEl.querySelector(".vw");
-          if (view && trk) {
-            const maxScroll = Math.max(
-              0,
-              trk.scrollWidth - view.clientWidth * 0.65,
-            );
-            const p = clamp((vh * 0.7 - cr.top) / (cr.height + vh * 0.2));
-            trk.style.transform = `translateX(${-p * maxScroll}px)`;
-            let sum = 0;
-            const midX =
-              view.getBoundingClientRect().left + view.clientWidth * 0.44;
-            evs.forEach((e, k) => {
-              const eb = e.getBoundingClientRect(),
-                ec = eb.left + eb.width / 2;
-              e.classList.toggle("on", Math.abs(ec - midX) < 135);
-              if (ec < midX + 90) sum += E[k][2];
-            });
-            $("#tot").textContent = Math.round(sum).toLocaleString();
-          }
+        navLinks.forEach((a) =>
+          a.classList.toggle("active", a.getAttribute("href") === "#" + activeId),
+        );
+        if (view && trk) {
+          const cr = rects[reveal.findIndex((r) => r.el === calEl)],
+            p = clamp((vh * 0.7 - cr.top) / (cr.height + vh * 0.2)),
+            midX = viewLeft + viewW * 0.44;
+          trkShift = p * maxScroll;
+          trk.style.transform = `translateX(${-trkShift}px)`;
+          let sum = 0;
+          evs.forEach((e, k) => {
+            const ec = evZero[k] - trkShift;
+            e.classList.toggle("on", Math.abs(ec - midX) < 135);
+            if (ec < midX + 90) sum += E[k][2];
+          });
+          const t = Math.round(sum).toLocaleString();
+          if (t !== lastTot) $("#tot").textContent = lastTot = t;
         }
-
         if (budEl) {
-          const br = budEl.getBoundingClientRect(),
-            bContent = budEl.querySelector(".sc-content"),
-            bVz = budEl.querySelector(".vz");
-          const se = ss(clamp((vh * 0.88 - br.top) / (vh * 0.45)));
-          if (bContent) {
-            bContent.style.opacity = 0.15 + 0.85 * se;
-            bContent.style.transform = `translateY(${(1 - se) * 28}px)`;
-          }
-          if (bVz) {
-            bVz.style.opacity = 0.15 + 0.85 * se;
-            bVz.style.transform = `translateY(${(1 - se) * 36}px) scale(${0.97 + 0.03 * se})`;
-          }
-          const p = clamp((vh * 0.75 - br.top) / (vh * 0.7)),
+          const br = rects[reveal.findIndex((r) => r.el === budEl)],
+            p = clamp((vh * 0.75 - br.top) / (vh * 0.7)),
             sp = ss(p);
           $("#c1").style.transform =
             `translateY(${(1 - sp) * 30 - sp * 12}px) rotate(${-2.5 + sp * 2}deg)`;
@@ -1840,28 +1840,15 @@
             `translate(${(1 - sp) * 26}px, ${(1 - sp) * 32 + sp * 12}px) rotate(${3 - sp * 2.5}deg)`;
           const barP = clamp((p - 0.12) / 0.78);
           bars.forEach((b) => (b.style.width = b.dataset.w * ss(barP) + "%"));
-          $("#bk").textContent = Math.round(64 * ss(barP)) + "%";
+          const bk = Math.round(64 * ss(barP)) + "%";
+          if (bk !== lastBk) $("#bk").textContent = lastBk = bk;
         }
-
-        if (aiEl) {
-          const ar = aiEl.getBoundingClientRect(),
-            aContent = aiEl.querySelector(".sc-content"),
-            aVz = aiEl.querySelector(".vz");
-          const se = ss(clamp((vh * 0.88 - ar.top) / (vh * 0.45)));
-          if (aContent) {
-            aContent.style.opacity = 0.15 + 0.85 * se;
-            aContent.style.transform = `translateY(${(1 - se) * 28}px)`;
-          }
-          if (aVz) {
-            aVz.style.opacity = 0.15 + 0.85 * se;
-            aVz.style.transform = `translateY(${(1 - se) * 36}px) scale(${0.97 + 0.03 * se})`;
-          }
-        }
-        const c = $("#cta").getBoundingClientRect().top;
-        $("#m1").style.transform = `translateX(${c * 0.45 - 300}px)`;
-        $("#m2").style.transform = `translateX(${-c * 0.45 - 200}px)`;
-        requestAnimationFrame(tick);
-      })(0);
+        $("#m1").style.transform = `translateX(${ctaTop * 0.45 - 300}px)`;
+        $("#m2").style.transform = `translateX(${-ctaTop * 0.45 - 200}px)`;
+        if (settling || (heroOn && full)) wake();
+      }
+      const prog = $("#prog");
+      tick(performance.now());
     </script>
   </body>
 </html>

@@ -774,61 +774,6 @@
     </div>
 
     <script>
-      const customCursor = document.getElementById("cCursor");
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      if (window.matchMedia("(pointer: fine)").matches) {
-        let mouseX = -100,
-          mouseY = -100,
-          cursorX = -100,
-          cursorY = -100,
-          isPressed = false;
-        window.addEventListener("pointermove", (event) => {
-          if (event.pointerType === "touch") return;
-          mouseX = event.clientX;
-          mouseY = event.clientY;
-          if (cursorX === -100) {
-            cursorX = mouseX;
-            cursorY = mouseY;
-          }
-        });
-        window.addEventListener("pointerdown", () => {
-          isPressed = true;
-        });
-        window.addEventListener("pointerup", () => {
-          isPressed = false;
-        });
-        document.addEventListener("mouseleave", () => {
-          customCursor.style.opacity = "0";
-        });
-        document.addEventListener("mouseenter", () => {
-          customCursor.style.opacity = "1";
-        });
-        document
-          .querySelectorAll('a,button,input,select,[role="button"]')
-          .forEach((element) => {
-            element.addEventListener("mouseenter", () =>
-              customCursor.classList.add("hover"),
-            );
-            element.addEventListener("mouseleave", () =>
-              customCursor.classList.remove("hover"),
-            );
-          });
-        (function trackCursor() {
-          if (reducedMotion) {
-            cursorX = mouseX;
-            cursorY = mouseY;
-          } else {
-            cursorX += (mouseX - cursorX) * 0.78;
-            cursorY += (mouseY - cursorY) * 0.78;
-          }
-          const scale = isPressed ? 0.8 : 1;
-          customCursor.style.transform = `translate3d(${cursorX}px,${cursorY}px,0) translate(-50%,-50%) scale(${scale})`;
-          requestAnimationFrame(trackCursor);
-        })();
-      }
-
       const statusRegion = document.getElementById("prototypeStatus");
       const statusMessage = document.getElementById("statusMessage");
       const roleButtons = {

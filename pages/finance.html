@@ -1,0 +1,1708 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Finance · Hayati</title>
+    <link rel="icon" type="image/png" href="/assets/hayati-mark.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #111;
+        --mut: #85858c;
+        --lav: #9f8fe0;
+        --mint: #7fe0c3;
+        --gold: #e8b765;
+        --red: #d9534f;
+        --rule: rgba(0, 0, 0, 0.09);
+        --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-sizing: border-box;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        cursor: none !important;
+      }
+      @media (pointer: coarse) {
+        *,
+        *::before,
+        *::after {
+          cursor: auto !important;
+        }
+        .c-cursor {
+          display: none !important;
+        }
+      }
+      body {
+        background: #fff;
+        color: var(--ink);
+        font:
+          400 15px/1.6 "Instrument Sans",
+          -apple-system,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        isolation: isolate;
+        min-height: 100vh;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Bricolage Grotesque", sans-serif;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--lav);
+        outline-offset: 3px;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+      .au {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .au i {
+        position: absolute;
+        width: 55vw;
+        height: 55vw;
+        border-radius: 50%;
+        filter: blur(110px);
+        opacity: 0.7;
+        animation: dr 30s ease-in-out infinite alternate;
+        will-change: transform;
+      }
+      .au i:nth-child(1) {
+        background: #dcd3ff;
+        left: -10vw;
+        top: -12vw;
+      }
+      .au i:nth-child(2) {
+        background: #c5f1e2;
+        right: -14vw;
+        top: 8vw;
+        animation-delay: -8s;
+      }
+      .au i:nth-child(3) {
+        background: #ffe5b8;
+        left: 22vw;
+        bottom: -22vw;
+        animation-delay: -15s;
+      }
+      @keyframes dr {
+        to {
+          transform: translate3d(5vw, 4vh, 0) scale(1.08);
+        }
+      }
+
+      /* Nav: same as the dashboard */
+      nav {
+        position: fixed;
+        top: env(safe-area-inset-top, 0px);
+        left: 0;
+        right: 0;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 6vw;
+        font-size: 14px;
+        transition:
+          background 0.3s,
+          border-color 0.3s;
+        border-bottom: 1px solid transparent;
+      }
+      nav.s {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-color: rgba(0, 0, 0, 0.06);
+      }
+      .bl {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        justify-self: start;
+      }
+      .brand img {
+        display: block;
+        height: 30px;
+        width: auto;
+      }
+      .sec {
+        padding-left: 16px;
+        border-left: 1px solid rgba(0, 0, 0, 0.16);
+        height: 24px;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #7c7c83;
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        padding: 4px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+      .tabs a {
+        padding: 8px 18px;
+        border-radius: 99px;
+        color: #666670;
+        transition:
+          color 0.2s,
+          background 0.3s;
+      }
+      .tabs a:hover {
+        color: var(--ink);
+      }
+      .tabs a.on {
+        background: var(--ink);
+        color: #fff;
+        font-weight: 500;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        justify-self: end;
+        gap: 12px;
+      }
+      .seg {
+        display: flex;
+        padding: 3px;
+        border-radius: 99px;
+        background: rgba(0, 0, 0, 0.06);
+      }
+      .seg button {
+        border: 0;
+        background: none;
+        padding: 7px 16px;
+        border-radius: 99px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #666670;
+        transition:
+          background 0.3s var(--ease),
+          color 0.3s;
+      }
+      .seg button[aria-pressed="true"] {
+        background: #fff;
+        color: var(--ink);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .nav-divider {
+        color: var(--mut);
+        opacity: 0.55;
+      }
+      .settings-link {
+        color: #666670;
+        font-size: 13px;
+      }
+      .settings-link:hover {
+        color: var(--ink);
+      }
+      @media (max-width: 1000px) {
+        nav {
+          padding-inline: 20px;
+        }
+      }
+      @media (max-width: 760px) {
+        .tabs {
+          display: none;
+        }
+        nav {
+          grid-template-columns: 1fr auto;
+        }
+      }
+
+      /* Page frame */
+      .page {
+        padding: 80px 6vw 90px;
+      }
+      @media (max-width: 1000px) {
+        .page {
+          padding: 78px 20px 70px;
+        }
+      }
+      .rule {
+        height: 1px;
+        background: var(--rule);
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        flex-wrap: wrap;
+        padding: clamp(40px, 4.4vw, 72px) 0 clamp(34px, 3.6vw, 58px);
+        animation: up 0.7s var(--ease) both;
+      }
+      @keyframes up {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+      }
+      .top h1 {
+        font-size: clamp(40px, 5.8vw, 96px);
+        line-height: 1;
+        letter-spacing: -0.055em;
+        font-weight: 600;
+      }
+      .top h1 span {
+        color: var(--lav);
+      }
+      .top p {
+        font-size: clamp(14px, 1.1vw, 17px);
+        margin-top: clamp(16px, 1.6vw, 26px);
+        max-width: 560px;
+        line-height: 1.5;
+        color: var(--mut);
+      }
+      .ctl {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .mon {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 99px;
+        background: rgba(0, 0, 0, 0.05);
+      }
+      .mon b {
+        min-width: 128px;
+        text-align: center;
+        font: 600 15px "Bricolage Grotesque";
+        letter-spacing: -0.02em;
+      }
+      .ic {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+      .ic:disabled {
+        opacity: 0.35;
+      }
+      .ic svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 42px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 99px;
+        background: var(--ink);
+        color: #fff;
+        font-weight: 500;
+        font-size: 14px;
+        white-space: nowrap;
+        transition: transform 0.25s var(--ease);
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+      .btn.sm {
+        height: 34px;
+        padding: 0 14px;
+        font-size: 13px;
+      }
+      .ghost {
+        height: 34px;
+        padding: 0 14px;
+        border: 0;
+        border-radius: 99px;
+        background: rgba(0, 0, 0, 0.05);
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .ghost:hover {
+        background: rgba(0, 0, 0, 0.09);
+      }
+
+      /* Stats strip */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-bottom: 1px solid var(--rule);
+      }
+      .sx {
+        padding: clamp(24px, 2.6vw, 40px) 24px clamp(24px, 2.6vw, 40px) 0;
+        min-width: 0;
+      }
+      .sx + .sx {
+        padding-left: clamp(20px, 2.4vw, 36px);
+        border-left: 1px solid var(--rule);
+      }
+      .sl {
+        font-size: 13px;
+        color: var(--mut);
+      }
+      .sn {
+        font: 600 clamp(26px, 3vw, 50px)/1.05 "Bricolage Grotesque";
+        letter-spacing: -0.05em;
+        margin: 10px 0 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sn.bad {
+        color: var(--red);
+      }
+      .ss {
+        font-size: 13px;
+        color: var(--mut);
+      }
+      @media (max-width: 900px) {
+        .stats {
+          grid-template-columns: 1fr 1fr;
+        }
+        .sx:nth-child(3) {
+          padding-left: 0;
+          border-left: 0;
+        }
+        .sx:nth-child(n + 3) {
+          border-top: 1px solid var(--rule);
+        }
+      }
+
+      /* Section tabs */
+      .tabbar {
+        display: flex;
+        gap: 6px;
+        padding: 4px;
+        margin-top: clamp(24px, 2.6vw, 38px);
+        width: fit-content;
+        max-width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-radius: 99px;
+        background: rgba(0, 0, 0, 0.05);
+      }
+      .tabbar button {
+        border: 0;
+        background: none;
+        padding: 9px 20px;
+        border-radius: 99px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666670;
+        white-space: nowrap;
+      }
+      .tabbar button[aria-selected="true"] {
+        background: var(--ink);
+        color: #fff;
+      }
+
+      /* Cards */
+      .g12 {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 18px;
+        padding: clamp(20px, 2.4vw, 34px) 0;
+        align-items: start;
+        animation: up 0.5s var(--ease) both;
+      }
+      .c4 {
+        grid-column: span 4;
+      }
+      .c5 {
+        grid-column: span 5;
+      }
+      .c7 {
+        grid-column: span 7;
+      }
+      .c12 {
+        grid-column: span 12;
+      }
+      @media (max-width: 1100px) {
+        .c4 {
+          grid-column: span 6;
+        }
+      }
+      @media (max-width: 1000px) {
+        .c5,
+        .c7 {
+          grid-column: span 12;
+        }
+      }
+      @media (max-width: 640px) {
+        .c4 {
+          grid-column: span 12;
+        }
+      }
+      .card {
+        position: relative;
+        background: rgba(255, 255, 255, 0.72);
+        border-radius: 26px;
+        padding: clamp(20px, 2vw, 30px);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        box-shadow:
+          0 20px 40px -24px rgba(24, 24, 38, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+        min-width: 0;
+      }
+      .card h3 {
+        font:
+          500 13px "Instrument Sans",
+          sans-serif;
+        color: var(--mut);
+        margin-bottom: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .card h3 em {
+        font: 600 13px "Instrument Sans";
+        font-style: normal;
+        color: var(--ink);
+      }
+      .big {
+        font: 600 clamp(26px, 2.6vw, 38px)/1 "Bricolage Grotesque";
+        letter-spacing: -0.05em;
+        margin: -4px 0 18px;
+      }
+      .big small {
+        font: 400 13px "Instrument Sans";
+        letter-spacing: 0;
+        color: var(--mut);
+        margin-left: 8px;
+      }
+      .bar {
+        height: 7px;
+        border-radius: 9px;
+        background: rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      .bf {
+        display: block;
+        height: 100%;
+        width: var(--w);
+        border-radius: 9px;
+        background: linear-gradient(90deg, var(--lav), var(--mint));
+        transform-origin: left;
+        animation: grow 0.8s var(--ease) both;
+      }
+      .bar.over .bf {
+        background: linear-gradient(90deg, #f0a07a, var(--red));
+      }
+      @keyframes grow {
+        from {
+          transform: scaleX(0);
+        }
+      }
+      .bm {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+        color: #55555c;
+        margin-top: 8px;
+      }
+      .bm .bad {
+        color: var(--red);
+        font-weight: 600;
+      }
+      .row {
+        padding: 14px 0;
+        border-top: 1px solid var(--rule);
+      }
+      .row:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .rt {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+        font-size: 14px;
+      }
+      .rt .grow {
+        flex: 1;
+        min-width: 0;
+      }
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--c);
+        flex: none;
+      }
+      .lnk {
+        border: 0;
+        background: none;
+        padding: 2px 4px;
+        color: var(--mut);
+        font-size: 12px;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .lnk:hover {
+        color: var(--ink);
+      }
+      .empty {
+        padding: 26px 0 8px;
+        color: var(--mut);
+        font-size: 14px;
+        text-align: center;
+      }
+
+      /* Share-of-spending strip */
+      .share {
+        display: flex;
+        height: 14px;
+        border-radius: 9px;
+        overflow: hidden;
+        gap: 2px;
+        margin-bottom: 16px;
+      }
+      .share i {
+        background: var(--c);
+        flex: var(--f) 1 0;
+      }
+      .legend {
+        display: grid;
+        gap: 8px;
+        font-size: 13px;
+      }
+      .legend div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .legend span:last-child {
+        margin-left: auto;
+        color: var(--mut);
+      }
+      .alert {
+        margin-top: 18px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(217, 83, 79, 0.08);
+        color: #9b2f2c;
+        font-size: 13px;
+      }
+      .alert.ok {
+        background: rgba(63, 191, 156, 0.12);
+        color: #1f6f58;
+      }
+
+      /* Expense list */
+      .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+      .filters select,
+      .fld input,
+      .fld select {
+        height: 40px;
+        padding: 0 12px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 12px;
+        background: #fff;
+        font-size: 14px;
+      }
+      .filters .tot {
+        margin-left: auto;
+        font-size: 13px;
+        color: var(--mut);
+      }
+      .filters .tot b {
+        color: var(--ink);
+      }
+      .xp {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr) auto 32px;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 0;
+        border-top: 1px solid var(--rule);
+      }
+      .xd {
+        text-align: center;
+        font: 700 17px/1 "Bricolage Grotesque";
+        padding: 8px 0;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--c) 16%, #fff);
+        color: color-mix(in srgb, var(--c) 45%, #111);
+      }
+      .xd small {
+        display: block;
+        font: 500 9.5px "Instrument Sans";
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 2px;
+      }
+      .xn b {
+        display: block;
+        font-weight: 500;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .xn span {
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .xa {
+        font: 600 15px "Bricolage Grotesque";
+        white-space: nowrap;
+      }
+      .del {
+        width: 32px;
+        height: 32px;
+        border: 0;
+        border-radius: 50%;
+        background: none;
+        color: var(--mut);
+        display: grid;
+        place-items: center;
+      }
+      .del:hover {
+        background: rgba(217, 83, 79, 0.1);
+        color: var(--red);
+      }
+      .del svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      /* Goals */
+      .goal .big {
+        margin: 6px 0 4px;
+      }
+      .goal-t {
+        font: 600 20px/1.2 "Bricolage Grotesque";
+        letter-spacing: -0.03em;
+      }
+      .acts {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+      .new {
+        display: grid;
+        place-items: center;
+        min-height: 200px;
+        border: 1.5px dashed rgba(0, 0, 0, 0.16);
+        border-radius: 26px;
+        background: none;
+        color: var(--mut);
+        font-weight: 500;
+      }
+      .new:hover {
+        color: var(--ink);
+        border-color: var(--lav);
+      }
+
+      /* Occasions */
+      .oc {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: start;
+        padding: 16px 0;
+        border-top: 1px solid var(--rule);
+      }
+      .oc:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .tent {
+        display: inline-block;
+        margin-left: 6px;
+        font-size: 11px;
+        padding: 1px 8px;
+        border-radius: 99px;
+        background: rgba(232, 183, 101, 0.2);
+        color: #8a6420;
+        font-weight: 500;
+        vertical-align: 2px;
+      }
+      .oc .acts {
+        margin-top: 0;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      /* Child: jars */
+      .jars {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .jar {
+        position: relative;
+        overflow: hidden;
+        min-height: 190px;
+        padding: 16px;
+        border-radius: 22px;
+        background: color-mix(in srgb, var(--c) 10%, #fff);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .jar::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--h);
+        background: color-mix(in srgb, var(--c) 34%, transparent);
+        transform-origin: bottom;
+        animation: fill 0.9s var(--ease) both;
+      }
+      @keyframes fill {
+        from {
+          transform: scaleY(0);
+        }
+      }
+      .jar > * {
+        position: relative;
+      }
+      .jar small {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: color-mix(in srgb, var(--c) 50%, #111);
+      }
+      .jar b {
+        font: 600 clamp(24px, 2.4vw, 34px)/1.1 "Bricolage Grotesque";
+        letter-spacing: -0.04em;
+      }
+      .jar span {
+        font-size: 12px;
+        color: #55555c;
+      }
+      .rw {
+        position: relative;
+        width: 150px;
+        aspect-ratio: 1;
+        margin: 0 auto 14px;
+      }
+      .ring {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+      .ring circle {
+        fill: none;
+        stroke-width: 9;
+        stroke-linecap: round;
+      }
+      .rt0 {
+        stroke: rgba(0, 0, 0, 0.06);
+      }
+      .rf {
+        stroke: url(#rg);
+        stroke-dasharray: 427.3;
+        stroke-dashoffset: calc(427.3px * (1 - var(--p) / 100));
+      }
+      .rc {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        text-align: center;
+      }
+      .rc b {
+        font: 600 38px/1 "Bricolage Grotesque";
+        letter-spacing: -0.05em;
+      }
+      .rc small {
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .center {
+        text-align: center;
+      }
+
+      /* Ask Hayati */
+      .ask h2 {
+        font-size: clamp(24px, 2.4vw, 36px);
+        font-weight: 600;
+        letter-spacing: -0.045em;
+        line-height: 1.05;
+      }
+      .ask h2 span {
+        color: var(--lav);
+      }
+      .ask p {
+        color: var(--mut);
+        font-size: 14px;
+        margin: 8px 0 16px;
+      }
+      .sg {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .sg a {
+        height: 36px;
+        padding: 0 15px;
+        border-radius: 99px;
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.07);
+        font-size: 13px;
+        color: #4a4a52;
+        transition: all 0.3s var(--ease);
+      }
+      .sg a:hover {
+        background: var(--ink);
+        color: #fff;
+      }
+
+      /* Dialog + toast */
+      dialog {
+        width: min(440px, calc(100vw - 32px));
+        max-height: calc(100dvh - 32px);
+        margin: auto;
+        border: 0;
+        border-radius: 26px;
+        padding: 26px;
+        background: #fff;
+        color: var(--ink);
+        box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.35);
+      }
+      dialog::backdrop {
+        background: rgba(17, 17, 22, 0.35);
+      }
+      dialog h2 {
+        font-size: 26px;
+        letter-spacing: -0.04em;
+        margin-bottom: 16px;
+      }
+      .fld {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #55555c;
+      }
+      .fld input,
+      .fld select {
+        width: 100%;
+        color: var(--ink);
+      }
+      .err {
+        min-height: 20px;
+        color: var(--red);
+        font-size: 13px;
+      }
+      .dlg-acts {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        z-index: 50;
+        padding: 11px 18px;
+        border-radius: 99px;
+        background: rgba(25, 25, 31, 0.92);
+        color: #fff;
+        font-size: 14px;
+        transform: translate(-50%, 20px);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.25s,
+          transform 0.25s var(--ease);
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      .c-cursor {
+        position: fixed;
+        inset: auto;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        overflow: visible;
+        width: 14px;
+        height: 14px;
+        border: 1.5px solid rgba(18, 18, 22, 0.7);
+        border-radius: 50%;
+        background: rgba(18, 18, 22, 0.08);
+        pointer-events: none;
+        z-index: 999999;
+        transform: translate3d(-50%, -50%, 0);
+        transition:
+          width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+          height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+          border-color 0.25s,
+          background 0.25s,
+          opacity 0.2s;
+      }
+      .c-cursor.hover {
+        width: 50px;
+        height: 50px;
+        border-color: var(--lav);
+        background: rgba(159, 143, 224, 0.18);
+      }
+      @media (max-width: 560px) {
+        .tabbar {
+          width: 100%;
+        }
+        .tabbar button {
+          flex: 1;
+          padding: 9px 8px;
+          font-size: 13px;
+        }
+        .jars {
+          grid-template-columns: 1fr;
+        }
+        .jar {
+          min-height: 120px;
+        }
+        .xp {
+          grid-template-columns: 46px minmax(0, 1fr) auto 28px;
+          gap: 10px;
+        }
+        .oc {
+          grid-template-columns: 46px minmax(0, 1fr);
+        }
+        .oc .acts {
+          grid-column: 2;
+          flex-direction: row;
+        }
+        .mon b {
+          min-width: 108px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      html[data-fx="lite"] :is(.g12, .top, .bf) {
+        animation: none;
+      }
+      html[data-fx="lite"] .jar::before {
+        animation: none;
+      }
+
+      /* Dark mode: shares the dashboard rules via body.dashboard-page; these cover finance-only parts. */
+      html[data-theme="dark"] body.dashboard-page #nav.s {
+        background: var(--hayati-nav);
+        border-color: transparent;
+      }
+      html[data-theme="dark"] body.dashboard-page #nav :is(.tabs, .seg) {
+        background: var(--hayati-control);
+      }
+      html[data-theme="dark"]
+        body.dashboard-page
+        #nav
+        :is(.tabs a, .settings-link, .nav-divider, .seg button) {
+        color: var(--hayati-muted);
+      }
+      html[data-theme="dark"] body.dashboard-page #nav .tabs a.on {
+        color: #fff;
+        background-color: #302b43 !important;
+      }
+      html[data-theme="dark"]
+        body.dashboard-page
+        #nav
+        .seg
+        button[aria-pressed="true"] {
+        color: var(--hayati-ink);
+        background: var(--hayati-raised);
+      }
+      html[data-theme="dark"] .finance-page :is(.mon, .tabbar, .ghost) {
+        background: rgba(255, 255, 255, 0.07);
+      }
+      html[data-theme="dark"] .finance-page .ic {
+        background: #2a2a31;
+        color: var(--hayati-ink);
+      }
+      html[data-theme="dark"] .finance-page :is(.tabbar button, .ghost) {
+        color: #d4d3dc;
+      }
+      html[data-theme="dark"] .finance-page .tabbar button[aria-selected="true"] {
+        background: #302b43;
+        color: #fff;
+      }
+      html[data-theme="dark"] .finance-page .xd {
+        background: color-mix(in srgb, var(--c) 18%, #25252b);
+        color: color-mix(in srgb, var(--c) 58%, #f5f4f8);
+      }
+      html[data-theme="dark"] .finance-page .jar {
+        background: color-mix(in srgb, var(--c) 12%, #202024);
+      }
+      html[data-theme="dark"] .finance-page .jar small {
+        color: color-mix(in srgb, var(--c) 60%, #f5f4f8);
+      }
+      html[data-theme="dark"] .finance-page :is(.jar span, .fld) {
+        color: #aaa9b4;
+      }
+      html[data-theme="dark"] .finance-page .rt0 {
+        stroke: rgba(255, 255, 255, 0.08);
+      }
+      html[data-theme="dark"] .finance-page .alert {
+        background: rgba(217, 83, 79, 0.16);
+        color: #f2a7a4;
+      }
+      html[data-theme="dark"] .finance-page .alert.ok {
+        background: rgba(63, 191, 156, 0.14);
+        color: #8fe0c8;
+      }
+      html[data-theme="dark"] .finance-page .new {
+        border-color: rgba(255, 255, 255, 0.16);
+      }
+      html[data-theme="dark"] .finance-page .tent {
+        color: #e3c47f;
+        background: rgba(232, 183, 101, 0.14);
+      }
+    </style>
+    <link rel="stylesheet" href="/assets/preferences.css" />
+    <script src="/assets/preferences.js"></script>
+    <script src="/assets/hayati-data.js"></script>
+  </head>
+  <body class="dashboard-page finance-page">
+    <div class="au" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="c-cursor" id="cur" popover="manual" aria-hidden="true"></div>
+    <nav id="nav">
+      <div class="bl">
+        <a class="brand" href="/" aria-label="Hayati home"
+          ><img src="/assets/hayati-logo.png" alt="" /></a
+        ><span class="sec">Finance</span>
+      </div>
+      <div class="tabs">
+        <a href="/dashboard">Dashboard</a><a href="/calendar">Calendar</a
+        ><a class="on" href="/finance" aria-current="page">Finance</a
+        ><a href="/AI">Hayati AI</a>
+      </div>
+      <div class="nav-actions">
+        <div class="seg" role="group" aria-label="View as">
+          <button data-r="adult" aria-pressed="true">Adult</button
+          ><button data-r="child" aria-pressed="false">Child</button>
+        </div>
+        <span class="nav-divider" aria-hidden="true">|</span
+        ><a class="settings-link" href="/settings">Settings</a>
+      </div>
+    </nav>
+
+    <main class="page">
+      <div class="rule"></div>
+      <div class="top">
+        <div>
+          <h1 id="gr"></h1>
+          <p id="sub"></p>
+        </div>
+        <div class="ctl" id="ctl"></div>
+      </div>
+      <div class="rule"></div>
+      <div id="stats"></div>
+      <div id="tabbar"></div>
+      <div id="app" role="tabpanel" tabindex="-1"></div>
+    </main>
+
+    <dialog id="dlg" aria-labelledby="dlgT">
+      <form id="frm" method="dialog" novalidate>
+        <h2 id="dlgT"></h2>
+        <div id="flds"></div>
+        <p class="err" id="err" role="alert"></p>
+        <div class="dlg-acts">
+          <button type="button" class="ghost" id="cancel">Cancel</button>
+          <button type="submit" class="btn sm" id="ok">Save</button>
+        </div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const H = HayatiData,
+        $ = (s) => document.querySelector(s),
+        aed = H.aed,
+        TODAY = H.today(),
+        esc = (s) =>
+          String(s).replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          ),
+        pct = (a, b) => (b > 0 ? Math.min(100, Math.round((a / b) * 100)) : 0),
+        fmt = (d, o) => new Date(d + "T00:00").toLocaleDateString("en-GB", o),
+        monthName = (m) =>
+          fmt(m + "-01", { month: "long", year: "numeric" }),
+        shiftMonth = (m, n) => {
+          const d = new Date(m + "-01T00:00");
+          d.setMonth(d.getMonth() + n);
+          return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+        },
+        bar = (p, over) =>
+          `<div class="bar${over ? " over" : ""}"><i class="bf" style="--w:${p}%"></i></div>`,
+        ask = (q) => `/AI?role=${role}&q=${encodeURIComponent(q)}`,
+        tile = (d, c) =>
+          `<div class="xd" style="--c:${c}">${+d.slice(8)}<small>${fmt(d, { month: "short" })}</small></div>`,
+        X = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>`,
+        TABS = [
+          ["budget", "Budget"],
+          ["expenses", "Expenses"],
+          ["goals", "Goals"],
+          ["occasions", "Occasions"],
+        ];
+
+      let st = H.load(),
+        role =
+          new URLSearchParams(location.search).get("role") === "child"
+            ? "child"
+            : "adult",
+        month = TODAY.slice(0, 7),
+        tab = TABS.some((t) => t[0] === location.hash.slice(1))
+          ? location.hash.slice(1)
+          : "budget",
+        filt = { cat: "", who: "" };
+
+      function toast(t) {
+        const el = $("#toast");
+        el.textContent = t;
+        el.classList.add("on");
+        clearTimeout(toast.t);
+        toast.t = setTimeout(() => el.classList.remove("on"), 2600);
+      }
+
+      /* ---------- Adult view ---------- */
+      function header(sum) {
+        if (role === "child") {
+          $("#gr").innerHTML = `My <span>jars.</span>`;
+          $("#sub").textContent =
+            "Save some, spend some, give some. Every dirham you add is split into your three jars.";
+          $("#ctl").innerHTML =
+            `<button class="btn" data-act="kid-in">+ I got money</button>`;
+          return;
+        }
+        $("#gr").innerHTML = `Family <span>finances.</span>`;
+        $("#sub").textContent =
+          "Monthly budgets, every expense, savings goals and occasion funds, all in one place.";
+        $("#ctl").innerHTML =
+          `<div class="mon"><button class="ic" data-act="prev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg></button><b aria-live="polite">${monthName(month)}</b><button class="ic" data-act="next" aria-label="Next month"${month >= TODAY.slice(0, 7) ? " disabled" : ""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button></div><button class="btn" data-act="add-expense">+ Add expense</button>`;
+      }
+
+      function stats(sum) {
+        let s;
+        if (role === "child") {
+          const j = H.kidJars(st),
+            g = st.kid.goal;
+          s = [
+            ["Save jar", aed(j.save), `for ${g.t.toLowerCase()}`],
+            ["Spend jar", aed(j.spend), "for fun things"],
+            ["Give jar", aed(j.give), `${aed(j.given)} given so far`],
+            ["Goal", pct(j.save, g.target) + "%", `of ${aed(g.target)}`],
+          ];
+        } else {
+          const prev = H.monthSummary(st, shiftMonth(month, -1)),
+            left = sum.limit - sum.spent,
+            diff = sum.spent - prev.spent,
+            pm = fmt(shiftMonth(month, -1) + "-01", { month: "long" });
+          s = [
+            [`Spent in ${fmt(month + "-01", { month: "long" })}`, aed(sum.spent), `of ${aed(sum.limit)} budget`],
+            [
+              left >= 0 ? "Left to spend" : "Over budget",
+              aed(Math.abs(left)),
+              sum.over.length
+                ? `${sum.over.length} ${sum.over.length === 1 ? "category" : "categories"} over limit`
+                : "every category within limit",
+              left < 0,
+            ],
+            ["Put aside", aed(sum.saved), "toward goals and occasions"],
+            [
+              `Compared with ${pm}`,
+              aed(Math.abs(diff)),
+              prev.spent ? (diff <= 0 ? "less spent so far" : "more spent") : "no data last month",
+            ],
+          ];
+        }
+        $("#stats").innerHTML =
+          `<div class="stats">${s.map((x) => `<div class="sx"><div class="sl">${x[0]}</div><div class="sn${x[3] ? " bad" : ""}">${x[1]}</div><div class="ss">${x[2]}</div></div>`).join("")}</div>`;
+      }
+
+      function tabbar() {
+        $("#tabbar").innerHTML =
+          role === "child"
+            ? ""
+            : `<div class="tabbar" role="tablist" aria-label="Finance sections">${TABS.map((t) => `<button role="tab" id="tab-${t[0]}" aria-controls="app" aria-selected="${t[0] === tab}" tabindex="${t[0] === tab ? 0 : -1}" data-act="tab" data-k="${t[0]}">${t[1]}</button>`).join("")}</div>`;
+        $("#app").setAttribute("aria-labelledby", role === "child" ? "gr" : "tab-" + tab);
+      }
+
+      function askCard(cls, chips, line) {
+        return `<section class="card ask ${cls}"><h2>Ask Hayati <span>about money.</span></h2><p>${line}</p><div class="sg">${chips.map((c) => `<a href="${ask(c[1])}">${c[0]}</a>`).join("")}</div></section>`;
+      }
+
+      function budgetPanel(sum) {
+        const rows = sum.cats
+          .map((c) => {
+            const p = pct(c.spent, c.limit);
+            return `<div class="row" style="--c:${c.color}"><div class="rt"><i class="dot"></i><span class="grow">${c.label}</span><button class="lnk" data-act="limit" data-k="${c.k}" aria-label="Edit ${c.label} limit">Edit limit</button></div>${bar(c.over ? 100 : p, c.over)}<div class="bm"><span>${aed(c.spent)} of ${aed(c.limit)}</span>${c.over ? `<span class="bad">Over by ${aed(c.spent - c.limit)}</span>` : `<span>${aed(Math.max(0, c.limit - c.spent))} left</span>`}</div></div>`;
+          })
+          .join("");
+        const spentCats = sum.cats.filter((c) => c.spent > 0).sort((a, b) => b.spent - a.spent);
+        const share = spentCats.length
+          ? `<div class="share" role="img" aria-label="Share of spending by category">${spentCats.map((c) => `<i style="--c:${c.color};--f:${c.spent}" title="${c.label}: ${aed(c.spent)}"></i>`).join("")}</div><div class="legend">${spentCats
+              .slice(0, 5)
+              .map((c) => `<div><i class="dot" style="--c:${c.color}"></i><span>${c.label}</span><span>${pct(c.spent, sum.spent)}%</span></div>`)
+              .join("")}</div>`
+          : `<p class="empty">No spending recorded in ${monthName(month)}.</p>`;
+        const alert = sum.over.length
+          ? `<div class="alert"><b>${sum.over.map((c) => c.label).join(", ")}</b> ${sum.over.length === 1 ? "is" : "are"} over the limit this month.</div>`
+          : `<div class="alert ok">Every category is within its limit. Nice work.</div>`;
+        return (
+          `<section class="card c7"><h3>Category budgets <em>${monthName(month)}</em></h3>${rows}</section>` +
+          `<section class="card c5"><h3>Where the money went</h3><div class="big">${aed(sum.spent)}<small>${sum.expenses.length} expenses</small></div>${share}${alert}</section>` +
+          askCard(
+            "c12",
+            [
+              ["Where did we overspend?", "Where did we overspend this month?"],
+              ["Trim next month", "Suggest three ways to spend less next month without hurting family time."],
+              ["Ramadan grocery plan", "Plan our grocery budget for Ramadan."],
+            ],
+            "Hayati AI reads this month's budgets and spending, so answers use your real numbers.",
+          )
+        );
+      }
+
+      function expensesPanel(sum) {
+        const list = sum.expenses.filter(
+            (x) => (!filt.cat || x.cat === filt.cat) && (!filt.who || x.who === filt.who),
+          ),
+          total = list.reduce((n, x) => n + x.amt, 0),
+          occ = Object.fromEntries(H.events(st).map((e) => [e.k, e.t]));
+        const opt = (v, l, cur) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(l)}</option>`;
+        return `<section class="card c12"><h3>Expenses <em>${monthName(month)}</em></h3><div class="filters"><label class="sr" for="fc">Category</label><select id="fc" data-filter="cat">${opt("", "All categories", filt.cat)}${Object.entries(H.SPEND).map(([k, v]) => opt(k, v[0], filt.cat)).join("")}</select><label class="sr" for="fw">Person</label><select id="fw" data-filter="who">${opt("", "Everyone", filt.who)}${H.FAM.map((f) => opt(f[0], f[0], filt.who)).join("")}</select><span class="tot">${list.length} shown · <b>${aed(total)}</b></span></div>${
+          list
+            .map((x) => {
+              const c = H.SPEND[x.cat];
+              return `<div class="xp">${tile(x.d, c[1])}<div class="xn"><b>${esc(x.note || c[0])}</b><span>${c[0]}${x.who ? " · " + esc(x.who) : ""}${x.occ && occ[x.occ] ? " · for " + esc(occ[x.occ]) : ""}</span></div><span class="xa">${aed(x.amt)}</span><button class="del" data-act="del-expense" data-k="${esc(x.id)}" aria-label="Delete ${esc(x.note || c[0])}, ${aed(x.amt)}">${X}</button></div>`;
+            })
+            .join("") || `<p class="empty">No expenses match. Add one with “+ Add expense”.</p>`
+        }</section>`;
+      }
+
+      function goalsPanel() {
+        return (
+          st.goals
+            .map((g) => {
+              const p = pct(g.saved, g.target);
+              return `<section class="card c4 goal"><h3>Savings goal ${p >= 100 ? "<em>Reached</em>" : ""}</h3><div class="goal-t">${esc(g.t)}</div><div class="big">${aed(g.saved)}<small>of ${aed(g.target)}</small></div>${bar(p)}<div class="bm"><span>${p}% saved</span><span>${aed(Math.max(0, g.target - g.saved))} to go</span></div><div class="acts"><button class="btn sm" data-act="save-goal" data-k="${g.id}">Add savings</button><button class="ghost" data-act="del-goal" data-k="${g.id}" aria-label="Remove goal ${esc(g.t)}">Remove</button></div></section>`;
+            })
+            .join("") +
+          `<button class="c4 new" data-act="add-goal">+ New savings goal</button>` +
+          askCard(
+            "c12",
+            [
+              ["Reach a goal sooner", "How can we reach our savings goals sooner?"],
+              ["Hajj savings plan", "Make a monthly savings plan for Jiddo Khalid's Hajj."],
+            ],
+            "Ask for a month-by-month plan for any goal.",
+          )
+        );
+      }
+
+      function occasionsPanel() {
+        const limit = new Date(TODAY + "T00:00");
+        limit.setFullYear(limit.getFullYear() + 1);
+        const end = limit.toISOString().slice(0, 10),
+          list = H.events(st).filter((e) => e.d >= TODAY && e.d <= end),
+          budgeted = list.filter((e) => e.b > 0),
+          planned = budgeted.reduce((n, e) => n + e.b, 0),
+          saved = budgeted.reduce((n, e) => n + Math.min(e.s, e.b), 0);
+        const rows = list
+          .map((e) => {
+            const c = H.CAT[e.c] || ["Family", "#EE7FAA"],
+              p = pct(e.s, e.b);
+            return `<div class="oc">${tile(e.d, c[1])}<div><div class="rt"><span class="grow">${esc(e.t)}${e.tent ? '<span class="tent">Tentative</span>' : ""}</span></div><div class="bm" style="margin-top:2px"><span>${c[0]}</span></div>${
+              e.b
+                ? `${bar(p)}<div class="bm"><span>${aed(e.s)} saved of ${aed(e.b)}${e.spent ? ` · ${aed(e.spent)} already spent` : ""}</span><span>${p >= 100 ? "Fully funded" : p + "%"}</span></div>`
+                : `<div class="bm"><span>No budget yet</span></div>`
+            }</div><div class="acts"><button class="ghost" data-act="occ-budget" data-k="${esc(e.k)}">${e.b ? "Edit budget" : "Set budget"}</button>${e.b ? `<button class="btn sm" data-act="occ-save" data-k="${esc(e.k)}">Add savings</button>` : ""}</div></div>`;
+          })
+          .join("");
+        return (
+          `<section class="card c7"><h3>Next 12 months <em>${list.length} occasions</em></h3>${rows || '<p class="empty">No upcoming occasions.</p>'}</section>` +
+          `<section class="card c5"><h3>Occasion funds</h3><div class="big">${aed(saved)}<small>saved of ${aed(planned)}</small></div>${bar(pct(saved, planned))}<div class="bm"><span>${budgeted.length} occasions with a budget</span><span>${aed(Math.max(0, planned - saved))} to go</span></div><p class="ss" style="margin-top:18px">Budgets here also appear on the Calendar and Dashboard. Add your own occasions from the <a href="/calendar" style="text-decoration:underline">Calendar</a>.</p></section>` +
+          askCard(
+            "c12",
+            [
+              ["Eid budget plan", "Help me plan the budget for Eid Al Fitr."],
+              ["Which occasion first?", "Which upcoming occasion should we fund first?"],
+            ],
+            "Hayati AI sees every occasion budget and how much is already saved.",
+          )
+        );
+      }
+
+      /* ---------- Child view ---------- */
+      function kidPanel() {
+        const j = H.kidJars(st),
+          g = st.kid.goal,
+          s = st.kid.split,
+          total = Math.max(1, j.save + j.spend + j.give),
+          p = pct(j.save, g.target),
+          jar = (k, label, color, note) =>
+            `<div class="jar" style="--c:${color};--h:${Math.max(6, (j[k] / total) * 100)}%"><small>${label}</small><b>${aed(j[k])}</b><span>${note}</span></div>`;
+        const log = [...st.kid.log]
+          .sort((a, b) => (a.d < b.d ? 1 : -1))
+          .slice(0, 8)
+          .map((x) => {
+            const sign = x.type === "in" ? "+" : "−",
+              what = x.type === "in" ? "Money in" : x.type === "spend" ? "Spent" : "Gave";
+            return `<div class="xp" style="grid-template-columns:52px minmax(0,1fr) auto">${tile(x.d, x.type === "in" ? "#3FBF9C" : x.type === "give" ? "#9F8FE0" : "#E8B765")}<div class="xn"><b>${esc(x.note || what)}</b><span>${what}</span></div><span class="xa">${sign}${aed(x.amt)}</span></div>`;
+          })
+          .join("");
+        return (
+          `<section class="card c7"><h3>My three jars <em>${s.save}% · ${s.spend}% · ${s.give}%</em></h3><div class="jars">${jar("save", "Save", "#3FBF9C", "for my goal")}${jar("spend", "Spend", "#E8B765", "for fun things")}${jar("give", "Give", "#9F8FE0", "Sadaqa to help others")}</div><div class="acts"><button class="btn sm" data-act="kid-in">+ I got money</button><button class="ghost" data-act="kid-spend">I spent something</button><button class="ghost" data-act="kid-give">I gave Sadaqa</button></div></section>` +
+          `<section class="card c5 center"><h3>My goal</h3><div class="rw"><svg class="ring" viewBox="0 0 160 160" aria-hidden="true"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9f8fe0"/><stop offset="1" stop-color="#7fe0c3"/></linearGradient></defs><circle class="rt0" cx="80" cy="80" r="68"/><circle class="rf" cx="80" cy="80" r="68" style="--p:${p}"/></svg><div class="rc"><b>${p}%</b><small>saved</small></div></div><div class="goal-t">${esc(g.t)}</div><p class="ss">${aed(j.save)} of ${aed(g.target)} · ${j.save >= g.target ? "You did it!" : `only ${aed(g.target - j.save)} to go`}</p></section>` +
+          `<section class="card c7"><h3>What happened lately</h3>${log || '<p class="empty">Nothing yet.</p>'}</section>` +
+          askCard(
+            "c5",
+            [
+              ["How close is my goal?", "How close am I to my goal?"],
+              ["What's in my jars?", "How much money is in my jars?"],
+              ["What is Sadaqa?", "What is Sadaqa?"],
+            ],
+            "Hayati only sees your jars, never the family budget.",
+          )
+        );
+      }
+
+      function render() {
+        const sum = H.monthSummary(st, month);
+        document.body.classList.toggle("child", role === "child");
+        header(sum);
+        stats(sum);
+        tabbar();
+        const html =
+          role === "child"
+            ? kidPanel()
+            : { budget: budgetPanel, expenses: expensesPanel, goals: goalsPanel, occasions: occasionsPanel }[tab](sum);
+        $("#app").innerHTML = `<div class="g12">${html}</div>`;
+      }
+
+      /* ---------- Forms ---------- */
+      const dlg = $("#dlg");
+      let onSubmit = null;
+      function field(f) {
+        const id = "f-" + f.name,
+          attrs = `id="${id}" name="${f.name}"${f.required ? " required" : ""}`;
+        const input =
+          f.type === "select"
+            ? `<select ${attrs}>${f.options.map((o) => `<option value="${esc(o[0])}"${o[0] === f.value ? " selected" : ""}>${esc(o[1])}</option>`).join("")}</select>`
+            : `<input ${attrs} type="${f.type}"${f.type === "number" ? ' inputmode="decimal" min="0" step="0.01"' : ""}${f.max ? ` max="${f.max}"` : ""}${f.maxlength ? ` maxlength="${f.maxlength}"` : ""} value="${esc(f.value ?? "")}"${f.placeholder ? ` placeholder="${esc(f.placeholder)}"` : ""}>`;
+        return `<label class="fld" for="${id}">${f.label}${input}</label>`;
+      }
+      function openForm(title, fields, submit, okLabel = "Save") {
+        $("#dlgT").textContent = title;
+        $("#flds").innerHTML = fields.map(field).join("");
+        $("#err").textContent = "";
+        $("#ok").textContent = okLabel;
+        onSubmit = submit;
+        dlg.showModal();
+        // Keep the shared custom cursor above the modal (both live in the top layer).
+        const cur = $("#cur");
+        if (cur.showPopover && cur.hasAttribute("popover"))
+          try {
+            cur.hidePopover();
+            cur.showPopover();
+          } catch (e) {}
+        const first = $("#flds input, #flds select");
+        if (first) first.focus();
+      }
+      $("#frm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const v = Object.fromEntries(new FormData($("#frm")));
+        try {
+          const msg = onSubmit(v);
+          dlg.close();
+          render();
+          if (msg) toast(msg);
+        } catch (x) {
+          $("#err").textContent = x.message;
+        }
+      });
+      $("#cancel").onclick = () => dlg.close();
+      dlg.addEventListener("click", (e) => {
+        if (e.target === dlg) dlg.close();
+      });
+
+      const amountField = (label = "Amount (AED)") => ({
+        name: "amt",
+        label,
+        type: "number",
+        required: true,
+        placeholder: "0",
+      });
+      const findOcc = (k) => H.events(st).find((e) => e.k === k);
+
+      const ACTIONS = {
+        tab(k) {
+          tab = k;
+          history.replaceState(null, "", `?role=${role}#${k}`);
+          render();
+          $("#tab-" + k).focus();
+        },
+        prev() {
+          month = shiftMonth(month, -1);
+          render();
+        },
+        next() {
+          if (month < TODAY.slice(0, 7)) month = shiftMonth(month, 1);
+          render();
+        },
+        "add-expense"() {
+          const occ = H.events(st).filter((e) => e.d >= TODAY && e.b > 0).slice(0, 10);
+          openForm(
+            "Add an expense",
+            [
+              amountField(),
+              { name: "cat", label: "Category", type: "select", value: "groceries", options: Object.entries(H.SPEND).map(([k, v]) => [k, v[0]]) },
+              { name: "note", label: "What was it for?", type: "text", maxlength: 80, placeholder: "e.g. Carrefour weekly shop" },
+              { name: "who", label: "Who paid?", type: "select", value: "Noura", options: H.FAM.map((f) => [f[0], f[0]]) },
+              { name: "d", label: "Date", type: "date", value: month === TODAY.slice(0, 7) ? TODAY : month + "-01", max: TODAY, required: true },
+              { name: "occ", label: "Part of an occasion? (optional)", type: "select", value: "", options: [["", "No"]].concat(occ.map((e) => [e.k, e.t])) },
+            ],
+            (v) => {
+              if (!/^\d{4}-\d{2}-\d{2}$/.test(v.d)) throw new Error("Pick a date.");
+              H.addExpense(st, v);
+              month = v.d.slice(0, 7);
+              const over = H.monthSummary(st, month).cats.find((c) => c.k === v.cat && c.over);
+              return over ? `Saved. ${over.label} is now over its limit.` : `Saved ${aed(v.amt)} for ${H.SPEND[v.cat][0]}.`;
+            },
+          );
+        },
+        "del-expense"(id) {
+          const x = st.expenses.find((e) => e.id === id);
+          H.removeExpense(st, id);
+          render();
+          toast(`Deleted ${x ? aed(x.amt) : "expense"}.`);
+        },
+        limit(k) {
+          openForm(
+            `${H.SPEND[k][0]} limit`,
+            [{ name: "amt", label: "Monthly limit (AED)", type: "number", required: true, value: st.limits[k] }],
+            (v) => {
+              if (v.amt === "") throw new Error("Enter a limit.");
+              H.setLimit(st, k, v.amt);
+              return `${H.SPEND[k][0]} limit set to ${aed(v.amt)}.`;
+            },
+          );
+        },
+        "add-goal"() {
+          openForm(
+            "New savings goal",
+            [
+              { name: "t", label: "Goal", type: "text", maxlength: 60, required: true, placeholder: "e.g. Summer trip to Salalah" },
+              amountField("Target (AED)"),
+            ],
+            (v) => {
+              H.addGoal(st, v.t, v.amt);
+              return `Goal “${v.t.trim()}” added.`;
+            },
+            "Add goal",
+          );
+        },
+        "save-goal"(id) {
+          const g = st.goals.find((x) => x.id === id);
+          openForm(`Add to “${g.t}”`, [amountField()], (v) => {
+            H.contribute(st, "goal", id, v.amt);
+            return `${aed(v.amt)} added to ${g.t}.`;
+          }, "Add savings");
+        },
+        "del-goal"(id) {
+          const g = st.goals.find((x) => x.id === id);
+          H.removeGoal(st, id);
+          render();
+          toast(`Removed “${g.t}”.`);
+        },
+        "occ-budget"(k) {
+          const e = findOcc(k);
+          openForm(
+            `Budget for ${e.t}`,
+            [{ name: "amt", label: "Planned budget (AED)", type: "number", required: true, value: e.b || "" }],
+            (v) => {
+              if (v.amt === "") throw new Error("Enter a budget.");
+              H.setOccBudget(st, k, v.amt);
+              return `${e.t} budget set to ${aed(v.amt)}.`;
+            },
+          );
+        },
+        "occ-save"(k) {
+          const e = findOcc(k);
+          openForm(`Save for ${e.t}`, [amountField()], (v) => {
+            H.contribute(st, "occ", k, v.amt);
+            return `${aed(v.amt)} put aside for ${e.t}.`;
+          }, "Add savings");
+        },
+        "kid-in"() {
+          const s = st.kid.split;
+          openForm(
+            "I got money!",
+            [
+              amountField("How much? (AED)"),
+              { name: "note", label: "Where from?", type: "text", maxlength: 60, placeholder: "e.g. Eidiya from Jiddo" },
+            ],
+            (v) => {
+              H.kidAdd(st, "in", v.amt, v.note || "Money in");
+              return `Split into Save ${s.save}%, Spend ${s.spend}%, Give ${s.give}%.`;
+            },
+            "Add to my jars",
+          );
+        },
+        "kid-spend"() {
+          openForm(
+            "I spent something",
+            [amountField("How much? (AED)"), { name: "note", label: "What did you buy?", type: "text", maxlength: 60 }],
+            (v) => {
+              H.kidAdd(st, "spend", v.amt, v.note);
+              return "Taken from your Spend jar.";
+            },
+          );
+        },
+        "kid-give"() {
+          openForm(
+            "I gave Sadaqa",
+            [amountField("How much? (AED)"), { name: "note", label: "Who did you help?", type: "text", maxlength: 60 }],
+            (v) => {
+              H.kidAdd(st, "give", v.amt, v.note || "Sadaqa");
+              return "Wonderful! Taken from your Give jar.";
+            },
+          );
+        },
+      };
+
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-act]");
+        if (b && ACTIONS[b.dataset.act]) ACTIONS[b.dataset.act](b.dataset.k);
+      });
+      document.addEventListener("change", (e) => {
+        const f = e.target.dataset && e.target.dataset.filter;
+        if (!f) return;
+        filt[f] = e.target.value;
+        render();
+        const sel = document.querySelector(`[data-filter="${f}"]`);
+        if (sel) sel.focus();
+      });
+      // Arrow keys move between section tabs.
+      document.addEventListener("keydown", (e) => {
+        if (!e.target.matches('[role="tab"]') || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
+        const i = TABS.findIndex((t) => t[0] === tab),
+          n = (i + (e.key === "ArrowRight" ? 1 : TABS.length - 1)) % TABS.length;
+        ACTIONS.tab(TABS[n][0]);
+      });
+
+      function setRole(r) {
+        role = r;
+        document
+          .querySelectorAll(".seg button")
+          .forEach((b) => b.setAttribute("aria-pressed", b.dataset.r === r));
+        try {
+          history.replaceState(null, "", `?role=${r}${r === "adult" ? "#" + tab : ""}`);
+        } catch (e) {}
+        render();
+      }
+      document.querySelectorAll(".seg button").forEach(
+        (b) =>
+          (b.onclick = () => {
+            if (b.dataset.r !== role) setRole(b.dataset.r);
+          }),
+      );
+      // Pick up changes made in another tab (e.g. Calendar or Settings reset).
+      addEventListener("storage", (e) => {
+        if (e.key === H.KEY || e.key === "hayati-events" || e.key === null) {
+          st = H.load();
+          render();
+        }
+      });
+      const nav = $("#nav");
+      let navTick = 0;
+      addEventListener(
+        "scroll",
+        () => {
+          if (!navTick)
+            navTick = requestAnimationFrame(() => {
+              nav.classList.toggle("s", scrollY > 20);
+              navTick = 0;
+            });
+        },
+        { passive: true },
+      );
+      setRole(role);
+    </script>
+  </body>
+</html>

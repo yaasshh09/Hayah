@@ -1342,6 +1342,7 @@
     </style>
     <link rel="stylesheet" href="/assets/preferences.css" />
     <script src="/assets/preferences.js"></script>
+    <script src="/assets/hayati-data.js"></script>
   </head>
   <body class="calendar-page">
     <div class="au" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -1562,67 +1563,15 @@
           /[&<>"]/g,
           (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
         );
-      const CAT = {
-        religious: ["Religious", "#9F8FE0"],
-        national: ["National", "#3FBF9C"],
-        cultural: ["Cultural", "#E8B765"],
-        school: ["School", "#6F9BEA"],
-        family: ["Family", "#EE7FAA"],
-      };
+      const { CAT } = HayatiData;
       $("#categoryLegend").innerHTML = Object.values(CAT)
         .map(
           ([label, color]) =>
             `<span class="category-key"><i style="--category-color:${color}"></i>${label}</span>`,
         )
         .join("");
-      const BASE = [
-        ["2026-01-01", "New Year's Day", "national"],
-        ["2026-02-18", "Ramadan begins", "religious", 1, 3200, 2400],
-        ["2026-03-20", "Eid Al Fitr", "religious", 1, 4500, 3900],
-        ["2026-03-21", "Mother's Day", "cultural"],
-        ["2026-05-26", "Arafat Day", "religious", 1],
-        ["2026-05-27", "Eid Al Adha", "religious", 1, 5200, 5200],
-        ["2026-06-16", "Islamic New Year", "religious", 1],
-        ["2026-07-04", "Summer break begins", "school", 0, 12000, 12000],
-        ["2026-08-24", "Back to school", "school", 0, 3800, 3800],
-        ["2026-08-25", "Prophet's Birthday", "religious", 1],
-        ["2026-08-28", "Emirati Women's Day", "national"],
-        ["2026-10-20", "Parent-teacher meeting", "school"],
-        ["2026-10-29", "Salem's birthday", "family", 0, 400, 400],
-        ["2026-11-03", "UAE Flag Day", "national"],
-        ["2026-11-08", "Diwali", "cultural"],
-        ["2026-11-14", "Latifa's birthday", "family", 0, 600, 350],
-        ["2026-12-01", "Commemoration Day", "national"],
-        ["2026-12-02", "UAE National Day", "national", 0, 1500, 600],
-        ["2026-12-12", "Family weekend in Hatta", "family", 0, 1800, 900],
-        ["2026-12-18", "Winter break begins", "school"],
-        ["2026-12-19", "Dubai Shopping Festival", "cultural", 0, 2000, 500],
-        ["2026-12-25", "Christmas", "cultural"],
-        ["2027-01-01", "New Year's Day", "national"],
-        ["2027-02-08", "Ramadan begins", "religious", 1, 3400, 600],
-        ["2027-03-10", "Eid Al Fitr", "religious", 1, 4800, 900],
-        ["2027-05-16", "Arafat Day", "religious", 1],
-        ["2027-05-17", "Eid Al Adha", "religious", 1, 5400, 1200],
-        ["2027-06-06", "Islamic New Year", "religious", 1],
-        ["2027-08-15", "Prophet's Birthday", "religious", 1],
-        ["2027-12-01", "Commemoration Day", "national"],
-        ["2027-12-02", "UAE National Day", "national", 0, 1600, 0],
-      ].map((a) => ({
-        d: a[0],
-        t: a[1],
-        c: a[2],
-        tent: a[3],
-        b: a[4] || 0,
-        s: a[5] || 0,
-      }));
-      let custom = [];
-      try {
-        custom = JSON.parse(localStorage.getItem("hayati-events") || "[]");
-      } catch (e) {}
-      const all = () =>
-        BASE.concat(custom).sort((a, b) =>
-          a.d + (a.time || "") < b.d + (b.time || "") ? -1 : 1,
-        );
+      const fin = HayatiData.load(),
+        all = () => HayatiData.events(fin);
       const now = new Date(),
         TODAY = iso(now.getFullYear(), now.getMonth(), now.getDate());
       let V = { y: now.getFullYear(), m: now.getMonth() },
@@ -1991,18 +1940,15 @@
       $("#frm").onsubmit = (e) => {
         const t = $("#fT").value.trim();
         if (!t) return;
-        custom.push({
+        HayatiData.addEvent({
           d: $("#fD").value,
           t,
           c: $("#fC").value,
           tent: 0,
-          b: +$("#fB").value || 0,
+          b: Math.max(0, +$("#fB").value || 0),
           s: 0,
           time: $("#fTm").value || "",
         });
-        try {
-          localStorage.setItem("hayati-events", JSON.stringify(custom));
-        } catch (x) {}
         sel = $("#fD").value;
         fromSel();
         render(0);
@@ -2024,47 +1970,15 @@
       addEventListener("keydown", (e) => {
         if (e.key === "Escape" && !$("#dlg").open) openD(false);
       });
+      // Keep the shared custom cursor above the modal dialog (top layer).
       const cur = $("#cur");
       const raise = () => {
-        if (!cur.showPopover) return;
+        if (!cur.showPopover || !cur.hasAttribute("popover")) return;
         try {
           cur.hidePopover();
-        } catch (e) {}
-        try {
           cur.showPopover();
         } catch (e) {}
       };
-      if (cur.showPopover) raise();
-      else cur.removeAttribute("popover");
-      let mx = -100,
-        my = -100,
-        cx = -100,
-        cy = -100,
-        dn = false;
-      addEventListener("pointermove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        if (cx === -100) {
-          cx = mx;
-          cy = my;
-        }
-      });
-      addEventListener("pointerdown", () => (dn = true));
-      addEventListener("pointerup", () => (dn = false));
-      document.addEventListener("pointerover", (e) =>
-        cur.classList.toggle(
-          "hover",
-          !!e.target.closest("a,button,input,select,.cell"),
-        ),
-      );
-      document.addEventListener("mouseleave", () => (cur.style.opacity = 0));
-      document.addEventListener("mouseenter", () => (cur.style.opacity = 1));
-      (function t() {
-        cx += (mx - cx) * 0.78;
-        cy += (my - cy) * 0.78;
-        cur.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${dn ? 0.8 : 1})`;
-        requestAnimationFrame(t);
-      })();
       setRole(role);
       render(0);
     </script>

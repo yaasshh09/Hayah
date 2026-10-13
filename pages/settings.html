@@ -989,6 +989,39 @@
                 </button>
               </div>
             </div>
+            <div class="setting-row">
+              <div>
+                <div class="setting-title">Visual effects</div>
+                <p class="setting-copy">
+                  Auto turns off heavy blur and motion on slower devices.
+                  <span data-effects-status></span>
+                </p>
+              </div>
+              <div class="choice-group" role="group" aria-label="Visual effects">
+                <button
+                  type="button"
+                  data-setting="effects"
+                  data-value="auto"
+                  aria-pressed="true"
+                >
+                  Auto</button
+                ><button
+                  type="button"
+                  data-setting="effects"
+                  data-value="full"
+                  aria-pressed="false"
+                >
+                  Full</button
+                ><button
+                  type="button"
+                  data-setting="effects"
+                  data-value="reduced"
+                  aria-pressed="false"
+                >
+                  Reduced
+                </button>
+              </div>
+            </div>
             <label class="setting-row">
               <span>
                 <span class="setting-title">High contrast</span>
@@ -1075,6 +1108,18 @@
                 data-reset-settings
               >
                 Reset preferences
+              </button>
+            </div>
+            <div class="action-row">
+              <div>
+                <div class="setting-title">Reset demo data</div>
+                <p class="setting-copy">
+                  Restore the sample family budgets, expenses, goals and
+                  calendar events.
+                </p>
+              </div>
+              <button class="button secondary" type="button" data-reset-finance>
+                Reset demo data
               </button>
             </div>
           </div>

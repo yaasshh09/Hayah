@@ -515,7 +515,8 @@ html[data-theme="dark"] body.dashboard-page .bar {
 }
 
 html[data-theme="dark"] body.dashboard-page .bm {
-  color: #aaa9b4;
+  color: #aaa9b4 !important;
+  background-color: transparent !important;
 }
 
 html[data-theme="dark"] body.dashboard-page .ud {
@@ -614,6 +615,50 @@ html[data-adhd="true"] *,
 html[data-adhd="true"] *::before,
 html[data-adhd="true"] *::after {
   cursor: auto !important;
+}
+
+/* Phones: drop the page label so the role switch and Settings fit in the nav. */
+@media (max-width: 480px) {
+  nav .sec {
+    display: none !important;
+  }
+}
+
+/* Lite effects: set by preferences.js on weak devices or from Settings.
+   Animated 100px blurs and backdrop-filter glass are the costliest paints in the app. */
+html[data-fx="lite"] *,
+html[data-fx="lite"] *::before,
+html[data-fx="lite"] *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  cursor: auto !important;
+}
+
+html[data-fx="lite"]
+  :is(a, button, label, select, summary, [role="button"], .cell, .wd, .cb) {
+  cursor: pointer !important;
+}
+
+html[data-fx="lite"] .au i,
+html[data-fx="lite"] .ambient::before,
+html[data-fx="lite"] .ambient::after {
+  animation: none !important;
+  filter: none !important;
+  will-change: auto !important;
+  -webkit-mask-image: radial-gradient(closest-side, #000, transparent);
+  mask-image: radial-gradient(closest-side, #000, transparent);
+}
+
+html[data-fx="lite"] :is(.waves, .waves *, .glow, .orb) {
+  animation: none !important;
+}
+
+html[data-fx="lite"] .rv {
+  filter: none !important;
+}
+
+html[data-fx="lite"] .c-cursor {
+  display: none !important;
 }
 
 html[data-adhd="true"] :focus-visible {

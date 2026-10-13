@@ -1309,6 +1309,7 @@
     </style>
     <link rel="stylesheet" href="/assets/preferences.css" />
     <script src="/assets/preferences.js"></script>
+    <script src="/assets/hayati-data.js"></script>
   </head>
   <body class="dashboard-page">
     <div id="scroll-progress" aria-hidden="true"></div>
@@ -1370,61 +1371,9 @@
           /[&<>"]/g,
           (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
         );
-      const CAT = {
-        religious: ["Religious", "#9F8FE0"],
-        national: ["National", "#3FBF9C"],
-        cultural: ["Cultural", "#E8B765"],
-        school: ["School", "#6F9BEA"],
-        family: ["Family", "#EE7FAA"],
-      };
-      const BASE = [
-        ["2026-01-01", "New Year's Day", "national"],
-        ["2026-02-18", "Ramadan begins", "religious", 1, 3200, 2400],
-        ["2026-03-20", "Eid Al Fitr", "religious", 1, 4500, 3900],
-        ["2026-03-21", "Mother's Day", "cultural"],
-        ["2026-05-26", "Arafat Day", "religious", 1],
-        ["2026-05-27", "Eid Al Adha", "religious", 1, 5200, 5200],
-        ["2026-06-16", "Islamic New Year", "religious", 1],
-        ["2026-07-04", "Summer break begins", "school", 0, 12000, 12000],
-        ["2026-08-24", "Back to school", "school", 0, 3800, 3800],
-        ["2026-08-25", "Prophet's Birthday", "religious", 1],
-        ["2026-08-28", "Emirati Women's Day", "national"],
-        ["2026-10-20", "Parent-teacher meeting", "school"],
-        ["2026-10-29", "Salem's birthday", "family", 0, 400, 400],
-        ["2026-11-03", "UAE Flag Day", "national"],
-        ["2026-11-08", "Diwali", "cultural"],
-        ["2026-11-14", "Latifa's birthday", "family", 0, 600, 350],
-        ["2026-12-01", "Commemoration Day", "national"],
-        ["2026-12-02", "UAE National Day", "national", 0, 1500, 600],
-        ["2026-12-12", "Family weekend in Hatta", "family", 0, 1800, 900],
-        ["2026-12-18", "Winter break begins", "school"],
-        ["2026-12-19", "Dubai Shopping Festival", "cultural", 0, 2000, 500],
-        ["2026-12-25", "Christmas", "cultural"],
-        ["2027-01-01", "New Year's Day", "national"],
-        ["2027-02-08", "Ramadan begins", "religious", 1, 3400, 600],
-        ["2027-03-10", "Eid Al Fitr", "religious", 1, 4800, 900],
-        ["2027-05-16", "Arafat Day", "religious", 1],
-        ["2027-05-17", "Eid Al Adha", "religious", 1, 5400, 1200],
-        ["2027-06-06", "Islamic New Year", "religious", 1],
-        ["2027-08-15", "Prophet's Birthday", "religious", 1],
-        ["2027-12-01", "Commemoration Day", "national"],
-        ["2027-12-02", "UAE National Day", "national", 0, 1600, 0],
-      ].map((a) => ({
-        d: a[0],
-        t: a[1],
-        c: a[2],
-        tent: a[3],
-        b: a[4] || 0,
-        s: a[5] || 0,
-      }));
-      let custom = [];
-      try {
-        custom = JSON.parse(localStorage.getItem("hayati-events") || "[]");
-      } catch (e) {}
-      const all = () =>
-        BASE.concat(custom).sort((a, b) =>
-          a.d + (a.time || "") < b.d + (b.time || "") ? -1 : 1,
-        );
+      const { CAT, FAM } = HayatiData;
+      const fin = HayatiData.load(),
+        all = () => HayatiData.events(fin);
       const now = new Date(),
         TODAY = iso(now.getFullYear(), now.getMonth(), now.getDate()),
         Y = now.getFullYear();
@@ -1444,22 +1393,6 @@
         new URLSearchParams(location.search).get("role") === "child"
           ? "child"
           : "adult";
-      const FAM = [
-        ["Ahmed", "Father", "#9F8FE0"],
-        ["Noura", "Mother", "#EE7FAA"],
-        ["Salem", "Son", "#6F9BEA"],
-        ["Latifa", "Daughter", "#E8B765"],
-        ["Zayed", "Son", "#3FBF9C"],
-        ["Jiddo Khalid", "Grandfather", "#B3A4F2"],
-      ];
-      const KID = {
-        eidiya: 300,
-        save: 50,
-        spend: 30,
-        give: 20,
-        goal: 250,
-        saved: 160,
-      };
       const ask = (q) => `/AI?role=${role}&q=${encodeURIComponent(q)}`;
       const chip = (e) =>
         `<span class="chip" style="--c:${CAT[e.c][1]}">${esc(e.t)}</span>`;
@@ -1524,10 +1457,11 @@
         const funded = fut.filter((e) => e.b > 0),
           saved = funded.reduce((a, e) => a + e.s, 0),
           need = funded.reduce((a, e) => a + Math.max(0, e.b - e.s), 0);
-        const mc = evs.filter(
-            (e) => e.d.slice(0, 7) === TODAY.slice(0, 7),
-          ).length,
-          mn = now.toLocaleDateString("en-GB", { month: "long" });
+        const month = HayatiData.monthSummary(fin, TODAY.slice(0, 7)),
+          mn = now.toLocaleDateString("en-GB", { month: "long" }),
+          jars = HayatiData.kidJars(fin),
+          goal = fin.kid.goal,
+          goalP = Math.min(100, Math.round((jars.save / goal.target) * 100));
         const st = adult
           ? [
               [
@@ -1545,7 +1479,13 @@
                 `across ${funded.length} occasions`,
               ],
               ["Still to save", need, "AED ", "", "to fully fund every goal"],
-              ["This month", mc, "", "", `events in ${mn}`],
+              [
+                `Spent in ${mn}`,
+                month.spent,
+                "AED ",
+                "",
+                `of AED ${month.limit.toLocaleString()} budget${month.over.length ? ` · ${month.over.length} over` : ""}`,
+              ],
             ]
           : [
               [
@@ -1555,21 +1495,15 @@
                 "\u00a0days",
                 nx ? nx.t : "Nothing planned",
               ],
-              ["My Eidiya", KID.eidiya, "AED ", "", "this Eid"],
+              ["Money received", jars.received, "AED ", "", "Eidiya and allowance"],
               [
-                "Saved for my bicycle",
-                KID.saved,
+                "Saved for my goal",
+                jars.save,
                 "AED ",
                 "",
-                `of AED ${KID.goal}`,
+                `of AED ${goal.target.toLocaleString()}`,
               ],
-              [
-                "Given as Sadaqa",
-                (KID.eidiya * KID.give) / 100,
-                "AED ",
-                "",
-                "to help others",
-              ],
+              ["Given as Sadaqa", jars.given, "AED ", "", "to help others"],
             ];
         let h = `<div class="stats rv">${st.map((s) => `<div class="sx"><div class="sl">${s[0]}</div><div class="sn">${cn(s[1], s[2], s[3])}</div><div class="ss">${esc(s[4])}</div></div>`).join("")}</div><div class="g12">`;
         if (adult && nx) {
@@ -1582,12 +1516,12 @@
             `<div class="nx">${ring(p.toFixed(0), `<b>${days}</b><small>${days === 1 ? "day" : "days"} to go</small>`)}<div class="nt"><div class="nn">${esc(nx.t)}</div><div class="nd">${fmt(nx.d, { weekday: "long", day: "numeric", month: "long" })}</div><div class="nh">${hjD.format(new Date(nx.d + "T00:00"))}</div>${nx.tent ? '<span class="tent">Tentative until announced</span>' : ""}${nx.b ? `<div class="bar"><i class="bf" style="--w:${bp}%"></i></div><div class="bm"><span>AED ${nx.s.toLocaleString()} of ${nx.b.toLocaleString()}</span><span>${bp}% saved</span></div>` : ""}</div></div>`,
           );
         } else if (!adult) {
-          const p = Math.round((KID.saved / KID.goal) * 100);
+          const left = Math.max(0, goal.target - jars.save);
           h += card(
             "c5",
             0,
             "My goal",
-            `<div class="nx">${ring(p, `<b>${p}%</b><small>saved</small>`)}<div class="nt"><div class="nn">A new bicycle</div><div class="nd">AED ${KID.saved} of AED ${KID.goal}</div><div class="nh">Only AED ${KID.goal - KID.saved} to go</div><div class="bar"><i class="bf" style="--w:${p}%"></i></div></div></div>`,
+            `<div class="nx">${ring(goalP, `<b>${goalP}%</b><small>saved</small>`)}<div class="nt"><div class="nn">${esc(goal.t)}</div><div class="nd">AED ${jars.save.toLocaleString()} of AED ${goal.target.toLocaleString()}</div><div class="nh">${left ? `Only AED ${left.toLocaleString()} to go` : "Goal reached!"}</div><div class="bar"><i class="bf" style="--w:${goalP}%"></i></div></div></div>`,
           );
         }
         const sun = new Date(now);
@@ -1625,7 +1559,7 @@
           h += card(
             "c5",
             1,
-            "Funding",
+            `Funding <em><a href="/finance#occasions">Manage</a></em>`,
             funded
               .slice(0, 4)
               .map((e) => {
@@ -1638,16 +1572,16 @@
           h += card(
             "c7",
             0,
-            "My Eidiya",
-            `<div class="big">${cn(KID.eidiya, "AED ")}<small>split three ways</small></div>` +
+            `My jars <em><a href="/finance?role=child">Open</a></em>`,
+            `<div class="big">${cn(jars.save + jars.spend + jars.give, "AED ")}<small>in my three jars</small></div>` +
               [
-                ["Save", KID.save],
-                ["Spend", KID.spend],
-                ["Give (Sadaqa)", KID.give],
+                ["Save", jars.save, fin.kid.split.save],
+                ["Spend", jars.spend, fin.kid.split.spend],
+                ["Give (Sadaqa)", jars.give, fin.kid.split.give],
               ]
                 .map(
                   (r) =>
-                    `<div class="fr"><div class="t">${r[0]}<span>AED ${(KID.eidiya * r[1]) / 100}</span></div><div class="bar"><i class="bf" style="--w:${r[1]}%"></i></div></div>`,
+                    `<div class="fr"><div class="t">${r[0]}<span>AED ${r[1].toLocaleString()} · ${r[2]}% of new money</span></div><div class="bar"><i class="bf" style="--w:${r[2]}%"></i></div></div>`,
                 )
                 .join(""),
           );
@@ -1734,7 +1668,8 @@
         const n = +el.dataset.n,
           pre = el.dataset.pre,
           suf = el.dataset.suf,
-          reduce = matchMedia("(prefers-reduced-motion:reduce)").matches,
+          reduce =
+            lite() || matchMedia("(prefers-reduced-motion:reduce)").matches,
           t0 = performance.now(),
           D = 1500;
         (function f(t) {
@@ -1777,91 +1712,48 @@
             if (b.dataset.r !== role) setRole(b.dataset.r);
           }),
       );
-      document.addEventListener("pointermove", (e) => {
-        const c = e.target.closest && e.target.closest(".card");
-        if (!c) return;
-        const r = c.getBoundingClientRect();
-        c.style.setProperty("--mx", e.clientX - r.left + "px");
-        c.style.setProperty("--my", e.clientY - r.top + "px");
-      });
-      const au = [...document.querySelectorAll(".au i")];
-      addEventListener(
-        "scroll",
-        () => {
-          $("#nav").classList.toggle("s", scrollY > 20);
-          au.forEach(
-            (a, i) => (a.style.marginTop = scrollY * (0.05 + i * 0.03) + "px"),
-          );
+      const lite = () => document.documentElement.dataset.fx === "lite";
+      document.addEventListener(
+        "pointermove",
+        (e) => {
+          const c = !lite() && e.target.closest && e.target.closest(".card");
+          if (!c) return;
+          const r = c.getBoundingClientRect();
+          c.style.setProperty("--mx", e.clientX - r.left + "px");
+          c.style.setProperty("--my", e.clientY - r.top + "px");
         },
         { passive: true },
       );
-      const progress = $("#scroll-progress"),
+      const au = [...document.querySelectorAll(".au i")],
+        nav = $("#nav"),
+        progress = $("#scroll-progress"),
         backTop = $("#back-top"),
         reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
       let scrollTick = 0;
+      // One rAF-batched handler for everything scroll-driven.
       function updateScrollUI() {
         const max = document.documentElement.scrollHeight - innerHeight,
           p = max > 0 ? scrollY / max : 0;
         progress.style.transform = `scaleX(${Math.max(0, Math.min(1, p))})`;
         backTop.classList.toggle("visible", scrollY > 500);
+        nav.classList.toggle("s", scrollY > 20);
+        if (!lite())
+          au.forEach(
+            (a, i) => (a.style.translate = `0 ${scrollY * (0.05 + i * 0.03)}px`),
+          );
         scrollTick = 0;
       }
-      addEventListener(
-        "scroll",
-        () => {
-          if (!scrollTick) scrollTick = requestAnimationFrame(updateScrollUI);
-        },
-        { passive: true },
-      );
-      addEventListener(
-        "resize",
-        () => {
-          if (!scrollTick) scrollTick = requestAnimationFrame(updateScrollUI);
-        },
-        { passive: true },
-      );
+      const queueScrollUI = () => {
+        if (!scrollTick) scrollTick = requestAnimationFrame(updateScrollUI);
+      };
+      addEventListener("scroll", queueScrollUI, { passive: true });
+      addEventListener("resize", queueScrollUI, { passive: true });
       backTop.addEventListener("click", () =>
         scrollTo({
           top: 0,
           behavior: reduceMotion.matches ? "auto" : "smooth",
         }),
       );
-      updateScrollUI();
-      const cur = $("#cur");
-      if (cur.showPopover)
-        try {
-          cur.showPopover();
-        } catch (e) {}
-      else cur.removeAttribute("popover");
-      let mx = -100,
-        my = -100,
-        cx = -100,
-        cy = -100,
-        dn = false;
-      addEventListener("pointermove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        if (cx === -100) {
-          cx = mx;
-          cy = my;
-        }
-      });
-      addEventListener("pointerdown", () => (dn = true));
-      addEventListener("pointerup", () => (dn = false));
-      document.addEventListener("pointerover", (e) =>
-        cur.classList.toggle(
-          "hover",
-          !!e.target.closest("a,button,.cb,.sw,.fm"),
-        ),
-      );
-      document.addEventListener("mouseleave", () => (cur.style.opacity = 0));
-      document.addEventListener("mouseenter", () => (cur.style.opacity = 1));
-      (function t() {
-        cx += (mx - cx) * 0.78;
-        cy += (my - cy) * 0.78;
-        cur.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${dn ? 0.8 : 1})`;
-        requestAnimationFrame(t);
-      })();
       setRole(role);
       requestAnimationFrame(updateScrollUI);
     </script>

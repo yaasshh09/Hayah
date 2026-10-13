@@ -1168,6 +1168,7 @@
     </style>
     <link rel="stylesheet" href="/assets/preferences.css" />
     <script src="/assets/preferences.js"></script>
+    <script src="/assets/hayati-data.js"></script>
   </head>
   <body class="ai-page">
     <div class="au" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -1361,47 +1362,8 @@
         convo = [],
         busy = false;
 
-      const FAMILY = {
-        today: "2026-10-13",
-        currency: "AED",
-        family: [
-          "Ahmed (father)",
-          "Noura (mother)",
-          "Salem (son)",
-          "Latifa (daughter)",
-          "Zayed (son)",
-          "Jiddo Khalid (grandfather)",
-        ],
-        occasions: [
-          ["Salem's birthday", "2026-10-29", 400, 400],
-          ["Latifa's birthday", "2026-11-14", 600, 350],
-          ["UAE National Day", "2026-12-02", 1500, 600],
-          ["Family weekend in Hatta", "2026-12-12", 1800, 900],
-          ["Dubai Shopping Festival", "2026-12-19", 2000, 500],
-          ["Ramadan begins (tentative)", "2027-02-08", 3400, 600],
-          ["Eid Al Fitr (tentative)", "2027-03-10", 4800, 900],
-          ["Eid Al Adha (tentative)", "2027-05-17", 5400, 1200],
-          ["UAE National Day", "2027-12-02", 1600, 0],
-        ].map((a) => ({ name: a[0], date: a[1], budget: a[2], saved: a[3] })),
-        pocketMoney: {
-          child: "Latifa",
-          eidiya: 300,
-          split: { save: "50%", spend: "30%", give_sadaqa: "20%" },
-          goal: { item: "bicycle", cost: 250, saved: 160 },
-        },
-      };
-      const ctx = (r) =>
-        r === "child"
-          ? {
-              today: FAMILY.today,
-              child: "Latifa",
-              pocketMoney: FAMILY.pocketMoney,
-              upcomingDays: FAMILY.occasions.map((o) => ({
-                name: o.name,
-                date: o.date,
-              })),
-            }
-          : FAMILY;
+      // Live family + finance data from the shared store (children only get their jars).
+      const ctx = (r) => HayatiData.aiContext(r);
       const SYSTEM = {
         adult:
           "You are Hayati AI, a warm, practical assistant inside a UAE family planner. Use only the family data provided and say so if something is missing. Amounts are in AED. Islamic dates are tentative until moon sighting. Keep answers short, clear and actionable, using short paragraphs or bullet points. Reply in the same language the user writes in (English or Arabic).",
@@ -1422,10 +1384,7 @@
             "School term costs",
             "Forecast our school term costs for the next year.",
           ],
-          [
-            "Weekend plan",
-            "Suggest a low-cost family weekend plan for next month.",
-          ],
+          ["Spending check", "Where did we overspend this month?"],
         ],
         child: [
           ["My bicycle goal", "How close am I to my bicycle?"],
@@ -1450,11 +1409,19 @@
         if (/[\u0600-\u06FF]/.test(p))
           return "هذا رد تجريبي. عند ربط Gemini سأجيبك بالعربية عن ميزانية العيد والادخار وجميع مناسبات العائلة.";
         if (role === "child") {
+          const k = ctx("child").pocketMoney,
+            left = Math.max(0, k.goal.cost - k.goal.saved);
           if (/bicycle|bike|goal|close/.test(t))
-            return `You have saved **AED 160** of the **AED 250** you need. Only **AED 90** to go!
+            return `You have saved **AED ${k.goal.saved}** of the **AED ${k.goal.cost}** you need for ${k.goal.item.toLowerCase()}. ${left ? `Only **AED ${left}** to go!` : "You did it!"}
 - Keep your save jar growing each week
 - Your next Eidiya could finish the goal
-You are 64% of the way there. Well done!`;
+You are ${Math.min(100, Math.round((k.goal.saved / k.goal.cost) * 100))}% of the way there. Well done!`;
+          if (/jar|have|money/.test(t))
+            return `Here is what is in your jars right now:
+- **Save:** AED ${k.jars.save}
+- **Spend:** AED ${k.jars.spend}
+- **Give:** AED ${k.jars.give}
+You have already given **AED ${k.totalGivenAsSadaqa}** as Sadaqa. That is wonderful!`;
           if (/eidiya|split/.test(t))
             return `Here is a smart way to split your **AED 300** Eidiya:
 - **Save** 50%: AED 150 for your bicycle
@@ -1472,6 +1439,21 @@ Would you like an idea for how to give this week?`;
 - See which one grew the most
 You can do it!`;
         }
+        const f = ctx("adult"),
+          m = f.thisMonth,
+          aed = HayatiData.aed;
+        if (/overspend|over budget|spent|spending|this month|categor/.test(t)) {
+          const top = [...m.byCategory].sort((a, b) => b.spent - a.spent)[0];
+          return `This month the family has spent **${aed(m.spent)}** of a **${aed(m.limit)}** budget.
+${m.overLimit.length ? `- Over the limit: **${m.overLimit.join(", ")}**` : "- No category is over its limit yet"}
+- Biggest category: **${top.category}** at ${aed(top.spent)} of ${aed(top.limit)}
+- Last month you spent ${aed(f.lastMonthSpent)} in total
+Would you like ideas to trim ${m.overLimit[0] || top.category} next month?`;
+        }
+        if (/goal|hajj|car|emergency|saving/.test(t))
+          return `Your savings goals:
+${f.savingsGoals.map((g) => `- **${g.name}:** ${aed(g.saved)} of ${aed(g.target)} (${Math.round((g.saved / g.target) * 100)}%)`).join("\n")}
+You have put aside **${aed(m.savedTowardGoals)}** this month. Want a monthly plan to finish one of these sooner?`;
         if (/eid|adha|fitr|ramadan/.test(t))
           return `For **Eid Al Adha (tentative, mid-May 2027)** your planned budget is **AED 5,400** and **AED 1,200** is saved, so **AED 4,200** is still needed.
 - Saving about **AED 600 a month** gets you there with a small buffer
@@ -2066,38 +2048,6 @@ Ask me about any of these and I will make a plan.`;
         note(speakOn ? "Replies will be read aloud." : "Read aloud is off.");
       };
 
-      const cur = $("#cur");
-      if (cur.showPopover)
-        try {
-          cur.showPopover();
-        } catch (e) {}
-      else cur.removeAttribute("popover");
-      let mx = -100,
-        my = -100,
-        cx = -100,
-        cy = -100,
-        dn = false;
-      addEventListener("pointermove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        if (cx === -100) {
-          cx = mx;
-          cy = my;
-        }
-      });
-      addEventListener("pointerdown", () => (dn = true));
-      addEventListener("pointerup", () => (dn = false));
-      document.addEventListener("pointerover", (e) =>
-        cur.classList.toggle("hover", !!e.target.closest("a,button,textarea")),
-      );
-      document.addEventListener("mouseleave", () => (cur.style.opacity = 0));
-      document.addEventListener("mouseenter", () => (cur.style.opacity = 1));
-      (function t() {
-        cx += (mx - cx) * 0.78;
-        cy += (my - cy) * 0.78;
-        cur.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${dn ? 0.8 : 1})`;
-        requestAnimationFrame(t);
-      })();
       setRole(role, false);
     </script>
   </body>

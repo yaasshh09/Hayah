@@ -5,9 +5,35 @@
     textSize: "medium",
     highContrast: false,
     adhdFriendly: false,
+    effects: "auto",
     name: "Divya Bhosale",
     email: "",
   };
+  const slowKey = "hayati.slowDevice";
+
+  // "lite" drops the expensive visuals (animated blur, glass, custom cursor) on weak devices.
+  const weakDevice = () => {
+    const cores = navigator.hardwareConcurrency || 8,
+      memory = navigator.deviceMemory || 8;
+    let slow = false;
+    try {
+      slow = localStorage.getItem(slowKey) === "1";
+    } catch {}
+    return (
+      slow ||
+      cores <= 2 ||
+      memory <= 2 ||
+      (cores <= 4 && memory <= 4) ||
+      Boolean(navigator.connection && navigator.connection.saveData) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  };
+  const effectsMode = (preferences) =>
+    preferences.effects === "full"
+      ? "full"
+      : preferences.effects === "reduced" || weakDevice()
+        ? "lite"
+        : "full";
 
   const readPreferences = () => {
     try {
@@ -30,6 +56,7 @@
     root.dataset.textSize = preferences.textSize;
     root.dataset.contrast = preferences.highContrast ? "high" : "normal";
     root.dataset.adhd = String(preferences.adhdFriendly);
+    root.dataset.fx = effectsMode(preferences);
     root.style.colorScheme = theme;
     const logo =
       theme === "dark"
@@ -84,6 +111,7 @@
     const save = () => {
       localStorage.setItem(storageKey, JSON.stringify(preferences));
       applyPreferences(preferences);
+      showEffects();
       const status = document.querySelector("[data-save-status]");
       if (status) {
         status.textContent = "Saved on this device";
@@ -166,10 +194,130 @@
           textSize: defaults.textSize,
           highContrast: defaults.highContrast,
           adhdFriendly: defaults.adhdFriendly,
+          effects: defaults.effects,
         };
+        try {
+          localStorage.removeItem(slowKey);
+        } catch {}
         save();
         render();
       });
+
+    document
+      .querySelector("[data-reset-finance]")
+      ?.addEventListener("click", (event) => {
+        try {
+          localStorage.removeItem("hayati.finance");
+          localStorage.removeItem("hayati-events");
+        } catch {}
+        event.currentTarget.textContent = "Demo data restored";
+      });
+
+    function showEffects() {
+      const status = document.querySelector("[data-effects-status]");
+      if (status)
+        status.textContent =
+          root.dataset.fx === "lite"
+            ? "Reduced effects are on for this device."
+            : "Full effects are on for this device.";
+    }
+    showEffects();
+
+    // On "auto", measure real frame times once the page settles. If this device
+    // can't hold ~40fps, remember it and switch to lite for every page.
+    if (preferences.effects === "auto" && root.dataset.fx === "full") {
+      window.addEventListener("load", () =>
+        setTimeout(() => {
+          if (document.hidden) return;
+          const gaps = [];
+          let last = performance.now();
+          const sample = (t) => {
+            gaps.push(t - last);
+            last = t;
+            if (gaps.length < 60) return requestAnimationFrame(sample);
+            gaps.sort((a, b) => a - b);
+            if (!document.hidden && gaps[30] > 25) {
+              try {
+                localStorage.setItem(slowKey, "1");
+              } catch {}
+              root.dataset.fx = "lite";
+              showEffects();
+            }
+          };
+          requestAnimationFrame(sample);
+        }, 1200),
+      );
+    }
+
+    // Shared custom cursor: only runs on fine pointers with full effects, and
+    // only animates while it is catching up with the mouse.
+    const cursor = document.querySelector(".c-cursor");
+    if (
+      cursor &&
+      root.dataset.fx === "full" &&
+      root.dataset.adhd !== "true" &&
+      window.matchMedia("(pointer: fine)").matches
+    ) {
+      if (cursor.showPopover && cursor.hasAttribute("popover")) {
+        try {
+          cursor.showPopover();
+        } catch {}
+      } else cursor.removeAttribute("popover");
+      let mx = -100,
+        my = -100,
+        cx = -100,
+        cy = -100,
+        down = false,
+        frame = 0;
+      const draw = () => {
+        cx += (mx - cx) * 0.78;
+        cy += (my - cy) * 0.78;
+        if (Math.abs(mx - cx) < 0.3 && Math.abs(my - cy) < 0.3) {
+          cx = mx;
+          cy = my;
+          frame = 0;
+        } else frame = requestAnimationFrame(draw);
+        cursor.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${down ? 0.8 : 1})`;
+      };
+      const wake = () => {
+        if (!frame) frame = requestAnimationFrame(draw);
+      };
+      window.addEventListener(
+        "pointermove",
+        (event) => {
+          if (event.pointerType === "touch") return;
+          mx = event.clientX;
+          my = event.clientY;
+          if (cx === -100) {
+            cx = mx;
+            cy = my;
+          }
+          wake();
+        },
+        { passive: true },
+      );
+      window.addEventListener("pointerdown", () => {
+        down = true;
+        wake();
+      });
+      window.addEventListener("pointerup", () => {
+        down = false;
+        wake();
+      });
+      document.addEventListener("pointerover", (event) =>
+        cursor.classList.toggle(
+          "hover",
+          Boolean(
+            event.target.closest &&
+              event.target.closest(
+                'a,button,input,select,textarea,label,summary,[role="button"],.cell,.cb,.sw,.fm,.pc,.ev,.ios-pill',
+              ),
+          ),
+        ),
+      );
+      document.addEventListener("mouseleave", () => (cursor.style.opacity = "0"));
+      document.addEventListener("mouseenter", () => (cursor.style.opacity = "1"));
+    } else if (cursor) cursor.style.display = "none";
 
     render();
     root.dataset.preferencesReady = "true";

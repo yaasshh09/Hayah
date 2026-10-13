@@ -25,6 +25,10 @@ router.get("/calendar", (_req, res) => {
   res.sendFile(path.join(pagesDirectory, "calendar.html"));
 });
 
+router.get("/finance", (_req, res) => {
+  res.sendFile(path.join(pagesDirectory, "finance.html"));
+});
+
 router.get("/AI", (_req, res) => {
   res.sendFile(path.join(pagesDirectory, "AI.html"));
 });
