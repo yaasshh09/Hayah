@@ -1,12 +1,13 @@
 // Offline support: pages are network-first (fresh when online, cached copy offline);
 // assets and fonts are served from cache and refreshed in the background.
 // Served at /sw.js (Express route locally, copied to the site root on Netlify build).
-const CACHE = "hayati-v1";
+const CACHE = "hayati-v2";
 const PAGES = ["/", "/signin", "/dashboard", "/calendar", "/finance", "/AI", "/settings"];
 const ASSETS = [
   "/assets/preferences.css",
   "/assets/preferences.js",
   "/assets/hayati-data.js",
+  "/assets/finance-plus.js",
   "/assets/hayati-logo.png",
   "/assets/hayati-logo-dark.png",
   "/assets/hayati-mark.png",

@@ -11,7 +11,6 @@
   };
   const slowKey = "hayati.slowDevice";
 
-  // "lite" drops the expensive visuals (animated blur, glass, custom cursor) on weak devices.
   const weakDevice = () => {
     const cores = navigator.hardwareConcurrency || 8,
       memory = navigator.deviceMemory || 8;
@@ -271,8 +270,6 @@
     }
     showEffects();
 
-    // On "auto", measure real frame times once the page settles. If this device
-    // can't hold ~40fps, remember it and switch to lite for every page.
     if (preferences.effects === "auto" && root.dataset.fx === "full") {
       window.addEventListener("load", () =>
         setTimeout(() => {
@@ -297,8 +294,6 @@
       );
     }
 
-    // Shared custom cursor: only runs on fine pointers with full effects, and
-    // only animates while it is catching up with the mouse.
     const cursor = document.querySelector(".c-cursor");
     if (
       cursor &&
@@ -318,14 +313,14 @@
         down = false,
         frame = 0;
       const draw = () => {
-        cx += (mx - cx) * 0.78;
-        cy += (my - cy) * 0.78;
+        cx += (mx - cx) * 0.52;
+        cy += (my - cy) * 0.52;
         if (Math.abs(mx - cx) < 0.3 && Math.abs(my - cy) < 0.3) {
           cx = mx;
           cy = my;
           frame = 0;
         } else frame = requestAnimationFrame(draw);
-        cursor.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${down ? 0.8 : 1})`;
+        cursor.style.transform = `translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${down ? 0.92 : 1})`;
       };
       const wake = () => {
         if (!frame) frame = requestAnimationFrame(draw);

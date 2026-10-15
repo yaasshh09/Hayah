@@ -1,5 +1,3 @@
-// Shared family data for every Hayati page: occasions, family, and the finance store.
-// Everything lives in this browser's localStorage. Works in Node too (scripts/check-finance.js).
 (function (root) {
   const CAT = {
     religious: ["Religious", "#9F8FE0"],
@@ -8,16 +6,15 @@
     school: ["School", "#6F9BEA"],
     family: ["Family", "#EE7FAA"],
   };
-  // Household spending categories: [label, colour, default monthly limit in AED]
   const SPEND = {
-    groceries: ["Groceries", "#3FBF9C", 3500],
-    bills: ["Bills & utilities", "#6F9BEA", 2400],
-    school: ["School", "#9F8FE0", 2000],
-    transport: ["Transport", "#E8B765", 1200],
-    health: ["Health", "#EE7FAA", 600],
-    home: ["Home", "#B3A4F2", 800],
-    dining: ["Eating out", "#F29E6D", 900],
-    giving: ["Giving & Sadaqa", "#5FC9A8", 500],
+    groceries: ["Groceries", "#B97C73", 3500],
+    bills: ["Bills & utilities", "#BC9D72", 2400],
+    school: ["School", "#8C7FC1", 2000],
+    transport: ["Transport", "#75A963", 1200],
+    health: ["Health", "#6FA6B1", 600],
+    home: ["Home", "#5D87C4", 800],
+    dining: ["Eating out", "#AD8294", 900],
+    giving: ["Giving & Sadaqa", "#B08BAA", 500],
   };
   const FAM = [
     ["Ahmed", "Father", "#9F8FE0"],
@@ -98,8 +95,6 @@
   const aed = (n) =>
     "AED " + Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
-  // Demo data is generated relative to "now" so the prototype always looks current.
-  // [day of month, category, amount, who, note]
   const MONTH_TEMPLATE = [
     [1, "bills", 1150, "Ahmed", "DEWA electricity & water"],
     [1, "bills", 389, "Ahmed", "Home internet"],
@@ -217,7 +212,6 @@
     store.set(EVENTS_KEY, JSON.stringify(list));
   }
 
-  // All occasions with live budgets: planned (b), saved (s), spent from tagged expenses.
   function events(st = load()) {
     const spent = {};
     st.expenses.forEach((x) => {
@@ -279,7 +273,6 @@
     st.occ[k] = { b: money(b), s: e.s };
     return save(st);
   }
-  // Put money aside toward a goal or an occasion.
   function contribute(st, kind, ref, amt) {
     if (!validAmount(amt)) throw new Error("Enter an amount.");
     if (kind === "goal") {
@@ -304,7 +297,6 @@
     return save(st);
   }
 
-  // Kid jars are derived from the log, so they can never drift out of sync.
   function kidJars(st) {
     const j = { save: 0, spend: 0, give: 0, received: 0, given: 0, spent: 0 };
     st.kid.log.forEach((x) => {
@@ -347,14 +339,6 @@
     if (!left || e.d < t) return 0;
     const days = (new Date(e.d + "T00:00") - new Date(t + "T00:00")) / 864e5;
     return Math.ceil(left / Math.max(1, Math.floor(days / 30.44)));
-  }
-
-  // Zakat estimate: 2.5% of zakatable wealth once it reaches the nisab (85 g of gold).
-  const NISAB_GRAMS = 85;
-  function zakat({ cash = 0, gold = 0, debts = 0, goldPrice = 400 }) {
-    const wealth = money(Math.max(0, Number(cash) + Number(gold) - Number(debts))),
-      nisab = money(NISAB_GRAMS * Number(goldPrice));
-    return { wealth, nisab, due: nisab > 0 && wealth >= nisab ? money(wealth * 0.025) : 0 };
   }
 
   // Up to three plain-language tips from this month's numbers. Works offline.
@@ -406,13 +390,18 @@
   }
 
   /* ---------- Backup: export / validated import ---------- */
-  const PREF_KEY = "hayati.preferences";
+  const PREF_KEY = "hayati.preferences",
+    PLUS_KEY = "hayati-fin-plus"; // debts, bills, assets and cards from finance-plus.js
   function exportAll() {
-    let preferences = {};
-    try {
-      preferences = JSON.parse(store.get(PREF_KEY) || "{}");
-    } catch {}
-    return { app: "hayati", version: VERSION, exported: new Date().toISOString(), finance: load(), events: customEvents(), preferences };
+    const read = (k) => {
+      try {
+        return JSON.parse(store.get(k) || "null");
+      } catch {
+        return null;
+      }
+    };
+    const plus = read(PLUS_KEY);
+    return { app: "hayati", version: VERSION, exported: new Date().toISOString(), finance: load(), events: customEvents(), preferences: read(PREF_KEY) || {}, ...(plus ? { plus } : {}) };
   }
 
   // Backup files come from outside the app, so every field is checked and rebuilt.
@@ -488,9 +477,6 @@
           return e;
         }),
       },
-      ...(isObj(f.zakat)
-        ? { zakat: Object.fromEntries(["cash", "gold", "debts", "goldPrice"].filter((z) => f.zakat[z] !== undefined).map((z) => [z, num(f.zakat[z], "zakat")])) }
-        : {}),
     };
     const evs = list(data.events, 500, "calendar events").map((e) => {
       if (!isObj(e) || !isDate(e.d) || !CAT[e.c] || ![0, 1].includes(e.tent ?? 0)) fail("calendar events");
@@ -510,10 +496,67 @@
     pick("effects", (x) => ["auto", "full", "reduced"].includes(x));
     pick("name", (x) => typeof x === "string" && x.length <= 80);
     pick("email", (x) => typeof x === "string" && x.length <= 120);
+    // Debts, bills and cards. Their ids, colours and types land in HTML attributes, so only known shapes get in.
+    let plus = null;
+    if (data.plus !== undefined) {
+      const x = data.plus,
+        id = (v, what) => (typeof v === "string" && /^[\w-]{1,40}$/.test(v) ? v : fail(what)),
+        oneOf = (v, opts, what) => (opts.includes(v) ? v : fail(what)),
+        day = (v, what) => (Number.isInteger(v) && v >= 1 && v <= 31 ? v : fail(what));
+      if (!isObj(x) || !isObj(x.assets) || !isObj(x.paid ?? {}) || !isObj(x.chk ?? {})) fail("debts and bills");
+      const assets = {};
+      ["cash", "savings", "invest", "gold", "other"].forEach((k) => (assets[k] = num(x.assets[k] ?? 0, "assets")));
+      plus = {
+        sample: x.sample === true,
+        income: num(x.income ?? 0, "income"),
+        gold: num(x.gold ?? 0, "gold price"),
+        extra: num(x.extra ?? 0, "extra payment"),
+        assets,
+        debts: list(x.debts, 100, "debts").map((d) => {
+          if (!isObj(d)) fail("debts");
+          return {
+            id: id(d.id, "debts"),
+            n: str(d.n, 60, "debts", 1),
+            t: oneOf(d.t, ["loan", "card", "bnpl", "mortgage", "family"], "debts"),
+            bal: num(d.bal, "debts"),
+            orig: num(d.orig ?? d.bal, "debts"),
+            apr: num(d.apr, "debts"),
+            pay: num(d.pay, "debts"),
+            limit: num(d.limit ?? 0, "debts"),
+            day: day(d.day, "debts"),
+          };
+        }),
+        bills: list(x.bills, 200, "bills").map((b) => {
+          if (!isObj(b)) fail("bills");
+          return {
+            id: id(b.id, "bills"),
+            n: str(b.n, 60, "bills", 1),
+            amt: num(b.amt, "bills", true),
+            f: oneOf(b.f, ["m", "y"], "bills"),
+            day: day(b.day, "bills"),
+            cat: oneOf(b.cat, ["home", "utilities", "transport", "insurance", "school", "fun", "other"], "bills"),
+            ...(b.mo !== undefined ? { mo: Number.isInteger(b.mo) && b.mo >= 0 && b.mo <= 12 ? b.mo : fail("bills") } : {}),
+          };
+        }),
+        paid: Object.fromEntries(Object.keys(x.paid ?? {}).filter((k) => /^[\w-]{1,40}:\d{4}-\d{2}$/.test(k) && x.paid[k] === true).map((k) => [k, true])),
+        chk: Object.fromEntries(Object.keys(x.chk ?? {}).filter((k) => /^\d{1,2}$/.test(k)).map((k) => [k, x.chk[k] === true])),
+        virtualCards: list(x.virtualCards ?? [], 50, "cards").map((c) => {
+          if (!isObj(c)) fail("cards");
+          return {
+            id: id(c.id, "cards"),
+            preset: id(c.preset, "cards"),
+            name: str(c.name, 60, "cards", 1),
+            color: typeof c.color === "string" && /^#[0-9a-f]{6}$/i.test(c.color) ? c.color : fail("cards"),
+            account: oneOf(c.account, ["cash", "savings", "invest", "other"], "cards"),
+          };
+        }),
+      };
+    }
     // Everything checked: now write.
     save(finance);
     store.set(EVENTS_KEY, JSON.stringify(evs));
     store.set(PREF_KEY, JSON.stringify(prefs));
+    if (plus) store.set(PLUS_KEY, JSON.stringify(plus));
     return finance;
   }
 
@@ -575,7 +618,7 @@
     seed, load, save, reset, events, addEvent, customEvents,
     monthSummary, addExpense, removeExpense, setLimit, setOccBudget,
     contribute, addGoal, removeGoal, kidJars, kidAdd, aiContext,
-    monthlyNeed, zakat, insights, exportAll, importAll,
+    monthlyNeed, insights, exportAll, importAll,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.HayatiData = api;

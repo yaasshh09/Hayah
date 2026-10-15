@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -52,7 +52,7 @@
         background: #fff;
         color: var(--ink);
         font:
-          400 15px/1.6 "Instrument Sans",
+          400 15px/1.6 "Manrope",
           -apple-system,
           sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -63,7 +63,7 @@
       h1,
       h2,
       h3 {
-        font-family: "Bricolage Grotesque", sans-serif;
+        font-family: "Manrope", sans-serif;
       }
       a {
         color: inherit;
@@ -91,7 +91,7 @@
         height: 55vw;
         border-radius: 50%;
         filter: blur(110px);
-        opacity: 0.7;
+        opacity: 0.58;
         animation: dr 30s ease-in-out infinite alternate;
       }
       .au i:nth-child(1) {
@@ -149,6 +149,7 @@
             rgba(255, 214, 231, 0.65),
             transparent 70%
           );
+        opacity: 0.82;
       }
       .waves {
         position: fixed;
@@ -159,6 +160,7 @@
         z-index: -1;
         pointer-events: none;
         animation: wv 46s linear infinite;
+        opacity: 0.78;
       }
       .waves path {
         fill: none;
@@ -281,6 +283,25 @@
       .page {
         padding: 80px 6vw 0;
       }
+      @keyframes aiPageEnter {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .page > .rule {
+        animation: aiPageEnter 0.55s var(--ease) both;
+      }
+      .shell > .sb {
+        animation: aiPageEnter 0.65s var(--ease) 0.06s both;
+      }
+      .shell > .ai {
+        animation: aiPageEnter 0.7s var(--ease) 0.12s both;
+      }
       .rule {
         height: 1px;
         background: var(--rule, rgba(0, 0, 0, 0.09));
@@ -369,6 +390,7 @@
         }
       }
       .hero h1 {
+        font-family: "Bricolage Grotesque", sans-serif;
         font-size: clamp(40px, 6.2vw, 100px);
         font-weight: 600;
         line-height: 1;
@@ -685,7 +707,7 @@
         display: grid;
         place-items: center;
         font:
-          600 12px "Instrument Sans",
+          600 12px "Manrope",
           -apple-system,
           sans-serif;
         letter-spacing: 0.06em;
@@ -801,7 +823,7 @@
         background: rgba(255, 255, 255, 0.72);
         box-shadow: 0 2px 8px rgba(32, 30, 46, 0.035);
         font:
-          600 14px "Instrument Sans",
+          600 14px "Manrope",
           -apple-system,
           sans-serif;
         transition:
@@ -856,7 +878,7 @@
         border: 0;
         background: rgba(255, 255, 255, 0.55);
         font:
-          400 14px "Instrument Sans",
+          400 14px "Manrope",
           -apple-system,
           sans-serif;
         outline: 0;
@@ -929,7 +951,7 @@
         background: none;
         padding: 10px 12px;
         font:
-          400 14px "Instrument Sans",
+          400 14px "Manrope",
           -apple-system,
           sans-serif;
         color: #3a3a42;
@@ -1083,7 +1105,7 @@
           border: 1px solid rgba(0, 0, 0, 0.12);
           background: rgba(255, 255, 255, 0.7);
           font:
-            600 13px "Instrument Sans",
+            600 13px "Manrope",
             -apple-system,
             sans-serif;
         }
@@ -1355,14 +1377,17 @@
             (c) =>
               ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
           );
-      let role =
-          new URLSearchParams(location.search).get("role") === "child"
-            ? "child"
-            : "adult",
-        convo = [],
+      const requestedRole = new URLSearchParams(location.search).get("role");
+      let role = requestedRole === "child" ? "child" : "adult";
+      try {
+        const savedRole = localStorage.getItem("hayati.role");
+        if (requestedRole !== "child" && requestedRole !== "adult")
+          role = savedRole === "child" || savedRole === "adult" ? savedRole : "adult";
+        localStorage.setItem("hayati.role", role);
+      } catch (e) {}
+      let convo = [],
         busy = false;
 
-      // Live family + finance data from the shared store (children only get their jars).
       const ctx = (r) => HayatiData.aiContext(r);
       const SYSTEM = {
         adult:
@@ -1610,6 +1635,9 @@ Ask me about any of these and I will make a plan.`;
       }
       function setRole(r, reset) {
         role = r;
+        try {
+          localStorage.setItem("hayati.role", r);
+        } catch (e) {}
         document
           .querySelectorAll(".seg button")
           .forEach((b) => b.setAttribute("aria-pressed", b.dataset.r === r));

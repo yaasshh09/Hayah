@@ -102,6 +102,16 @@
         background: rgba(130, 218, 191, 0.2);
         animation-delay: -9s;
       }
+      body.settings-page {
+        background: #efedf3;
+      }
+      .settings-page .ambient {
+        background: transparent;
+      }
+      .settings-page .ambient::before,
+      .settings-page .ambient::after {
+        display: none;
+      }
       @keyframes drift {
         to {
           transform: translate3d(3vw, 2vh, 0) scale(1.12);
