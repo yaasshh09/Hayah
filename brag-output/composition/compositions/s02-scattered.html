@@ -1,0 +1,298 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s02 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          background: #15131c;
+          color: #fff;
+        }
+        #s02 .glow {
+          position: absolute;
+          width: 1300px;
+          height: 1300px;
+          left: 900px;
+          top: -200px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(232, 183, 101, 0.22), rgba(232, 183, 101, 0) 62%);
+        }
+        #s02 .left {
+          position: absolute;
+          left: 120px;
+          top: 0;
+          bottom: 0;
+          width: 780px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 30px;
+        }
+        #s02 .kicker {
+          color: var(--gold);
+        }
+        #s02 .hl {
+          position: relative;
+          height: 360px;
+        }
+        #s02 .hl h2 {
+          position: absolute;
+          left: 0;
+          top: 0;
+          font-size: 104px;
+          width: 780px;
+        }
+        #s02 .hl h2 .w {
+          display: inline-block;
+          opacity: 0;
+        }
+        #s02 .frag {
+          position: absolute;
+          border-radius: 22px;
+          opacity: 0;
+          box-shadow: 0 40px 90px rgba(0, 0, 0, 0.5);
+        }
+        /* spreadsheet */
+        #s02-sheet {
+          left: 950px;
+          top: 60px;
+          width: 560px;
+          background: #fff;
+          color: #1d1d1f;
+          overflow: hidden;
+        }
+        #s02-sheet .bar {
+          background: #1f7a4a;
+          color: #fff;
+          padding: 14px 22px;
+          font-size: 20px;
+          font-weight: 700;
+        }
+        #s02-sheet table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 22px;
+          font-weight: 600;
+        }
+        #s02-sheet td {
+          border: 1px solid #d9dde3;
+          padding: 10px 16px;
+        }
+        #s02-sheet .err {
+          background: #ffe1e1;
+          color: #c62828;
+          font-weight: 800;
+        }
+        /* paper calendar */
+        #s02-cal {
+          left: 1500px;
+          top: 120px;
+          width: 380px;
+          background: #fffaf0;
+          color: #2a2520;
+          padding: 24px 26px;
+        }
+        #s02-cal h4 {
+          font-size: 34px;
+          letter-spacing: 0.08em;
+          margin-bottom: 14px;
+        }
+        #s02-cal .g {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          gap: 8px;
+          font-size: 20px;
+          font-weight: 700;
+          text-align: center;
+          color: #6b6258;
+        }
+        #s02-cal .circ {
+          border: 3px solid #d64545;
+          border-radius: 50%;
+          color: #d64545;
+        }
+        #s02-cal .note {
+          margin-top: 14px;
+          font-size: 26px;
+          font-weight: 800;
+          color: #d64545;
+          transform: rotate(-4deg);
+        }
+        /* bank sms */
+        #s02-sms {
+          left: 920px;
+          top: 440px;
+          width: 560px;
+          background: rgba(255, 255, 255, 0.94);
+          color: #1d1d1f;
+          padding: 22px 26px;
+        }
+        #s02-sms .from {
+          font-size: 18px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: #85858c;
+          margin-bottom: 8px;
+        }
+        #s02-sms p {
+          font-size: 25px;
+          font-weight: 600;
+          line-height: 1.35;
+        }
+        /* group chat */
+        #s02-chat {
+          left: 1170px;
+          top: 690px;
+          width: 520px;
+          background: #0f2a24;
+          padding: 20px;
+        }
+        #s02-chat .hd {
+          font-size: 20px;
+          font-weight: 800;
+          color: #9be8c9;
+          margin-bottom: 14px;
+        }
+        #s02-chat .b {
+          display: block;
+          width: fit-content;
+          max-width: 400px;
+          padding: 12px 18px;
+          border-radius: 16px;
+          font-size: 23px;
+          font-weight: 600;
+          margin-bottom: 10px;
+          background: #1f4a40;
+          opacity: 0;
+        }
+        #s02-chat .b.me {
+          margin-left: auto;
+          background: #2f7a62;
+        }
+        /* sticky note */
+        #s02-note {
+          left: 1560px;
+          top: 520px;
+          width: 330px;
+          background: #ffe680;
+          color: #3b3200;
+          padding: 26px 24px;
+          border-radius: 6px;
+          font-size: 28px;
+          font-weight: 800;
+          line-height: 1.3;
+        }
+      </style>
+
+      <div id="s02" data-composition-id="s02" data-width="1920" data-height="1080">
+        <div class="glow"></div>
+
+        <div class="frag" id="s02-sheet">
+          <div class="bar body">family_budget_FINAL_v3.xlsx</div>
+          <table class="body">
+            <tr><td>Rent</td><td>9,500</td><td>paid?</td></tr>
+            <tr><td>School</td><td>14,200</td><td>??</td></tr>
+            <tr><td>DEWA</td><td>860</td><td></td></tr>
+            <tr><td>Eid</td><td class="err">#REF!</td><td></td></tr>
+            <tr><td>Travel</td><td>11,000</td><td>ask Ahmed</td></tr>
+          </table>
+        </div>
+        <div class="frag" id="s02-cal">
+          <h4 class="disp">MARCH</h4>
+          <div class="g body">
+            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+            <span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span>
+            <span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span class="circ">20</span><span>21</span>
+          </div>
+          <div class="note body">Eid?? budget??</div>
+        </div>
+        <div class="frag body" id="s02-note">Eidiya envelopes: 6 kids x AED 200 = ??</div>
+        <div class="frag" id="s02-sms">
+          <div class="from body">BANK &middot; NOW</div>
+          <p class="body">AED 1,240.00 was debited from your card ending 4421 at CARREFOUR.</p>
+        </div>
+        <div class="frag" id="s02-chat">
+          <div class="hd body">Al Mazrouei Family</div>
+          <span class="b body">Did anyone pay DEWA?</span>
+          <span class="b me body">I thought you did</span>
+          <span class="b body">How much is Eidiya this year?</span>
+        </div>
+
+        <div class="left">
+          <div class="kicker">The problem</div>
+          <div class="hl">
+            <h2 class="disp" id="s02-h1">
+              <span class="w">My</span> <span class="w">family's</span> <span class="w">money</span> <span class="w">lived</span>
+              <span class="w">in</span> <span class="w" style="color: var(--gold)">five</span> <span class="w" style="color: var(--gold)">different</span>
+              <span class="w">places.</span>
+            </h2>
+            <h2 class="disp" id="s02-h2">
+              <span class="w">Nobody</span> <span class="w">could</span> <span class="w">see</span> <span class="w">the</span>
+              <span class="w lav">whole</span> <span class="w lav">picture.</span>
+            </h2>
+          </div>
+        </div>
+
+        <audio id="s02-a1" src="assets/sfx/card-place-1.ogg" data-start="0.48" data-duration="0.5" data-track-index="110" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s02-a2" src="assets/sfx/card-place-2.ogg" data-start="0.98" data-duration="0.5" data-track-index="111" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s02-a3" src="assets/sfx/card-place-3.ogg" data-start="1.48" data-duration="0.5" data-track-index="110" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s02-a4" src="assets/sfx/select_008.ogg" data-start="1.98" data-duration="0.4" data-track-index="111" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s02-a5" src="assets/sfx/card-place-4.ogg" data-start="2.48" data-duration="0.5" data-track-index="110" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s02-p1" src="assets/sfx/pop.wav" data-start="2.85" data-duration="0.22" data-track-index="112" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s02-p2" src="assets/sfx/pop.wav" data-start="3.2" data-duration="0.22" data-track-index="112" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s02-p3" src="assets/sfx/pop.wav" data-start="3.55" data-duration="0.22" data-track-index="112" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s02-g1" src="assets/sfx/glitch_002.ogg" data-start="4.0" data-duration="0.3" data-track-index="113" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s02-e1" src="assets/sfx/error_005.ogg" data-start="4.05" data-duration="0.5" data-track-index="114" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s02-g2" src="assets/sfx/glitch_004.ogg" data-start="4.45" data-duration="0.3" data-track-index="113" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s02-r1" src="assets/sfx/riser.wav" data-start="6.19" data-duration="1.8" data-track-index="115" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s02-w1" src="assets/sfx/whoosh.wav" data-start="7.2" data-duration="0.7" data-track-index="116" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const frags = [
+            ["#s02-sheet", -8, -260, 0.49],
+            ["#s02-cal", 7, 220, 0.99],
+            ["#s02-note", -6, -180, 1.49],
+            ["#s02-sms", 4, 0, 1.99],
+            ["#s02-chat", -5, 240, 2.49],
+          ];
+          // beat-grid: one fragment per beat
+          frags.forEach(([sel, rot, dx, t]) => {
+            tl.fromTo(sel, { opacity: 0, x: dx, y: 120, rotation: rot * 3, scale: 0.7 }, { opacity: 1, x: 0, y: 0, rotation: rot, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, t);
+            tl.to(sel, { y: "+=" + (rot > 0 ? 26 : -26), rotation: rot * 1.4, duration: 3.4, ease: "sine.inOut" }, t + 0.6);
+          });
+          tl.fromTo("#s02-chat .b", { opacity: 0, y: 16, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)", stagger: 0.35 }, 2.85);
+
+          tl.fromTo("#s02 .kicker", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 0.25);
+          tl.fromTo("#s02-h1 .w", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.06 }, 0.35);
+
+          // Glitch: fragments split and shake
+          ["#s02-sheet", "#s02-cal", "#s02-note", "#s02-sms", "#s02-chat"].forEach((sel, i) => {
+            tl.to(sel, { x: i % 2 ? 14 : -14, skewX: i % 2 ? 6 : -6, duration: 0.05, ease: "none", yoyo: true, repeat: 5 }, 4.0 + i * 0.02);
+            tl.to(sel, { opacity: 0.55, filter: "saturate(0.3) blur(1.5px)", duration: 0.4 }, 4.4);
+          });
+
+          // Headline swap
+          tl.to("#s02-h1 .w", { opacity: 0, y: -50, duration: 0.3, ease: "power2.in", stagger: 0.02 }, 4.3);
+          tl.fromTo("#s02-h2 .w", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.07 }, 4.55);
+
+          // Everything gets pulled to the center for the reveal
+          ["#s02-sheet", "#s02-cal", "#s02-note", "#s02-sms", "#s02-chat"].forEach((sel, i) => {
+            tl.to(sel, { left: 760, top: 400, x: 0, y: 0, rotation: (i % 2 ? 1 : -1) * 120, scale: 0.05, opacity: 1, filter: "none", duration: 1.0, ease: "power4.in" }, 6.9 + i * 0.04);
+          });
+          tl.to("#s02 .left", { opacity: 0, scale: 0.9, filter: "blur(10px)", duration: 0.6, ease: "power2.in" }, 7.1);
+          tl.to("#s02 .glow", { left: 310, top: -110, scale: 1.6, duration: 1.1, ease: "power3.in" }, 6.85);
+
+          window.__timelines["s02"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

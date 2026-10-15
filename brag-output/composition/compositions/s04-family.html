@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s04 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s04 .line {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1920px;
+          height: 260px;
+        }
+        #s04 .kicker {
+          position: absolute;
+          left: 120px;
+          top: 64px;
+          opacity: 0;
+        }
+        #s04 .pc {
+          position: absolute;
+          top: 168px;
+          width: 340px;
+          padding: 18px 18px 22px;
+          border-radius: 26px;
+          background: #fff;
+          box-shadow: 0 34px 80px rgba(60, 40, 120, 0.22);
+          transform-origin: 50% -14px;
+          opacity: 0;
+        }
+        #s04 .pin {
+          position: absolute;
+          left: 155px;
+          top: -26px;
+          width: 30px;
+          height: 46px;
+          border-radius: 8px;
+          background: #c9c9d2;
+          box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.08);
+        }
+        #s04 .pc .lb {
+          font-size: 17px;
+          font-weight: 700;
+          color: var(--mut);
+          margin: 2px 4px 12px;
+        }
+        #s04 .pc .ph {
+          width: 304px;
+          height: 270px;
+          border-radius: 18px;
+          overflow: hidden;
+        }
+        #s04 .pc .ph svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+        #s04 .pc .nm {
+          font-size: 34px;
+          margin: 18px 6px 4px;
+          letter-spacing: -0.03em;
+        }
+        #s04 .pc .rl {
+          font-size: 22px;
+          font-weight: 600;
+          color: var(--mut);
+          margin: 0 6px;
+        }
+        #s04 .role {
+          position: absolute;
+          top: 128px;
+          padding: 8px 18px;
+          border-radius: 999px;
+          background: #15131c;
+          color: #fff;
+          font-size: 20px;
+          font-weight: 800;
+          white-space: nowrap;
+          opacity: 0;
+        }
+        #s04 .copy {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 690px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 28px;
+          text-align: center;
+        }
+        #s04 h2 {
+          font-size: 116px;
+        }
+        #s04 h2 span {
+          display: inline-block;
+          opacity: 0;
+        }
+        #s04 .sub {
+          font-size: 36px;
+          font-weight: 600;
+          color: #4a4852;
+          max-width: 1300px;
+          opacity: 0;
+        }
+      </style>
+
+      <div id="s04" data-composition-id="s04" data-width="1920" data-height="1080">
+        <svg class="line" viewBox="0 0 1920 260"><path id="s04-str" d="M -20 150 Q 960 210 1940 150" stroke="#8e8a99" stroke-width="3" fill="none" /></svg>
+        <div class="kicker">Meet the Hayati family</div>
+        <div id="s04-cards"></div>
+        <div class="copy">
+          <h2 class="disp"><span>One</span> <span>family.</span> <span class="lav">One</span> <span class="lav">clearer</span> <span class="lav">plan.</span></h2>
+          <p class="sub body" id="s04-sub">I designed it around how families here really plan: together, across generations, around the moments that matter.</p>
+        </div>
+
+        <audio id="s04-a0" src="assets/sfx/whoosh.wav" data-start="0.05" data-duration="0.7" data-track-index="130" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s04-a1" src="assets/sfx/card-place-1.ogg" data-start="0.5" data-duration="0.5" data-track-index="131" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-a2" src="assets/sfx/card-place-2.ogg" data-start="1.0" data-duration="0.5" data-track-index="132" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-a3" src="assets/sfx/card-place-3.ogg" data-start="1.5" data-duration="0.5" data-track-index="131" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-a4" src="assets/sfx/card-place-4.ogg" data-start="2.0" data-duration="0.5" data-track-index="132" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-c1" src="assets/sfx/click_003.ogg" data-start="0.62" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s04-c2" src="assets/sfx/click_003.ogg" data-start="1.12" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s04-c3" src="assets/sfx/click_003.ogg" data-start="1.62" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s04-c4" src="assets/sfx/click_003.ogg" data-start="2.12" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s04-h1" src="assets/sfx/impactSoft_medium_004.ogg" data-start="2.5" data-duration="0.3" data-track-index="134" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-p1" src="assets/sfx/pop.wav" data-start="5.0" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-p2" src="assets/sfx/pop.wav" data-start="5.5" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-p3" src="assets/sfx/pop.wav" data-start="6.0" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-p4" src="assets/sfx/pop.wav" data-start="6.5" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+      </div>
+
+      <script>
+        (function () {
+          // Avatar art copied from pages/landing.html so the family looks exactly like the app
+          const av = (id, c) =>
+            `<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="s04s${id}" cx=".36" cy=".3" r=".85"><stop offset="0" stop-color="${c.s1}"/><stop offset="1" stop-color="${c.s2}"/></radialGradient><linearGradient id="s04g${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.g1}"/><stop offset="1" stop-color="${c.g2}"/></linearGradient></defs><rect width="200" height="200" fill="${c.bg}"/>${c.back || ""}<path d="M14 205Q22 148 100 144Q178 148 186 205Z" fill="url(#s04g${id})"/><rect x="84" y="116" width="32" height="40" rx="14" fill="${c.s2}"/><ellipse cx="57" cy="94" rx="7" ry="11" fill="url(#s04s${id})"/><ellipse cx="143" cy="94" rx="7" ry="11" fill="url(#s04s${id})"/><ellipse cx="100" cy="90" rx="43" ry="49" fill="url(#s04s${id})"/>${c.mid || ""}<ellipse cx="85" cy="93" rx="4.2" ry="5.2" fill="#2a1d18"/><ellipse cx="115" cy="93" rx="4.2" ry="5.2" fill="#2a1d18"/><circle cx="86.5" cy="91" r="1.4" fill="#fff"/><circle cx="116.5" cy="91" r="1.4" fill="#fff"/><path d="M76 81Q85 76 93 80M107 80Q115 76 124 81" stroke="${c.br || "#2a1d18"}" stroke-width="3" stroke-linecap="round" fill="none"/><ellipse cx="100" cy="105" rx="5" ry="4" fill="${c.s2}" opacity=".75"/><path d="M89 117Q100 126 111 117" stroke="#8a3b2e" stroke-width="3.2" stroke-linecap="round" fill="none"/>${c.front || ""}</svg>`;
+          const gh = '<path d="M42 104Q36 28 100 26Q164 28 158 104L174 176Q100 156 26 176Z" fill="#fff"/><path d="M52 120L46 168M148 120L154 168" stroke="#e3e3e8" stroke-width="3" fill="none"/>';
+          const gf = '<path d="M54 74Q57 38 100 36Q143 38 146 74Q122 54 100 54Q78 54 54 74Z" fill="#fafafa"/><path d="M54 74Q78 54 100 54Q122 54 146 74" stroke="#e1e1e6" stroke-width="2" fill="none"/><ellipse cx="100" cy="44" rx="47" ry="9" fill="none" stroke="#1b1b1b" stroke-width="5"/>';
+          const F = [
+            { n: "Jiddo Khalid", r: "Grandfather", role: "Storyteller", c: { bg: "#E3D8F4", s1: "#E5AE88", s2: "#C58760", g1: "#fff", g2: "#e6e6ec", back: gh, front: gf, br: "#d8d8d8", mid: '<path d="M58 108Q62 146 100 150Q138 146 142 108Q130 128 100 127Q70 128 58 108Z" fill="#eceae6"/>' } },
+            { n: "Noura Al Mazrouei", r: "Mother", role: "Family planner", c: { bg: "#F4D3E6", s1: "#EDB690", s2: "#CD9068", g1: "#34343f", g2: "#1b1b24", back: '<path d="M40 106Q34 26 100 24Q166 26 160 106L178 190Q100 170 22 190Z" fill="#202029"/>', front: '<path d="M55 82Q56 42 100 40Q144 42 145 82Q126 61 100 61Q74 61 55 82Z" fill="#202029"/><path d="M60 78Q100 56 140 78" stroke="#3a3a46" stroke-width="2" fill="none"/>' } },
+            { n: "Ahmed Al Mazrouei", r: "Father", role: "Budget lead", c: { bg: "#F1C879", s1: "#DFA27C", s2: "#BE7F58", g1: "#fff", g2: "#e8e8ee", back: gh, front: gf, mid: '<path d="M70 112Q100 128 130 112Q122 124 100 126Q78 124 70 112Z" fill="#3a2a22" opacity=".85"/>' } },
+            { n: "Latifa", r: "Daughter", role: "Saver in training", c: { bg: "#E1DBEF", s1: "#F4C19B", s2: "#DB9F78", g1: "#ffc0d9", g2: "#ff8fb8", back: '<circle cx="46" cy="118" r="17" fill="#2b1b16"/><circle cx="154" cy="118" r="17" fill="#2b1b16"/>', front: '<path d="M54 84Q52 38 100 37Q148 38 146 84Q132 56 100 56Q68 56 54 84Z" fill="#2b1b16"/><circle cx="52" cy="100" r="6" fill="#ff7fb0"/><circle cx="148" cy="100" r="6" fill="#ff7fb0"/>' } },
+          ];
+          const rest = [-3.5, 1.5, -1, 3];
+          const host = document.getElementById("s04-cards");
+          F.forEach((p, i) => {
+            const left = 200 + i * 400;
+            host.insertAdjacentHTML(
+              "beforeend",
+              `<div class="pc" id="s04-c${i}" style="left:${left}px"><div class="pin"></div><div class="lb body">Hayati family</div><div class="ph">${av(i, p.c)}</div><div class="nm disp">${p.n}</div><div class="rl body">${p.r}</div></div><div class="role body" id="s04-r${i}" style="left:${left + 170}px">${p.role}</div>`,
+            );
+          });
+
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#s04-str", { strokeDasharray: 2100, strokeDashoffset: 2100 }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 0.05);
+          tl.fromTo("#s04 .kicker", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4 }, 0.2);
+          // beat-grid: a card per beat, dropping onto the line and swinging to rest
+          F.forEach((p, i) => {
+            const t = 0.5 + i * 0.5;
+            tl.fromTo("#s04-c" + i, { opacity: 0, y: -520, rotation: (i % 2 ? 1 : -1) * 24 }, { opacity: 1, y: 0, rotation: rest[i], duration: 1.1, ease: "elastic.out(1, 0.45)" }, t);
+            tl.to("#s04-c" + i, { rotation: rest[i] * -0.6, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 2 }, t + 1.15);
+          });
+          tl.fromTo("#s04 h2 span", { opacity: 0, y: 80, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)", stagger: 0.08 }, 2.45);
+          tl.fromTo("#s04-sub", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 3.4);
+          F.forEach((p, i) => {
+            tl.fromTo("#s04-r" + i, { opacity: 0, scale: 0.5, xPercent: -50, y: 20 }, { opacity: 1, scale: 1, xPercent: -50, y: 0, duration: 0.4, ease: "back.out(2.4)" }, 5.0 + i * 0.5);
+          });
+          tl.to("#s04 .copy", { y: -12, duration: 4.5, ease: "none" }, 3.4);
+
+          window.__timelines["s04"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

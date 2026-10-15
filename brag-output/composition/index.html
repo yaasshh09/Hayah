@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Hayati Demo Film</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="assets/audio-data.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("assets/fonts/Bricolage.woff2") format("woff2");
+        font-weight: 200 800;
+      }
+      @font-face {
+        font-family: "Manrope";
+        src: url("assets/fonts/Manrope.woff2") format("woff2");
+        font-weight: 300 800;
+      }
+      @font-face {
+        font-family: "Reem Kufi";
+        src: url("assets/fonts/ReemKufi-ar.woff2") format("woff2");
+        font-weight: 400 700;
+        unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+      }
+      @font-face {
+        font-family: "Reem Kufi";
+        src: url("assets/fonts/ReemKufi-latin.woff2") format("woff2");
+        font-weight: 400 700;
+        unicode-range: U+0000-00FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f6f4fa;
+      }
+      :root {
+        --ink: #111;
+        --mut: #85858c;
+        --lav: #9f8fe0;
+        --lav-d: #7d6bd1;
+        --gold: #e8b765;
+        --mint: #7fe0c3;
+        --rose: #f2a7c3;
+        --canvas: #f6f4fa;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        color: var(--ink);
+        font-family: "Manrope", sans-serif;
+      }
+      [data-composition-id="main"] > div[data-composition-src] {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* Shared type helpers used by every scene */
+      .disp {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.045em;
+        line-height: 0.92;
+      }
+      .ar {
+        font-family: "Reem Kufi", sans-serif;
+        font-weight: 600;
+      }
+      .body {
+        font-family: "Manrope", sans-serif;
+      }
+      .lav {
+        color: var(--lav);
+      }
+      .mut {
+        color: var(--mut);
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 24px;
+        border-radius: 999px;
+        background: #fff;
+        border: 2px solid rgba(17, 17, 17, 0.08);
+        font-family: "Manrope", sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--ink);
+        box-shadow: 0 14px 40px rgba(60, 40, 120, 0.12);
+      }
+      .chip i {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        display: block;
+      }
+      .kicker {
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--lav-d);
+      }
+      .shot {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+        border-radius: 28px;
+        box-shadow:
+          0 50px 120px rgba(50, 30, 110, 0.28),
+          0 0 0 2px rgba(17, 17, 17, 0.06);
+      }
+
+      /* Persistent background */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--canvas);
+        overflow: hidden;
+      }
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(110px);
+      }
+      #blob-a {
+        width: 1100px;
+        height: 1000px;
+        left: -260px;
+        top: -320px;
+        background: #d9cff8;
+      }
+      #blob-b {
+        width: 1000px;
+        height: 800px;
+        left: 520px;
+        top: 560px;
+        background: #fbe0c4;
+      }
+      #blob-c {
+        width: 980px;
+        height: 980px;
+        left: 1180px;
+        top: -120px;
+        background: #c9f1e3;
+      }
+      #grain {
+        position: absolute;
+        inset: 0;
+        opacity: 0.14;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .6  0 0 0 .55 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>");
+      }
+
+      /* Transition panels */
+      #tx {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .txp {
+        position: absolute;
+        top: -60px;
+        left: -200px;
+        width: 2320px;
+        height: 1200px;
+      }
+      #tx1 {
+        background: var(--lav);
+      }
+      #tx2 {
+        background: var(--gold);
+      }
+      #tx3 {
+        background: #15131c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #tx3 span {
+        display: block;
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        font-size: 120px;
+        letter-spacing: -0.05em;
+        color: #fff;
+      }
+      #tx3 span b {
+        color: var(--lav);
+      }
+      #flash {
+        position: absolute;
+        inset: 0;
+        z-index: 60;
+        background: #fff;
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="150"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg">
+        <div class="blob" id="blob-a"></div>
+        <div class="blob" id="blob-b"></div>
+        <div class="blob" id="blob-c"></div>
+        <div id="grain"></div>
+      </div>
+
+      <div id="el-s01" data-composition-id="s01" data-composition-src="compositions/s01-hook.html" data-start="0" data-duration="8.01" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-s02" data-composition-id="s02" data-composition-src="compositions/s02-scattered.html" data-start="8.01" data-duration="7.99" data-track-index="2" data-width="1920" data-height="1080"></div>
+      <div id="el-s03" data-composition-id="s03" data-composition-src="compositions/s03-reveal.html" data-start="16" data-duration="7.98" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-s04" data-composition-id="s04" data-composition-src="compositions/s04-family.html" data-start="23.98" data-duration="7.99" data-track-index="2" data-width="1920" data-height="1080"></div>
+      <div id="el-s05" data-composition-id="s05" data-composition-src="compositions/s05-dashboard.html" data-start="31.97" data-duration="11.98" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-s06" data-composition-id="s06" data-composition-src="compositions/s06-calendar.html" data-start="43.95" data-duration="11.99" data-track-index="2" data-width="1920" data-height="1080"></div>
+      <div id="el-s07" data-composition-id="s07" data-composition-src="compositions/s07-finance.html" data-start="55.94" data-duration="23.96" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-s08" data-composition-id="s08" data-composition-src="compositions/s08-tools.html" data-start="79.9" data-duration="11.98" data-track-index="2" data-width="1920" data-height="1080"></div>
+      <div id="el-s09" data-composition-id="s09" data-composition-src="compositions/s09-child.html" data-start="91.88" data-duration="15.98" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-s10" data-composition-id="s10" data-composition-src="compositions/s10-ai.html" data-start="107.86" data-duration="15.97" data-track-index="2" data-width="1920" data-height="1080"></div>
+      <div id="el-s11" data-composition-id="s11" data-composition-src="compositions/s11-comfort.html" data-start="123.83" data-duration="11.99" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="el-s12" data-composition-id="s12" data-composition-src="compositions/s12-outro.html" data-start="135.82" data-duration="14.18" data-track-index="2" data-width="1920" data-height="1080"></div>
+
+      <div id="tx">
+        <div class="txp" id="tx1"></div>
+        <div class="txp" id="tx2"></div>
+        <div class="txp" id="tx3"><span>hayati<b>.</b></span></div>
+      </div>
+      <div id="flash"></div>
+
+      <audio id="bgm" src="assets/music/bgm.mp3" data-start="0" data-duration="150" data-track-index="40" data-volume="0.32"></audio>
+      <!-- Transition whooshes, 0.42s before each panel cut, plus a soft thud on the cut -->
+      <audio id="tw-1" src="assets/sfx/whoosh.wav" data-start="7.59" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-3" src="assets/sfx/whoosh.wav" data-start="23.56" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-4" src="assets/sfx/whoosh.wav" data-start="31.55" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-5" src="assets/sfx/whoosh.wav" data-start="43.53" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-6" src="assets/sfx/whoosh.wav" data-start="55.52" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-7" src="assets/sfx/whoosh.wav" data-start="79.48" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-8" src="assets/sfx/whoosh.wav" data-start="91.46" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-9" src="assets/sfx/whoosh.wav" data-start="107.44" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-10" src="assets/sfx/whoosh.wav" data-start="123.41" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-11" src="assets/sfx/whoosh.wav" data-start="135.4" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
+      <audio id="tw-1b" src="assets/sfx/impactSoft_medium_001.ogg" data-start="8.01" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-4b" src="assets/sfx/impactSoft_medium_002.ogg" data-start="31.97" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-5b" src="assets/sfx/impactSoft_medium_004.ogg" data-start="43.95" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-6b" src="assets/sfx/impactSoft_medium_001.ogg" data-start="55.94" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-7b" src="assets/sfx/impactSoft_medium_002.ogg" data-start="79.9" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-8b" src="assets/sfx/impactSoft_medium_004.ogg" data-start="91.88" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-9b" src="assets/sfx/impactSoft_medium_001.ogg" data-start="107.86" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+      <audio id="tw-10b" src="assets/sfx/impactSoft_medium_002.ogg" data-start="123.83" data-duration="0.3" data-track-index="42" data-volume="0.6"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // Panel sweep transitions. Cover is full at T, the scene cut happens underneath.
+      const cuts = [8.01, 23.98, 31.97, 43.95, 55.94, 79.9, 91.88, 107.86, 123.83, 135.82];
+      const panels = ["#tx1", "#tx2", "#tx3"];
+      tl.set(panels, { xPercent: -110 }, 0);
+      cuts.forEach((T) => {
+        panels.forEach((p, i) => {
+          tl.fromTo(p, { xPercent: -110 }, { xPercent: 0, duration: 0.3, ease: "power3.in", immediateRender: false }, T - 0.42 + i * 0.06);
+          tl.fromTo(p, { xPercent: 0 }, { xPercent: 110, duration: 0.38, ease: "power3.out", immediateRender: false }, T + 0.04 + (2 - i) * 0.06);
+        });
+        tl.fromTo("#tx3 span", { scale: 0.8 }, { scale: 1.06, duration: 0.5, ease: "power2.out", immediateRender: false }, T - 0.25);
+      });
+
+      // White flash on the first drop (logo slam).
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.in" }, 15.88);
+      tl.to("#flash", { opacity: 0, duration: 0.5, ease: "power2.out" }, 16.0);
+
+      // Background drift (finite, deterministic)
+      tl.fromTo("#blob-a", { x: 0, y: 0 }, { x: 260, y: 140, duration: 75, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+      tl.fromTo("#blob-b", { x: 0, y: 0 }, { x: -320, y: -120, duration: 50, ease: "sine.inOut", yoyo: true, repeat: 2 }, 0);
+      tl.fromTo("#blob-c", { x: 0, y: 0 }, { x: -200, y: 220, duration: 37.5, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+
+      // Audio-reactive glow: bass swells the blobs, overall level lifts their opacity.
+      const A = window.HAYATI_AUDIO;
+      const blobs = [document.getElementById("blob-a"), document.getElementById("blob-b"), document.getElementById("blob-c")];
+      for (let f = 0; f < A.bass.length; f++) {
+        tl.call(
+          ((b, l) => () => {
+            blobs[0].style.scale = String(0.92 + b * 0.22);
+            blobs[2].style.scale = String(0.94 + b * 0.16);
+            blobs[1].style.scale = String(0.95 + l * 0.12);
+            blobs[0].style.opacity = blobs[2].style.opacity = String(0.7 + l * 0.3);
+          })(A.bass[f], A.level[f]),
+          [],
+          f / A.fps,
+        );
+      }
+
+      // Music fade
+      tl.fromTo("#bgm", { volume: 0.32 }, { volume: 0, duration: 4, ease: "sine.in" }, 146);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
