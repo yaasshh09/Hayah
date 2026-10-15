@@ -4,7 +4,31 @@ const router = express.Router();
 const endpoint =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
 
+// The browser sends its own system prompt, so the child rules are added here too:
+// nobody can talk the AI out of them by editing the request.
+const CHILD_RULES =
+  "You are talking with a child. Keep every answer kind, simple and age-appropriate. Never share the parents' budgets, debts or account details. Refuse anything unsafe and suggest asking a parent.";
+
+// Keeps one visitor from burning through the Gemini quota.
+// ponytail: per-instance memory, so serverless instances each count on their own. Use a shared store if abuse shows up.
+const WINDOW_MS = 60_000,
+  MAX_PER_WINDOW = 15,
+  hits = new Map();
+function rateLimited(req) {
+  const ip = req.get("x-nf-client-connection-ip") || req.ip || "unknown",
+    now = Date.now(),
+    recent = (hits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
+  recent.push(now);
+  hits.set(ip, recent);
+  if (hits.size > 5000) hits.clear();
+  return recent.length > MAX_PER_WINDOW;
+}
+
 router.post("/", async (req, res) => {
+  if (rateLimited(req)) {
+    res.set("Retry-After", "60");
+    return res.status(429).json({ error: "Too many questions in a row. Wait a minute and try again." });
+  }
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
@@ -42,6 +66,7 @@ router.post("/", async (req, res) => {
   const systemInstruction = [
     typeof system === "string" ? system.slice(0, 2000) : "",
     `Family data (JSON): ${familyContext}`,
+    role === "child" ? CHILD_RULES : "",
   ]
     .filter(Boolean)
     .join("\n");
