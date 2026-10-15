@@ -11,26 +11,27 @@
 }
 
 
+/* The cursor box stays 32px and grows with `scale`, so hovering never triggers layout.
+   Resting scale 0.3125 shows a 10px dot; its shadow is drawn 3.2x larger to match. */
 .c-cursor {
-  width: 10px !important;
-  height: 10px !important;
+  width: 32px !important;
+  height: 32px !important;
+  scale: 0.3125;
   border: 1px solid #17171b !important;
   border-radius: 50%;
   background: #17171b !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 3px 13px rgba(0, 0, 0, 0.2) !important;
   transition:
-    width 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    height 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    scale 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 160ms ease,
     background-color 160ms ease,
     box-shadow 160ms ease,
     opacity 160ms ease !important;
-  will-change: transform, width, height;
+  will-change: transform, scale;
 }
 
 .c-cursor.hover {
-  width: 32px !important;
-  height: 32px !important;
+  scale: 1;
   border-color: #17171b !important;
   background: rgba(23, 23, 27, 0.07) !important;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
@@ -39,7 +40,7 @@
 html[data-theme="dark"] .c-cursor {
   border-color: #f7f6fa !important;
   background: #f7f6fa !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55) !important;
+  box-shadow: 0 3px 13px rgba(0, 0, 0, 0.55) !important;
 }
 
 html[data-theme="dark"] .c-cursor.hover {
@@ -234,14 +235,14 @@ html[data-theme="dark"] body.ai-page .pb {
   color: #111114 !important;
   background: rgba(251, 251, 247, 0.9) !important;
   box-shadow:
-    0 22px 60px -22px rgba(100, 80, 200, 0.6),
+    0 22px 60px -22px rgba(0, 0, 0, 0.7),
     0 0 0 1px rgba(142, 142, 147, 0.5);
 }
 
 html[data-theme="dark"] body.ai-page .pb:focus-within {
   box-shadow:
-    0 22px 60px -22px rgba(100, 80, 200, 0.6),
-    0 0 0 1px rgba(142, 142, 147, 0.5);
+    0 22px 60px -22px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(214, 214, 220, 0.8);
 }
 
 html[data-theme="dark"] body.ai-page .bw .halo,
