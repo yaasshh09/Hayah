@@ -1,1 +1,263 @@
-<!-- s07-finance -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s07 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s07 .scenehead {
+          top: 34px;
+        }
+        #s07 .vp {
+          position: relative;
+          width: 1920px;
+          height: 1080px;
+          overflow: hidden;
+        }
+        #s07 .scr {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1920px;
+          height: 1770px;
+        }
+        #s07 .scr img {
+          position: absolute;
+          left: 0;
+          width: 1920px;
+          height: 1080px;
+        }
+        #s07 .scr .pg {
+          top: 0;
+        }
+        #s07 .cap {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 948px;
+          display: flex;
+          justify-content: center;
+        }
+        #s07 .cap div {
+          position: absolute;
+          left: 50%;
+          padding: 22px 44px;
+          border-radius: 26px;
+          background: #15131c;
+          color: #fff;
+          font-size: 44px;
+          white-space: nowrap;
+          opacity: 0;
+        }
+        #s07 .cap div b {
+          color: var(--lav);
+        }
+        #s07 .ins {
+          position: absolute;
+          left: 260px;
+          top: 290px;
+          width: 1400px;
+          height: 420px;
+          padding: 44px 54px;
+          border-radius: 34px;
+          background: #fff;
+          box-shadow: 0 60px 140px rgba(40, 20, 90, 0.35);
+          opacity: 0;
+        }
+        #s07 .ins .lbl {
+          font-size: 26px;
+          font-weight: 700;
+          color: var(--mut);
+          margin-bottom: 26px;
+        }
+        #s07 .ins .ln {
+          display: flex;
+          align-items: center;
+          gap: 22px;
+          font-size: 40px;
+          font-weight: 600;
+          margin-bottom: 20px;
+          opacity: 0;
+        }
+        #s07 .ins .ln i {
+          flex: none;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #d9534f;
+          display: block;
+        }
+        #s07 .ins .btn {
+          position: absolute;
+          left: 54px;
+          top: 300px;
+          padding: 18px 34px;
+          border-radius: 999px;
+          background: #111;
+          color: #fff;
+          font-size: 30px;
+          font-weight: 800;
+          opacity: 0;
+        }
+        #s07 .cur {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 52px;
+          height: 52px;
+          margin: -26px 0 0 -26px;
+          border-radius: 50%;
+          border: 4px solid var(--lav-d);
+          background: rgba(159, 143, 224, 0.18);
+          opacity: 0;
+          z-index: 5;
+        }
+        #s07 .rip {
+          position: absolute;
+          width: 90px;
+          height: 90px;
+          margin: -45px 0 0 -45px;
+          border-radius: 50%;
+          border: 4px solid var(--lav);
+          opacity: 0;
+          z-index: 4;
+        }
+      </style>
+
+      <div id="s07" data-composition-id="s07" data-width="1920" data-height="1080">
+        <div class="bw" id="s07-bw">
+          <div class="bar"><i></i><i></i><i></i><span class="url">hayatiweb.netlify.app/finance</span></div>
+          <div class="vp">
+            <div class="scr" id="s07-scr">
+              <img id="s07-top" src="assets/shots/finance.png" alt="" style="top: 0" />
+              <img class="pg" id="s07-p0" src="assets/shots/finance-Budget.png" alt="" />
+              <img class="pg" id="s07-p1" src="assets/shots/finance-Expenses.png" alt="" />
+              <img class="pg" id="s07-p2" src="assets/shots/finance-Debts.png" alt="" />
+              <img class="pg" id="s07-p3" src="assets/shots/finance-Bills.png" alt="" />
+              <img class="pg" id="s07-p4" src="assets/shots/finance-Occasions.png" alt="" />
+              <img class="pg" id="s07-p5" src="assets/shots/finance-Tools.png" alt="" />
+            </div>
+          </div>
+        </div>
+        <div class="scenehead kicker" id="s07-head"><span class="num">03</span>Family finances</div>
+
+        <div class="ins" id="s07-ins">
+          <div class="lbl body">Hayati insight</div>
+          <div class="ln body" id="s07-l1"><i></i><span>School and Eating out are AED 140 over the monthly limit.</span></div>
+          <div class="ln body" id="s07-l2"><i></i><span>Groceries is on pace for AED 4,009, AED 509 over its limit.</span></div>
+          <div class="btn body" id="s07-btn">Get AI advice</div>
+        </div>
+
+        <div class="cap disp" id="s07-caps">
+          <div id="s07-c0">My whole month of money, <b>in one place.</b></div>
+          <div id="s07-c1">Set a limit for <b>every category.</b></div>
+          <div id="s07-c2">Log every dirham, <b>and who spent it.</b></div>
+          <div id="s07-c3">Plan payoffs with <b>snowball or avalanche.</b></div>
+          <div id="s07-c4">Bills, net worth and <b>a health score.</b></div>
+          <div id="s07-c5">Fund every occasion <b>months ahead.</b></div>
+          <div id="s07-c6">Plus the tools <b>UAE families actually need.</b></div>
+        </div>
+
+        <div class="rip" id="s07-rip"></div>
+        <div class="cur" id="s07-cur"></div>
+
+        <audio id="s07-a0" src="assets/sfx/card-slide-3.ogg" data-start="0.2" data-duration="0.6" data-track-index="170" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-a1" src="assets/sfx/drop_002.ogg" data-start="1.0" data-duration="0.4" data-track-index="171" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s07-a2" src="assets/sfx/swish.wav" data-start="2.35" data-duration="0.4" data-track-index="172" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s07-a3" src="assets/sfx/pop.wav" data-start="2.8" data-duration="0.22" data-track-index="173" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s07-a4" src="assets/sfx/pop.wav" data-start="3.6" data-duration="0.22" data-track-index="173" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s07-a5" src="assets/sfx/drop_001.ogg" data-start="4.4" data-duration="0.4" data-track-index="174" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s07-a6" src="assets/sfx/mouseclick1.ogg" data-start="5.2" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-a7" src="assets/sfx/sparkle.wav" data-start="5.25" data-duration="1" data-track-index="176" data-hf-media-start-basis="local" data-volume="0.35"></audio>
+        <audio id="s07-a8" src="assets/sfx/swish.wav" data-start="5.85" data-duration="0.4" data-track-index="172" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-a9" src="assets/sfx/whoosh.wav" data-start="6.2" data-duration="0.7" data-track-index="177" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s07-t0" src="assets/sfx/mouseclick1.ogg" data-start="7.0" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-t1" src="assets/sfx/mouseclick1.ogg" data-start="9.8" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-t2" src="assets/sfx/mouseclick1.ogg" data-start="12.6" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-t3" src="assets/sfx/mouseclick1.ogg" data-start="15.4" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-t4" src="assets/sfx/mouseclick1.ogg" data-start="18.2" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-t5" src="assets/sfx/mouseclick1.ogg" data-start="21.0" data-duration="0.3" data-track-index="175" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s07-s1" src="assets/sfx/card-slide-1.ogg" data-start="9.85" data-duration="0.6" data-track-index="178" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-s2" src="assets/sfx/card-slide-3.ogg" data-start="12.65" data-duration="0.6" data-track-index="179" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-s3" src="assets/sfx/card-slide-1.ogg" data-start="15.45" data-duration="0.6" data-track-index="178" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-s4" src="assets/sfx/card-slide-3.ogg" data-start="18.25" data-duration="0.6" data-track-index="179" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-s5" src="assets/sfx/card-slide-1.ogg" data-start="21.05" data-duration="0.6" data-track-index="178" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s07-d1" src="assets/sfx/drop_003.ogg" data-start="7.15" data-duration="0.4" data-track-index="180" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s07-d2" src="assets/sfx/drop_001.ogg" data-start="9.95" data-duration="0.4" data-track-index="180" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s07-d3" src="assets/sfx/drop_003.ogg" data-start="12.75" data-duration="0.4" data-track-index="180" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s07-d4" src="assets/sfx/drop_001.ogg" data-start="15.55" data-duration="0.4" data-track-index="180" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s07-d5" src="assets/sfx/drop_003.ogg" data-start="18.35" data-duration="0.4" data-track-index="180" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s07-bg" src="assets/sfx/bong_001.ogg" data-start="21.15" data-duration="0.5" data-track-index="181" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s07-rs" src="assets/sfx/riser.wav" data-start="22.15" data-duration="1.8" data-track-index="182" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const S = 0.78;
+          const L = 211;
+          const T = 110;
+          const tabX = [163, 265, 362, 441, 535, 633];
+          const tabY = T + (72 + 109) * S;
+          const caps = ["#s07-c0", "#s07-c1", "#s07-c2", "#s07-c3", "#s07-c4", "#s07-c5", "#s07-c6"];
+          const showCap = (i, t) => {
+            if (i > 0) tl.to(caps[i - 1], { opacity: 0, y: -30, duration: 0.2, ease: "power2.in" }, t - 0.05);
+            tl.fromTo(caps[i], { opacity: 0, y: 40, xPercent: -50 }, { opacity: 1, y: 0, xPercent: -50, duration: 0.35, ease: "back.out(1.8)" }, t + 0.1);
+          };
+
+          // Phase 1: the real finance page
+          tl.fromTo("#s07-bw", { x: L, y: T + 160, scale: 0.7, opacity: 0, filter: "blur(10px)" }, { y: T, scale: S, opacity: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out" }, 0.1);
+          tl.fromTo("#s07-head", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.3);
+          showCap(0, 0.9);
+
+          // Hayati insight card comes forward, cursor presses Get AI advice
+          tl.to("#s07-bw", { filter: "blur(5px) brightness(0.92)", duration: 0.4 }, 2.35);
+          tl.to(caps[0], { opacity: 0, duration: 0.2 }, 2.3);
+          tl.fromTo("#s07-ins", { opacity: 0, y: 260, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out" }, 2.35);
+          tl.fromTo("#s07-l1", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 2.8);
+          tl.fromTo("#s07-l2", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 3.6);
+          tl.fromTo("#s07-btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 4.4);
+          tl.fromTo("#s07-cur", { opacity: 0, x: 1500, y: 960 }, { opacity: 1, x: 470, y: 636, duration: 0.55, ease: "power3.inOut" }, 4.6);
+          tl.to("#s07-cur", { scale: 0.7, duration: 0.08, yoyo: true, repeat: 1 }, 5.18);
+          tl.to("#s07-btn", { scale: 0.92, duration: 0.08, yoyo: true, repeat: 1 }, 5.18);
+          tl.fromTo("#s07-rip", { opacity: 0.9, scale: 0.3, x: 470, y: 636 }, { opacity: 0, scale: 2.2, duration: 0.6, ease: "power2.out" }, 5.2);
+          tl.to("#s07-ins", { opacity: 0, y: 220, scale: 0.92, duration: 0.4, ease: "power3.in" }, 5.85);
+          tl.to("#s07-bw", { filter: "blur(0px) brightness(1)", duration: 0.4 }, 5.9);
+
+          // Scroll down to the tabs: the top of the page slides away, the Budget tab view rises in
+          tl.set("#s07-p0", { opacity: 0 }, 0);
+          tl.to("#s07-top", { y: -520, opacity: 0, filter: "blur(8px)", duration: 0.55, ease: "power3.in" }, 6.2);
+          tl.fromTo("#s07-p0", { opacity: 0, y: 420, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" }, 6.4);
+          tl.to("#s07-cur", { x: L + tabX[0] * S, y: tabY, duration: 0.5, ease: "power3.inOut" }, 6.45);
+
+          // Tab montage: click a real tab, its real screen wipes in
+          for (let i = 0; i < 6; i++) {
+            const t = 7.0 + i * 2.8;
+            if (i > 0) {
+              tl.to("#s07-cur", { x: L + tabX[i] * S, y: tabY, duration: 0.4, ease: "power3.inOut" }, t - 0.45);
+              tl.fromTo("#s07-p" + i, { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)", duration: 0.5, ease: "power3.inOut" }, t + 0.05);
+              tl.to("#s07-bw", { scale: S * 1.012, duration: 0.15, ease: "power2.out", yoyo: true, repeat: 1 }, t + 0.05);
+            }
+            tl.to("#s07-cur", { scale: 0.7, duration: 0.08, yoyo: true, repeat: 1 }, t - 0.02);
+            tl.fromTo("#s07-rip", { opacity: 0.9, scale: 0.3, x: L + tabX[i] * S, y: tabY }, { opacity: 0, scale: 2, duration: 0.55, ease: "power2.out" }, t);
+            showCap(i + 1, t);
+          }
+          for (let i = 1; i < 6; i++) tl.set("#s07-p" + i, { clipPath: "inset(0 0 0 100%)" }, 0);
+
+          // Push into the Tools tab, handing off to the next chapter
+          tl.to("#s07-cur", { opacity: 0, duration: 0.3 }, 22.0);
+          tl.to("#s07-bw", { x: -260, y: -240, scale: 1.25, duration: 1.8, ease: "power2.in" }, 22.1);
+          tl.to(caps[6], { opacity: 0, y: 30, duration: 0.3 }, 23.3);
+
+          window.__timelines["s07"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

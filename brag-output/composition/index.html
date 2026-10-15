@@ -45,7 +45,8 @@
         --ink: #111;
         --mut: #85858c;
         --lav: #9f8fe0;
-        --lav-d: #7d6bd1;
+        --lav-d: #6a57c4;
+        --lav-t: #7766cf;
         --gold: #e8b765;
         --mint: #7fe0c3;
         --rose: #f2a7c3;
@@ -79,7 +80,7 @@
         font-family: "Manrope", sans-serif;
       }
       .lav {
-        color: var(--lav);
+        color: var(--lav-t);
       }
       .mut {
         color: var(--mut);
@@ -120,6 +121,97 @@
         box-shadow:
           0 50px 120px rgba(50, 30, 110, 0.28),
           0 0 0 2px rgba(17, 17, 17, 0.06);
+      }
+
+      /* Browser window that frames real app screenshots (1920 wide, scaled by GSAP) */
+      .bw {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        border-radius: 34px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow:
+          0 60px 140px rgba(50, 30, 110, 0.3),
+          0 0 0 3px rgba(17, 17, 17, 0.07);
+        transform-origin: 0 0;
+      }
+      .bw .bar {
+        height: 72px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 0 30px;
+        background: #f3f1f7;
+        border-bottom: 2px solid rgba(17, 17, 17, 0.06);
+      }
+      .bw .bar i {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #d9d5e2;
+        display: block;
+      }
+      .bw .bar .url {
+        margin-left: 30px;
+        padding: 10px 26px;
+        border-radius: 999px;
+        background: #fff;
+        font-family: "Manrope", sans-serif;
+        font-size: 26px;
+        font-weight: 600;
+        color: #6d6a78;
+      }
+      .bw img {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+      .stat {
+        position: absolute;
+        padding: 28px 34px;
+        border-radius: 28px;
+        background: #fff;
+        box-shadow: 0 30px 70px rgba(60, 40, 120, 0.18);
+        border: 2px solid rgba(17, 17, 17, 0.05);
+      }
+      .stat .l {
+        font-family: "Manrope", sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--mut);
+      }
+      .stat .v {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        font-size: 78px;
+        line-height: 1.05;
+        margin-top: 6px;
+        white-space: nowrap;
+      }
+      .stat .s {
+        font-family: "Manrope", sans-serif;
+        font-size: 22px;
+        font-weight: 600;
+        color: #5d5a66;
+        margin-top: 4px;
+      }
+      .scenehead {
+        position: absolute;
+        left: 110px;
+        top: 90px;
+      }
+      .scenehead .num {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        font-size: 26px;
+        color: #fff;
+        background: var(--ink);
+        border-radius: 12px;
+        padding: 6px 14px;
+        margin-right: 16px;
       }
 
       /* Persistent background */
@@ -247,7 +339,7 @@
       </div>
       <div id="flash"></div>
 
-      <audio id="bgm" src="assets/music/bgm.mp3" data-start="0" data-duration="150" data-track-index="40" data-volume="0.32"></audio>
+      <audio id="bgm" src="assets/music/bgm.mp3" data-start="0" data-duration="150" data-track-index="40" data-volume="1"></audio>
       <!-- Transition whooshes, 0.42s before each panel cut, plus a soft thud on the cut -->
       <audio id="tw-1" src="assets/sfx/whoosh.wav" data-start="7.59" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
       <audio id="tw-3" src="assets/sfx/whoosh.wav" data-start="23.56" data-duration="0.7" data-track-index="41" data-volume="0.7"></audio>
@@ -310,7 +402,8 @@
       }
 
       // Music fade
-      tl.fromTo("#bgm", { volume: 0.32 }, { volume: 0, duration: 4, ease: "sine.in" }, 146);
+      tl.set("#bgm", { volume: 0.32 }, 0);
+      tl.fromTo("#bgm", { volume: 0.32 }, { volume: 0, duration: 4, ease: "sine.in", immediateRender: false }, 146);
 
       window.__timelines["main"] = tl;
     </script>

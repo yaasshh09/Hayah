@@ -1,1 +1,185 @@
-<!-- s08-tools -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s08 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s08 h2 {
+          position: absolute;
+          left: 110px;
+          top: 150px;
+          font-size: 112px;
+        }
+        #s08 h2 .w {
+          display: inline-block;
+          opacity: 0;
+        }
+        #s08 .tool {
+          position: absolute;
+          top: 300px;
+          width: 540px;
+          height: 640px;
+          padding: 40px 42px;
+          border-radius: 34px;
+          background: #fff;
+          box-shadow: 0 40px 90px rgba(60, 40, 120, 0.18);
+          border: 2px solid rgba(17, 17, 17, 0.05);
+          opacity: 0;
+        }
+        #s08 .tool .ic {
+          width: 72px;
+          height: 72px;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 36px;
+          font-weight: 800;
+          margin-bottom: 22px;
+        }
+        #s08 .tool h3 {
+          font-size: 44px;
+          letter-spacing: -0.03em;
+          margin-bottom: 22px;
+        }
+        #s08 .tool .in {
+          display: flex;
+          justify-content: space-between;
+          padding: 14px 0;
+          border-bottom: 2px solid #f0eef4;
+          font-size: 25px;
+          font-weight: 600;
+          color: #5d5a66;
+          opacity: 0;
+        }
+        #s08 .tool .in b {
+          color: var(--ink);
+          font-weight: 800;
+        }
+        #s08 .tool .res {
+          position: absolute;
+          left: 42px;
+          right: 42px;
+          bottom: 40px;
+          opacity: 0;
+        }
+        #s08 .tool .res .l {
+          font-size: 24px;
+          font-weight: 700;
+          color: var(--mut);
+        }
+        #s08 .tool .res .v {
+          font-size: 84px;
+          line-height: 1.05;
+          white-space: nowrap;
+        }
+        #s08 .tool .res .s {
+          font-size: 21px;
+          font-weight: 600;
+          color: #5d5a66;
+        }
+        #s08 .cap {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 975px;
+          text-align: center;
+          font-size: 36px;
+          font-weight: 600;
+          color: #3e3c46;
+          opacity: 0;
+        }
+      </style>
+
+      <div id="s08" data-composition-id="s08" data-width="1920" data-height="1080">
+        <div class="scenehead kicker" id="s08-head"><span class="num">04</span>UAE money tools</div>
+        <h2 class="disp"><span class="w">Built</span> <span class="w">for</span> <span class="w">life</span> <span class="w">here.</span> <span class="w lav">In</span> <span class="w lav">AED.</span></h2>
+
+        <div class="tool" id="s08-t0" style="left: 110px">
+          <div class="ic body" style="background: #efeaff; color: #7d6bd1">%</div>
+          <h3 class="disp">Loan calculator</h3>
+          <div class="in body"><span>Loan amount</span><b>AED 80,000</b></div>
+          <div class="in body"><span>Interest rate</span><b>5.2% a year</b></div>
+          <div class="in body"><span>Term</span><b>4 years</b></div>
+          <div class="res"><div class="l body">Monthly payment</div><div class="v disp" id="s08-v0">AED 0</div><div class="s body">AED 8,781 total interest</div></div>
+        </div>
+        <div class="tool" id="s08-t1" style="left: 690px">
+          <div class="ic body" style="background: #fdf1dc; color: #c48a2c">&#9733;</div>
+          <h3 class="disp">End-of-service gratuity</h3>
+          <div class="in body"><span>Basic monthly salary</span><b>AED 12,000</b></div>
+          <div class="in body"><span>Years of service</span><b>6.5</b></div>
+          <div class="in body"><span>Days of pay earned</span><b>150</b></div>
+          <div class="res"><div class="l body">Gratuity estimate</div><div class="v disp" id="s08-v1">AED 0</div><div class="s body">21 days a year for 5 years, then 30</div></div>
+        </div>
+        <div class="tool" id="s08-t2" style="left: 1270px">
+          <div class="ic body" style="background: #dcf7ee; color: #24a07c">&#9790;</div>
+          <h3 class="disp">Zakat calculator</h3>
+          <div class="in body"><span>Zakatable wealth</span><b>AED 79,000</b></div>
+          <div class="in body"><span>Nisab (85 g gold)</span><b>AED 34,000</b></div>
+          <div class="in body"><span>Rate</span><b>2.5% of a lunar year</b></div>
+          <div class="res"><div class="l body">Zakat due</div><div class="v disp" id="s08-v2" style="color: #24a07c">AED 0</div><div class="s body">Worked out from today's gold price</div></div>
+        </div>
+
+        <p class="cap body" id="s08-cap">Loan repayments, end-of-service gratuity and Zakat, worked out in seconds.</p>
+
+        <audio id="s08-a0" src="assets/sfx/drop_001.ogg" data-start="0.45" data-duration="0.4" data-track-index="190" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s08-c0" src="assets/sfx/card-place-2.ogg" data-start="1.6" data-duration="0.5" data-track-index="191" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s08-c1" src="assets/sfx/card-place-3.ogg" data-start="2.6" data-duration="0.5" data-track-index="192" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s08-c2" src="assets/sfx/card-place-4.ogg" data-start="3.6" data-duration="0.5" data-track-index="191" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s08-k0" src="assets/sfx/key03.wav" data-start="1.95" data-duration="0.2" data-track-index="193" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k1" src="assets/sfx/key07.wav" data-start="2.1" data-duration="0.2" data-track-index="194" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k2" src="assets/sfx/key11.wav" data-start="2.25" data-duration="0.2" data-track-index="193" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k3" src="assets/sfx/key05.wav" data-start="2.95" data-duration="0.2" data-track-index="194" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k4" src="assets/sfx/key13.wav" data-start="3.1" data-duration="0.2" data-track-index="193" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k5" src="assets/sfx/key17.wav" data-start="3.25" data-duration="0.2" data-track-index="194" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k6" src="assets/sfx/key09.wav" data-start="3.95" data-duration="0.2" data-track-index="193" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k7" src="assets/sfx/key21.wav" data-start="4.1" data-duration="0.2" data-track-index="194" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-k8" src="assets/sfx/key15.wav" data-start="4.25" data-duration="0.2" data-track-index="193" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-r0" src="assets/sfx/chips-stack-1.ogg" data-start="4.7" data-duration="0.6" data-track-index="195" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s08-r1" src="assets/sfx/chips-stack-2.ogg" data-start="5.2" data-duration="0.6" data-track-index="196" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s08-r2" src="assets/sfx/chips-collide-1.ogg" data-start="5.7" data-duration="0.6" data-track-index="195" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s08-sp" src="assets/sfx/sparkle.wav" data-start="6.3" data-duration="1" data-track-index="197" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s08-gl" src="assets/sfx/impactGlass_light_002.ogg" data-start="6.3" data-duration="0.5" data-track-index="198" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const fmt = (n) => Math.round(n).toLocaleString("en-US");
+          const countUp = (sel, to, t, d) => {
+            const o = { v: 0 };
+            const el = document.querySelector(sel);
+            tl.fromTo(o, { v: 0 }, { v: to, duration: d, ease: "power3.out", onUpdate: () => (el.textContent = "AED " + fmt(o.v)) }, t);
+          };
+          tl.fromTo("#s08-head", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.2);
+          tl.fromTo("#s08 h2 .w", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.08 }, 0.4);
+          [0, 1, 2].forEach((i) => {
+            const t = 1.6 + i * 1.0;
+            tl.fromTo("#s08-t" + i, { opacity: 0, y: 160, rotationX: -30, transformPerspective: 1600 }, { opacity: 1, y: 0, rotationX: 0, duration: 0.7, ease: "power3.out" }, t);
+            tl.fromTo("#s08-t" + i + " .in", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out", stagger: 0.15 }, t + 0.35);
+          });
+          // Results land one by one after all inputs are in
+          const res = [1850, 60000, 1975];
+          res.forEach((v, i) => {
+            const t = 4.7 + i * 0.5;
+            tl.fromTo("#s08-t" + i + " .res", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, t);
+            countUp("#s08-v" + i, v, t, 1.0);
+            tl.fromTo("#s08-t" + i, { scale: 1 }, { scale: 1.03, duration: 0.15, yoyo: true, repeat: 1, ease: "power2.out" }, t);
+          });
+          tl.fromTo("#s08-cap", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 6.3);
+          tl.to(["#s08-t0", "#s08-t2"], { y: -10, duration: 5, ease: "sine.inOut" }, 6.9);
+          tl.to("#s08-t1", { y: 10, duration: 5, ease: "sine.inOut" }, 6.9);
+
+          window.__timelines["s08"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

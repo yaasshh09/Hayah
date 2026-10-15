@@ -1,1 +1,155 @@
-<!-- s05-dashboard -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s05 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s05 .copy {
+          position: absolute;
+          left: 110px;
+          top: 210px;
+          width: 720px;
+        }
+        #s05 h2 {
+          font-size: 112px;
+        }
+        #s05 h2 .w {
+          display: inline-block;
+          opacity: 0;
+        }
+        #s05 .lede {
+          margin-top: 40px;
+          font-size: 40px;
+          font-weight: 600;
+          color: #4a4852;
+          opacity: 0;
+        }
+        #s05 .stat {
+          top: 690px;
+          width: 405px;
+          opacity: 0;
+        }
+        #s05 .hlbox {
+          position: absolute;
+          left: 0;
+          top: 0;
+          border: 5px solid var(--lav);
+          border-radius: 18px;
+          opacity: 0;
+          box-shadow: 0 0 0 9999px rgba(21, 19, 28, 0);
+        }
+        #s05 .note {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 960px;
+          text-align: center;
+          font-size: 32px;
+          font-weight: 600;
+          color: #3e3c46;
+          opacity: 0;
+        }
+        #s05 .note b {
+          color: var(--lav-d);
+        }
+      </style>
+
+      <div id="s05" data-composition-id="s05" data-width="1920" data-height="1080">
+        <div class="scenehead kicker" id="s05-head"><span class="num">01</span>Family dashboard</div>
+        <div class="copy">
+          <h2 class="disp"><span class="w">Where</span> <span class="w">we</span> <span class="w">stand,</span> <span class="w lav">every</span> <span class="w lav">morning.</span></h2>
+          <p class="lede body" id="s05-lede">One screen. Every number the family needs.</p>
+        </div>
+
+        <div class="bw" id="s05-bw">
+          <div class="bar"><i></i><i></i><i></i><span class="url">hayatiweb.netlify.app/dashboard</span></div>
+          <img src="assets/shots/dashboard.png" alt="" />
+        </div>
+        <div class="hlbox" id="s05-box"></div>
+
+        <div class="stat" id="s05-st0" style="left: 110px"><div class="l">Next occasion</div><div class="v" id="s05-v0">0 days</div><div class="s">Parent-teacher meeting</div></div>
+        <div class="stat" id="s05-st1" style="left: 545px"><div class="l">Saved so far</div><div class="v" id="s05-v1">AED 0</div><div class="s">across 9 occasions</div></div>
+        <div class="stat" id="s05-st2" style="left: 980px"><div class="l">Still to save</div><div class="v" id="s05-v2">AED 0</div><div class="s">to fully fund every goal</div></div>
+        <div class="stat" id="s05-st3" style="left: 1415px"><div class="l">Spent in October</div><div class="v" id="s05-v3">AED 0</div><div class="s">of AED 11,900 budget</div></div>
+        <p class="note body" id="s05-note">Gregorian and <b>Hijri dates</b> side by side, plus a live countdown to the next family occasion.</p>
+
+        <audio id="s05-a0" src="assets/sfx/swish.wav" data-start="0.28" data-duration="0.4" data-track-index="140" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s05-a1" src="assets/sfx/card-slide-3.ogg" data-start="0.35" data-duration="0.6" data-track-index="141" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s05-a2" src="assets/sfx/drop_001.ogg" data-start="1.9" data-duration="0.4" data-track-index="142" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s05-a3" src="assets/sfx/whoosh.wav" data-start="4.2" data-duration="0.7" data-track-index="143" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s05-c0" src="assets/sfx/chips-stack-1.ogg" data-start="4.75" data-duration="0.6" data-track-index="144" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s05-c1" src="assets/sfx/chips-stack-2.ogg" data-start="5.55" data-duration="0.6" data-track-index="145" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s05-c2" src="assets/sfx/chips-stack-3.ogg" data-start="6.35" data-duration="0.6" data-track-index="144" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s05-c3" src="assets/sfx/chips-stack-1.ogg" data-start="7.15" data-duration="0.6" data-track-index="145" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s05-r0" src="assets/sfx/rollover2.ogg" data-start="4.72" data-duration="0.2" data-track-index="146" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s05-r1" src="assets/sfx/rollover2.ogg" data-start="5.52" data-duration="0.2" data-track-index="146" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s05-r2" src="assets/sfx/rollover2.ogg" data-start="6.32" data-duration="0.2" data-track-index="146" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s05-r3" src="assets/sfx/rollover2.ogg" data-start="7.12" data-duration="0.2" data-track-index="146" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s05-s0" src="assets/sfx/sparkle.wav" data-start="7.9" data-duration="1" data-track-index="147" data-hf-media-start-basis="local" data-volume="0.35"></audio>
+        <audio id="s05-b0" src="assets/sfx/impactGlass_light_001.ogg" data-start="9.3" data-duration="0.5" data-track-index="148" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const fmt = (n) => Math.round(n).toLocaleString("en-US");
+          const countUp = (sel, to, pre, suf, t, d) => {
+            const o = { v: 0 };
+            const el = document.querySelector(sel);
+            tl.fromTo(o, { v: 0 }, { v: to, duration: d, ease: "power3.out", onUpdate: () => (el.textContent = pre + fmt(o.v) + suf) }, t);
+          };
+
+          tl.fromTo("#s05-head", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 0.25);
+          tl.fromTo("#s05 h2 .w", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.08 }, 0.4);
+          tl.fromTo("#s05-lede", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 1.9);
+
+          // Real dashboard flies in on a 3D tilt
+          tl.fromTo(
+            "#s05-bw",
+            { x: 1300, y: 190, scale: 0.5, rotationY: -42, rotationX: 8, opacity: 0, transformPerspective: 2600 },
+            { x: 880, y: 190, scale: 0.55, rotationY: -16, rotationX: 4, opacity: 1, duration: 1.0, ease: "power3.out", transformPerspective: 2600 },
+            0.3,
+          );
+          tl.to("#s05-bw", { scale: 0.58, rotationY: -11, y: 176, duration: 2.9, ease: "sine.inOut" }, 1.3);
+
+          // Phase 2: copy clears, screen flattens on top, real numbers come out of it
+          tl.to("#s05 .copy", { x: -160, opacity: 0, duration: 0.45, ease: "power2.in" }, 4.2);
+          tl.to("#s05-bw", { x: 480, y: 64, scale: 0.5, rotationY: 0, rotationX: 0, duration: 0.7, ease: "power3.inOut" }, 4.2);
+          const vals = [
+            [5, "", " days"],
+            [5450, "AED ", ""],
+            [16050, "AED ", ""],
+            [7859, "AED ", ""],
+          ];
+          // beat-grid: stat cards every other beat-pair (0.8s) so each label can be read
+          vals.forEach((v, i) => {
+            const t = 4.75 + i * 0.8;
+            tl.fromTo("#s05-st" + i, { opacity: 0, y: 80, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, t);
+            countUp("#s05-v" + i, v[0], v[1], v[2], t + 0.05, 0.9);
+            const bx = 480 + (115 + i * 422) * 0.5 - 6;
+            if (i === 0) {
+              tl.fromTo("#s05-box", { opacity: 0, x: bx, y: 280, width: 222, height: 116, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, t - 0.03);
+            } else {
+              tl.to("#s05-box", { x: bx, duration: 0.3, ease: "power3.inOut" }, t - 0.03);
+            }
+          });
+          // Hijri date block, top right of the real dashboard
+          tl.to("#s05-box", { x: 1304, y: 199, width: 91, height: 61, duration: 0.45, ease: "power3.inOut" }, 7.85);
+          tl.fromTo("#s05-note", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 7.9);
+          // Countdown ring
+          tl.to("#s05-box", { x: 549, y: 438, width: 90, height: 88, borderRadius: 50, borderColor: "#e8b765", duration: 0.5, ease: "power3.inOut" }, 9.3);
+          tl.fromTo("#s05-box", { scale: 1 }, { scale: 1.15, duration: 0.35, ease: "sine.inOut", yoyo: true, repeat: 3 }, 9.85);
+
+          window.__timelines["s05"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,1 +1,336 @@
-<!-- s09-child -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s09 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s09 .pinkwash {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 70% 40%, #ffd3e4 0%, rgba(255, 211, 228, 0) 60%);
+          opacity: 0;
+        }
+        #s09 .tg {
+          position: absolute;
+          left: 510px;
+          top: 360px;
+          width: 900px;
+          height: 210px;
+          border-radius: 999px;
+          background: #fff;
+          box-shadow: 0 40px 100px rgba(60, 40, 120, 0.22);
+          opacity: 0;
+        }
+        #s09 .tg .knob {
+          position: absolute;
+          left: 15px;
+          top: 15px;
+          width: 430px;
+          height: 180px;
+          border-radius: 999px;
+          background: #15131c;
+        }
+        #s09 .tg .lb {
+          position: absolute;
+          top: 0;
+          width: 450px;
+          height: 210px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 96px;
+        }
+        #s09 .tg .lb.a {
+          left: 0;
+          color: #fff;
+        }
+        #s09 .tg .lb.c {
+          left: 450px;
+          color: #b9b6c2;
+        }
+        #s09 .tgcap {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 650px;
+          text-align: center;
+          font-size: 44px;
+          font-weight: 600;
+          color: #44424c;
+          opacity: 0;
+        }
+        #s09 .cur {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 64px;
+          height: 64px;
+          margin: -32px 0 0 -32px;
+          border-radius: 50%;
+          border: 5px solid var(--lav-d);
+          background: rgba(159, 143, 224, 0.2);
+          opacity: 0;
+        }
+        #s09 .ph2 {
+          position: absolute;
+          left: 110px;
+          top: 260px;
+          width: 700px;
+        }
+        #s09 .ph2 h2 {
+          font-size: 104px;
+        }
+        #s09 .w {
+          display: inline-block;
+          opacity: 0;
+        }
+        #s09 .ph2 p {
+          margin-top: 36px;
+          font-size: 36px;
+          font-weight: 600;
+          color: #44424c;
+          opacity: 0;
+        }
+        #s09 .ph3 h2 {
+          position: absolute;
+          left: 110px;
+          top: 140px;
+          font-size: 120px;
+        }
+        #s09 .jar {
+          position: absolute;
+          top: 380px;
+          width: 300px;
+          opacity: 0;
+        }
+        #s09 .jar .lid {
+          width: 220px;
+          height: 34px;
+          margin: 0 auto;
+          border-radius: 12px 12px 4px 4px;
+          background: #15131c;
+        }
+        #s09 .jar .body2 {
+          position: relative;
+          height: 360px;
+          border: 6px solid #15131c;
+          border-top-width: 4px;
+          border-radius: 26px 26px 70px 70px;
+          background: rgba(255, 255, 255, 0.75);
+          overflow: hidden;
+        }
+        #s09 .jar .liq {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          transform-origin: 50% 100%;
+        }
+        #s09 .jar .coin {
+          position: absolute;
+          left: 120px;
+          top: -60px;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #e8b765;
+          border: 4px solid #c48a2c;
+          opacity: 0;
+        }
+        #s09 .jar .nm {
+          margin-top: 20px;
+          font-size: 22px;
+          font-weight: 800;
+          letter-spacing: 0.16em;
+          color: var(--mut);
+          text-align: center;
+        }
+        #s09 .jar .amt {
+          font-size: 66px;
+          text-align: center;
+          white-space: nowrap;
+        }
+        #s09 .ring {
+          position: absolute;
+          left: 1250px;
+          top: 290px;
+          width: 480px;
+          height: 480px;
+          opacity: 0;
+        }
+        #s09 .ring svg {
+          width: 480px;
+          height: 480px;
+          transform: rotate(-90deg);
+        }
+        #s09 .ring .pct {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        #s09 .ring .pct b {
+          font-size: 130px;
+        }
+        #s09 .ring .pct span {
+          font-size: 28px;
+          font-weight: 700;
+          color: var(--mut);
+        }
+        #s09 .goal {
+          position: absolute;
+          left: 1250px;
+          top: 800px;
+          width: 480px;
+          text-align: center;
+          opacity: 0;
+        }
+        #s09 .goal b {
+          display: block;
+          font-size: 50px;
+        }
+        #s09 .goal span {
+          font-size: 26px;
+          font-weight: 600;
+          color: #5d5a66;
+        }
+        #s09 .cap3 {
+          position: absolute;
+          left: 110px;
+          top: 970px;
+          font-size: 34px;
+          font-weight: 600;
+          color: #3e3c46;
+          opacity: 0;
+        }
+      </style>
+
+      <div id="s09" data-composition-id="s09" data-width="1920" data-height="1080">
+        <div class="pinkwash" id="s09-wash"></div>
+        <div class="scenehead kicker" id="s09-head"><span class="num">05</span>Child mode</div>
+
+        <div id="s09-ph1">
+          <div class="tg" id="s09-tg">
+            <div class="knob" id="s09-knob"></div>
+            <div class="lb a disp" id="s09-la">Adult</div>
+            <div class="lb c disp" id="s09-lc">Child</div>
+          </div>
+          <p class="tgcap body" id="s09-tgcap">One family. Two views. One tap to switch.</p>
+        </div>
+
+        <div class="bw" id="s09-bw">
+          <div class="bar"><i></i><i></i><i></i><span class="url">hayatiweb.netlify.app/dashboard</span></div>
+          <img src="assets/shots/dashboard-child.png" alt="" />
+        </div>
+        <div class="ph2" id="s09-ph2">
+          <h2 class="disp"><span class="w">Kids</span> <span class="w">see</span> <span class="w">pocket</span> <span class="w">money.</span> <span class="w lav">Parents</span> <span class="w lav">see</span> <span class="w lav">everything.</span></h2>
+          <p class="body" id="s09-p2">Latifa signs in to a simple view of her Eidiya and her goals.</p>
+        </div>
+
+        <div class="ph3" id="s09-ph3">
+          <h2 class="disp"><span class="w" style="color: #24a07c">Save.</span> <span class="w" style="color: #c48a2c">Spend.</span> <span class="w lav">Give.</span></h2>
+          <div class="jar" id="s09-j0" style="left: 110px"><div class="lid"></div><div class="body2"><div class="liq" id="s09-q0" style="background: #7fe0c3"></div><div class="coin" id="s09-k0"></div></div><div class="nm body">SAVE</div><div class="amt disp" id="s09-m0">AED 0</div></div>
+          <div class="jar" id="s09-j1" style="left: 470px"><div class="lid"></div><div class="body2"><div class="liq" id="s09-q1" style="background: #f3cf8d"></div><div class="coin" id="s09-k1"></div></div><div class="nm body">SPEND</div><div class="amt disp" id="s09-m1">AED 0</div></div>
+          <div class="jar" id="s09-j2" style="left: 830px"><div class="lid"></div><div class="body2"><div class="liq" id="s09-q2" style="background: #c7bcf2"></div><div class="coin" id="s09-k2"></div></div><div class="nm body">GIVE &middot; SADAQA</div><div class="amt disp" id="s09-m2">AED 0</div></div>
+          <div class="ring" id="s09-ring">
+            <svg viewBox="0 0 480 480"><circle cx="240" cy="240" r="200" stroke="#ece8f5" stroke-width="40" fill="none" /><circle id="s09-arc" cx="240" cy="240" r="200" stroke="#9f8fe0" stroke-width="40" fill="none" stroke-linecap="round" stroke-dasharray="1257" stroke-dashoffset="1257" /></svg>
+            <div class="pct"><b class="disp" id="s09-pc">0%</b><span class="body">saved</span></div>
+          </div>
+          <div class="goal" id="s09-goal"><b class="disp">A new bicycle</b><span class="body">AED 160 of AED 250, only AED 90 to go</span></div>
+          <p class="cap3 body" id="s09-cap3">Every dirham she gets splits into Save, Spend and Give. Sadaqa included.</p>
+        </div>
+
+        <div class="cur" id="s09-cur"></div>
+
+        <audio id="s09-a0" src="assets/sfx/pop.wav" data-start="0.2" data-duration="0.22" data-track-index="200" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s09-a1" src="assets/sfx/drop_002.ogg" data-start="0.6" data-duration="0.4" data-track-index="201" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s09-a2" src="assets/sfx/rollover2.ogg" data-start="2.9" data-duration="0.2" data-track-index="202" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s09-r0" src="assets/sfx/riser.wav" data-start="2.17" data-duration="1.8" data-track-index="203" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s09-sw" src="assets/sfx/switch_007.ogg" data-start="3.95" data-duration="0.4" data-track-index="204" data-hf-media-start-basis="local" data-volume="0.85"></audio>
+        <audio id="s09-bm" src="assets/sfx/boom.wav" data-start="3.97" data-duration="1.6" data-track-index="205" data-hf-media-start-basis="local" data-volume="0.8"></audio>
+        <audio id="s09-sp" src="assets/sfx/sparkle.wav" data-start="4.05" data-duration="1" data-track-index="206" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s09-wh" src="assets/sfx/whoosh.wav" data-start="4.2" data-duration="0.7" data-track-index="207" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s09-w2" src="assets/sfx/whoosh.wav" data-start="8.3" data-duration="0.7" data-track-index="207" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s09-j0a" src="assets/sfx/card-place-1.ogg" data-start="8.8" data-duration="0.5" data-track-index="208" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s09-j1a" src="assets/sfx/card-place-2.ogg" data-start="9.0" data-duration="0.5" data-track-index="209" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s09-j2a" src="assets/sfx/card-place-3.ogg" data-start="9.2" data-duration="0.5" data-track-index="214" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s09-c0" src="assets/sfx/chips-collide-1.ogg" data-start="9.75" data-duration="0.6" data-track-index="210" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s09-c1" src="assets/sfx/chips-stack-2.ogg" data-start="10.25" data-duration="0.6" data-track-index="211" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s09-c2" src="assets/sfx/chips-stack-3.ogg" data-start="10.75" data-duration="0.6" data-track-index="210" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s09-rg" src="assets/sfx/swish.wav" data-start="11.0" data-duration="0.4" data-track-index="212" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s09-bl" src="assets/sfx/impactBell_heavy_003.ogg" data-start="12.2" data-duration="1.5" data-track-index="213" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const fmt = (n) => Math.round(n).toLocaleString("en-US");
+          const count = (sel, to, pre, suf, t, d) => {
+            const o = { v: 0 };
+            const el = document.querySelector(sel);
+            tl.fromTo(o, { v: 0 }, { v: to, duration: d, ease: "power3.out", onUpdate: () => (el.textContent = pre + fmt(o.v) + suf) }, t);
+          };
+
+          // Phase 1: the Adult / Child switch
+          tl.fromTo("#s09-head", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.15);
+          tl.fromTo("#s09-tg", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.8)" }, 0.2);
+          tl.fromTo("#s09-tgcap", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.6);
+          tl.fromTo("#s09-cur", { opacity: 0, x: 1600, y: 900 }, { opacity: 1, x: 1190, y: 470, duration: 0.8, ease: "power3.inOut" }, 2.2);
+          tl.to("#s09-tg", { scale: 1.03, duration: 1.0, ease: "power1.in" }, 2.95);
+          // beat-locked: 95.85s global, the switch flips on the drop
+          tl.to("#s09-cur", { scale: 0.7, duration: 0.07, yoyo: true, repeat: 1 }, 3.9);
+          tl.to("#s09-knob", { x: 440, backgroundColor: "#9f8fe0", duration: 0.32, ease: "back.out(1.6)" }, 3.97);
+          tl.to("#s09-la", { color: "#b9b6c2", duration: 0.2 }, 3.97);
+          tl.to("#s09-lc", { color: "#ffffff", duration: 0.2 }, 3.97);
+          tl.to("#s09-tg", { scale: 1, duration: 0.25, ease: "back.out(3)" }, 3.97);
+          tl.fromTo("#s09-wash", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 3.97);
+
+          // Phase 2: Latifa's real dashboard
+          tl.to("#s09-ph1", { y: -700, opacity: 0, duration: 0.5, ease: "power3.in" }, 4.3);
+          tl.to("#s09-cur", { opacity: 0, duration: 0.2 }, 4.3);
+          tl.fromTo("#s09-bw", { x: 860, y: 1100, scale: 0.52, rotation: -4, opacity: 1 }, { y: 250, rotation: 0, duration: 0.8, ease: "power3.out" }, 4.45);
+          tl.to("#s09-bw", { scale: 0.55, duration: 3.4, ease: "none" }, 5.25);
+          tl.fromTo("#s09-ph2 .w", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.07 }, 4.6);
+          tl.fromTo("#s09-p2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 5.7);
+
+          // Phase 3: the jars
+          tl.to("#s09-ph2", { x: -900, opacity: 0, duration: 0.5, ease: "power3.in" }, 8.3);
+          tl.to("#s09-bw", { x: 1900, opacity: 0, rotation: 6, duration: 0.5, ease: "power3.in" }, 8.3);
+          tl.fromTo("#s09-ph3 h2 .w", { opacity: 0, y: 80, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(2)", stagger: 0.18 }, 8.55);
+          const jars = [
+            [160, 0.64],
+            [66, 0.34],
+            [19, 0.14],
+          ];
+          jars.forEach(([amt, lvl], i) => {
+            tl.fromTo("#s09-j" + i, { opacity: 0, y: 200 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.5)" }, 8.8 + i * 0.2);
+            const t = 9.6 + i * 0.5;
+            tl.fromTo("#s09-k" + i, { opacity: 1, y: 0 }, { y: 330 - lvl * 300, duration: 0.35, ease: "power2.in", immediateRender: false }, t);
+            tl.to("#s09-k" + i, { opacity: 0, duration: 0.1 }, t + 0.35);
+            tl.fromTo("#s09-q" + i, { scaleY: 0 }, { scaleY: lvl, duration: 0.9, ease: "elastic.out(1, 0.6)" }, t + 0.25);
+            count("#s09-m" + i, amt, "AED ", "", t + 0.2, 0.8);
+          });
+          tl.fromTo("#s09-ring", { opacity: 0, scale: 0.7, rotation: -40 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.6)" }, 10.9);
+          tl.fromTo("#s09-arc", { strokeDashoffset: 1257 }, { strokeDashoffset: 1257 * 0.36, duration: 1.3, ease: "power3.out" }, 11.1);
+          count("#s09-pc", 64, "", "%", 11.1, 1.3);
+          tl.fromTo("#s09-goal", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 11.6);
+          tl.fromTo("#s09-cap3", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 11.3);
+          tl.to(["#s09-j0", "#s09-j2"], { rotation: 2, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 3 }, 12.4);
+          tl.to("#s09-j1", { rotation: -2, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 3 }, 12.4);
+
+          window.__timelines["s09"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

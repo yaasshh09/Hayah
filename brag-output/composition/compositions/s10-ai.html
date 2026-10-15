@@ -1,1 +1,377 @@
-<!-- s10-ai -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s10 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s10 .orb {
+          position: absolute;
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          background: radial-gradient(circle at 35% 30%, #ffffff 0%, #d8cffb 22%, #9f8fe0 58%, #6e5cc8 100%);
+          box-shadow: 0 30px 60px rgba(80, 60, 160, 0.35);
+        }
+        #s10 .hero {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 50px;
+        }
+        #s10 .hero .orb {
+          position: relative;
+          opacity: 0;
+        }
+        #s10 .hero h2 {
+          font-size: 118px;
+          text-align: center;
+          max-width: 1500px;
+        }
+        #s10 .w {
+          display: inline-block;
+          opacity: 0;
+        }
+        #s10 .panel {
+          position: absolute;
+          left: 260px;
+          top: 150px;
+          width: 1400px;
+          height: 790px;
+          border-radius: 40px;
+          background: rgba(255, 255, 255, 0.92);
+          box-shadow: 0 60px 140px rgba(60, 40, 120, 0.25);
+          opacity: 0;
+        }
+        #s10 .ph {
+          position: absolute;
+          left: 50px;
+          top: 40px;
+          display: flex;
+          align-items: center;
+          gap: 22px;
+        }
+        #s10 .ph .orb {
+          position: relative;
+          width: 64px;
+          height: 64px;
+        }
+        #s10 .ph b {
+          display: block;
+          font-size: 38px;
+        }
+        #s10 .ph span {
+          font-size: 22px;
+          font-weight: 600;
+          color: var(--mut);
+        }
+        #s10 .ub {
+          position: absolute;
+          right: 50px;
+          top: 160px;
+          max-width: 900px;
+          padding: 22px 32px;
+          border-radius: 30px 30px 8px 30px;
+          background: #15131c;
+          color: #fff;
+          font-size: 34px;
+          font-weight: 600;
+          opacity: 0;
+        }
+        #s10 .ctx {
+          position: absolute;
+          left: 50px;
+          top: 290px;
+          display: flex;
+          gap: 18px;
+        }
+        #s10 .ctx .chip {
+          opacity: 0;
+          font-size: 26px;
+        }
+        #s10 .dots {
+          position: absolute;
+          left: 50px;
+          top: 390px;
+          display: flex;
+          gap: 14px;
+          opacity: 0;
+        }
+        #s10 .dots i {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: var(--lav);
+          display: block;
+        }
+        #s10 .ans {
+          position: absolute;
+          left: 50px;
+          right: 50px;
+          top: 280px;
+          opacity: 0;
+        }
+        #s10 .ans .lead {
+          font-size: 34px;
+          font-weight: 700;
+          margin-bottom: 22px;
+        }
+        #s10 .ans .row {
+          display: grid;
+          grid-template-columns: 520px 1fr 90px;
+          align-items: center;
+          gap: 24px;
+          margin-bottom: 18px;
+          font-size: 28px;
+          font-weight: 600;
+          opacity: 0;
+        }
+        #s10 .ans .row .tr {
+          height: 18px;
+          border-radius: 999px;
+          background: #eeebf4;
+          position: relative;
+          overflow: hidden;
+        }
+        #s10 .ans .row .tr span {
+          position: absolute;
+          inset: 0;
+          border-radius: 999px;
+          background: linear-gradient(90deg, #9f8fe0, #7fe0c3);
+          transform-origin: 0 50%;
+        }
+        #s10 .ans .row b {
+          text-align: right;
+          font-size: 30px;
+        }
+        #s10 .ans .q {
+          margin-top: 16px;
+          font-size: 30px;
+          font-weight: 600;
+          color: #44424c;
+          opacity: 0;
+        }
+        #s10 .pb {
+          position: absolute;
+          left: 50px;
+          right: 50px;
+          bottom: 40px;
+          height: 100px;
+          border-radius: 999px;
+          background: #f4f2f8;
+          border: 3px solid #e3def0;
+          display: flex;
+          align-items: center;
+          padding: 0 18px 0 40px;
+          gap: 20px;
+        }
+        #s10 .pb .typed {
+          flex: 1;
+          font-size: 32px;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        #s10 .pb .typed {
+          position: relative;
+          height: 50px;
+        }
+        #s10 .pb .ph0,
+        #s10 .pb .tw {
+          position: absolute;
+          left: 0;
+          top: 4px;
+        }
+        #s10 .pb .ph0 {
+          color: #a19fab;
+        }
+        #s10 .caret {
+          display: inline-block;
+          width: 3px;
+          height: 36px;
+          margin-left: 3px;
+          vertical-align: -6px;
+          background: var(--lav-d);
+        }
+        #s10 .pb .lang {
+          position: relative;
+          width: 86px;
+          height: 52px;
+          border-radius: 14px;
+          background: #fff;
+          font-size: 22px;
+          font-weight: 800;
+          color: #44424c;
+        }
+        #s10 .pb .lang span {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #s10 .pb .mic {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #s10 .pb .send {
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          background: #15131c;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #s10 .foot {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 966px;
+          text-align: center;
+          font-size: 32px;
+          font-weight: 600;
+          color: #3e3c46;
+          opacity: 0;
+        }
+      </style>
+
+      <div id="s10" data-composition-id="s10" data-width="1920" data-height="1080">
+        <div class="scenehead kicker" id="s10-head"><span class="num">06</span>Hayati AI</div>
+
+        <div class="hero" id="s10-hero">
+          <div class="orb" id="s10-horb"></div>
+          <h2 class="disp"><span class="w">An</span> <span class="w">intelligent</span> <span class="w lav">co-pilot</span> <span class="w">for</span> <span class="w">family</span> <span class="w">life.</span></h2>
+        </div>
+
+        <div class="panel" id="s10-panel">
+          <div class="ph"><div class="orb" id="s10-orb"></div><div><b class="disp">Ask Hayati AI anything</b><span class="body">Knows your calendar, budgets and occasions</span></div></div>
+          <div class="ub body" id="s10-ub">How should I split the Eid buffer between the kids?</div>
+          <div class="ctx" id="s10-ctx">
+            <span class="chip"><i style="background: #9f8fe0"></i>Reading the family calendar</span>
+            <span class="chip"><i style="background: #e8b765"></i>Checking budgets</span>
+            <span class="chip"><i style="background: #7fe0c3"></i>Kids' goals</span>
+          </div>
+          <div class="dots" id="s10-dots"><i></i><i></i><i></i></div>
+          <div class="ans" id="s10-ans">
+            <div class="lead body">Your Eid Al Fitr preparations are progressing well:</div>
+            <div class="row body"><span>Eidiya &amp; Children's Gifts</span><div class="tr"><span id="s10-b0"></span></div><b class="disp">89%</b></div>
+            <div class="row body"><span>Ramadan &amp; Family Hosting</span><div class="tr"><span id="s10-b1"></span></div><b class="disp">60%</b></div>
+            <div class="row body"><span>Latifa's Bicycle &amp; Savings</span><div class="tr"><span id="s10-b2"></span></div><b class="disp">35%</b></div>
+            <div class="q body" id="s10-q">Want me to split the remaining Eid buffer across Salem, Latifa and Zayed's savings?</div>
+          </div>
+          <div class="pb">
+            <div class="typed body"><span class="ph0" id="s10-ph0">Ask about budgets, occasions or savings...</span><span class="tw" id="s10-tw"><span id="s10-typed"></span><span class="caret" id="s10-caret"></span></span></div>
+            <div class="lang body"><span id="s10-en">EN</span><span id="s10-ar" style="opacity: 0">AR</span></div>
+            <div class="mic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#44424c" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg></div>
+            <div class="send" id="s10-send"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-2-7-8-1z" /></svg></div>
+          </div>
+        </div>
+
+        <p class="foot body" id="s10-foot">Gemini, through my own secure server. Kids get a gentler version.</p>
+
+        <audio id="s10-a0" src="assets/sfx/sparkle.wav" data-start="0.3" data-duration="1" data-track-index="220" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s10-a1" src="assets/sfx/drop_001.ogg" data-start="0.6" data-duration="0.4" data-track-index="224" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-a2" src="assets/sfx/whoosh.wav" data-start="2.9" data-duration="0.7" data-track-index="225" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-a3" src="assets/sfx/click2.ogg" data-start="4.2" data-duration="0.2" data-track-index="226" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k0" src="assets/sfx/key01.wav" data-start="4.42" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k1" src="assets/sfx/key15.wav" data-start="4.545" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k2" src="assets/sfx/key05.wav" data-start="4.67" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k3" src="assets/sfx/key19.wav" data-start="4.795" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k4" src="assets/sfx/key09.wav" data-start="4.92" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k5" src="assets/sfx/key23.wav" data-start="5.045" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k6" src="assets/sfx/key13.wav" data-start="5.17" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k7" src="assets/sfx/key03.wav" data-start="5.295" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k8" src="assets/sfx/key17.wav" data-start="5.42" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k9" src="assets/sfx/key07.wav" data-start="5.545" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k10" src="assets/sfx/key21.wav" data-start="5.67" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k11" src="assets/sfx/key11.wav" data-start="5.795" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k12" src="assets/sfx/key01.wav" data-start="5.92" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k13" src="assets/sfx/key15.wav" data-start="6.045" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k14" src="assets/sfx/key05.wav" data-start="6.17" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k15" src="assets/sfx/key19.wav" data-start="6.295" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k16" src="assets/sfx/key09.wav" data-start="6.42" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k17" src="assets/sfx/key23.wav" data-start="6.545" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k18" src="assets/sfx/key13.wav" data-start="6.67" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k19" src="assets/sfx/key03.wav" data-start="6.795" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k20" src="assets/sfx/key17.wav" data-start="6.92" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k21" src="assets/sfx/key07.wav" data-start="7.045" data-duration="0.2" data-track-index="221" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k22" src="assets/sfx/key21.wav" data-start="7.17" data-duration="0.2" data-track-index="222" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-k23" src="assets/sfx/key11.wav" data-start="7.295" data-duration="0.2" data-track-index="223" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-sd" src="assets/sfx/mouseclick1.ogg" data-start="7.8" data-duration="0.3" data-track-index="227" data-hf-media-start-basis="local" data-volume="0.7"></audio>
+        <audio id="s10-sw" src="assets/sfx/swish.wav" data-start="7.85" data-duration="0.4" data-track-index="228" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s10-c0" src="assets/sfx/pop.wav" data-start="8.6" data-duration="0.22" data-track-index="229" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-c1" src="assets/sfx/pop.wav" data-start="9.3" data-duration="0.22" data-track-index="229" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-c2" src="assets/sfx/pop.wav" data-start="10.0" data-duration="0.22" data-track-index="229" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-lg" src="assets/sfx/switch_002.ogg" data-start="10.6" data-duration="0.4" data-track-index="230" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s10-rs" src="assets/sfx/riser.wav" data-start="10.18" data-duration="1.8" data-track-index="231" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s10-dr" src="assets/sfx/impactBell_heavy_000.ogg" data-start="11.98" data-duration="1.5" data-track-index="232" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-dp" src="assets/sfx/impactSoft_medium_001.ogg" data-start="11.98" data-duration="0.3" data-track-index="233" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s10-r0" src="assets/sfx/drop_001.ogg" data-start="12.3" data-duration="0.4" data-track-index="234" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-r1" src="assets/sfx/drop_002.ogg" data-start="12.55" data-duration="0.4" data-track-index="235" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s10-r2" src="assets/sfx/drop_003.ogg" data-start="12.8" data-duration="0.4" data-track-index="234" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          // Phase 1: the promise
+          tl.fromTo("#s10-head", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.15);
+          tl.fromTo("#s10-horb", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.7, ease: "back.out(2)" }, 0.25);
+          tl.to("#s10-horb", { y: -16, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2 }, 0.95);
+          tl.fromTo("#s10-hero h2 .w", { opacity: 0, y: 70, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", stagger: 0.08 }, 0.55);
+          tl.to("#s10-hero", { y: -500, scale: 0.6, opacity: 0, duration: 0.6, ease: "power3.in" }, 2.95);
+
+          // Phase 2: the chat, typed in the quiet part of the track
+          tl.fromTo("#s10-panel", { opacity: 0, y: 300, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 3.2);
+          tl.set("#s10-ph0", { opacity: 0 }, 4.4);
+          const q = "How should I split the Eid buffer between the kids?";
+          const typed = document.getElementById("s10-typed");
+          const o = { n: 0 };
+          tl.fromTo(o, { n: 0 }, { n: q.length, duration: 3.0, ease: "none", onUpdate: () => (typed.textContent = q.slice(0, Math.round(o.n))) }, 4.4);
+          tl.fromTo("#s10-caret", { opacity: 1 }, { opacity: 0, duration: 0.25, ease: "steps(1)", yoyo: true, repeat: 5 }, 0);
+          tl.to("#s10-send", { scale: 0.85, duration: 0.08, yoyo: true, repeat: 1 }, 7.78);
+          tl.set("#s10-tw", { opacity: 0 }, 7.85);
+          tl.set("#s10-ph0", { opacity: 1 }, 7.9);
+          tl.fromTo("#s10-ub", { opacity: 0, y: 560, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out" }, 7.85);
+          // Thinking: context chips, dots, orb pulse
+          tl.fromTo("#s10-ctx .chip", { opacity: 0, y: 30, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(2)", stagger: 0.7 }, 8.6);
+          tl.fromTo("#s10-dots", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 8.4);
+          tl.fromTo("#s10-dots i", { y: 0 }, { y: -14, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 6, stagger: 0.12 }, 8.5);
+          tl.fromTo("#s10-orb", { scale: 1 }, { scale: 1.25, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 7 }, 8.4);
+          // Voice language flips EN to Arabic
+          tl.to("#s10-en", { opacity: 0, y: -16, duration: 0.2 }, 10.6);
+          tl.fromTo("#s10-ar", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.2 }, 10.65);
+
+          // Phase 3: the answer on the drop (beat-locked: 119.84s global)
+          tl.to(["#s10-ctx", "#s10-dots"], { opacity: 0, y: -20, duration: 0.25 }, 11.8);
+          tl.fromTo("#s10-ans", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 11.98);
+          tl.to("#s10-panel", { scale: 1.02, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, 11.98);
+          const pct = [0.89, 0.6, 0.35];
+          pct.forEach((p, i) => {
+            tl.fromTo("#s10-ans .row:nth-of-type(" + (i + 2) + ")", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 12.3 + i * 0.25);
+            tl.fromTo("#s10-b" + i, { scaleX: 0 }, { scaleX: p, duration: 0.9, ease: "power3.out" }, 12.4 + i * 0.25);
+          });
+          tl.fromTo("#s10-q", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 13.2);
+          tl.fromTo("#s10-foot", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 12.6);
+
+          window.__timelines["s10"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

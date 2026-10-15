@@ -1,1 +1,192 @@
-<!-- s12-outro -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #s12 {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+        #s12 .wall {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 8040px;
+          height: 2280px;
+          transform-origin: 0 0;
+        }
+        #s12 .tile {
+          position: absolute;
+          width: 1920px;
+          height: 1080px;
+          border-radius: 60px;
+          overflow: hidden;
+          box-shadow: 0 60px 160px rgba(50, 30, 110, 0.3);
+        }
+        #s12 .tile img {
+          display: block;
+          width: 1920px;
+          height: 1080px;
+        }
+        #s12 .tile .lbl {
+          position: absolute;
+          left: 70px;
+          bottom: 70px;
+          padding: 30px 60px;
+          border-radius: 50px;
+          background: #15131c;
+          color: #fff;
+          font-size: 130px;
+          opacity: 0;
+        }
+        #s12 .top {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 110px;
+          text-align: center;
+          font-size: 78px;
+          opacity: 0;
+        }
+        #s12 .white {
+          position: absolute;
+          inset: 0;
+          background: #fbfaff;
+          opacity: 0;
+        }
+        #s12 .end {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        #s12 .mq {
+          position: absolute;
+          left: 0;
+          white-space: nowrap;
+          font-size: 260px;
+          color: rgba(159, 143, 224, 0.07);
+          -webkit-text-stroke: 2px rgba(159, 143, 224, 0.4);
+          opacity: 0;
+        }
+        #s12 .mark {
+          font-size: 330px;
+          letter-spacing: -0.055em;
+          opacity: 0;
+        }
+        #s12 .arw {
+          font-size: 110px;
+          color: var(--lav-d);
+          line-height: 1.25;
+          margin-top: 6px;
+        }
+        #s12 .tag {
+          font-size: 84px;
+          margin-top: 20px;
+          opacity: 0;
+        }
+        #s12 .url {
+          margin-top: 50px;
+          font-size: 34px;
+          padding: 18px 36px;
+          opacity: 0;
+        }
+        #s12 .cred {
+          margin-top: 34px;
+          font-size: 28px;
+          font-weight: 600;
+          color: #5d5a66;
+          opacity: 0;
+        }
+      </style>
+
+      <div id="s12" data-composition-id="s12" data-width="1920" data-height="1080">
+        <div class="wall" id="s12-wall" data-layout-allow-overlap data-layout-allow-overflow></div>
+        <div class="top disp" id="s12-top">Everything my family needs, <span class="lav">in one place.</span></div>
+        <div class="white" id="s12-white"></div>
+
+        <div class="mq disp" id="s12-mq1" style="top: -60px">Hayati Hayati Hayati Hayati Hayati Hayati</div>
+        <div class="mq ar" id="s12-mq2" style="top: 790px; -webkit-text-stroke-color: rgba(232, 183, 101, 0.5)">حياتي حياتي حياتي حياتي حياتي حياتي حياتي حياتي</div>
+        <div class="end" id="s12-end">
+          <div class="mark disp" id="s12-mark">Hayati</div>
+          <div class="arw ar" id="s12-ar">حياتي</div>
+          <div class="tag disp" id="s12-tag">Make room for <span class="lav">what matters.</span></div>
+          <div class="url chip" id="s12-url"><i style="background: #9f8fe0"></i>hayatiweb.netlify.app</div>
+          <p class="cred body" id="s12-cred">Designed and built for the ADU Software Engineering Innovation Cup 2K26.</p>
+        </div>
+
+        <audio id="s12-a0" src="assets/sfx/whoosh.wav" data-start="0.2" data-duration="0.7" data-track-index="250" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s12-a1" src="assets/sfx/card-fan-1.ogg" data-start="0.9" data-duration="0.8" data-track-index="251" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s12-tp" src="assets/sfx/drop_001.ogg" data-start="2.9" data-duration="0.4" data-track-index="252" data-hf-media-start-basis="local" data-volume="0.5"></audio>
+        <audio id="s12-l0" src="assets/sfx/pop.wav" data-start="2.4" data-duration="0.22" data-track-index="253" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l1" src="assets/sfx/pop.wav" data-start="2.9" data-duration="0.22" data-track-index="254" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l2" src="assets/sfx/pop.wav" data-start="3.4" data-duration="0.22" data-track-index="253" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l3" src="assets/sfx/pop.wav" data-start="3.9" data-duration="0.22" data-track-index="254" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l4" src="assets/sfx/pop.wav" data-start="4.4" data-duration="0.22" data-track-index="253" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l5" src="assets/sfx/pop.wav" data-start="4.9" data-duration="0.22" data-track-index="254" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l6" src="assets/sfx/pop.wav" data-start="5.4" data-duration="0.22" data-track-index="253" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-l7" src="assets/sfx/pop.wav" data-start="5.9" data-duration="0.22" data-track-index="254" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-rs" src="assets/sfx/riser.wav" data-start="6.18" data-duration="1.8" data-track-index="255" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s12-bm" src="assets/sfx/boom.wav" data-start="7.98" data-duration="1.6" data-track-index="256" data-hf-media-start-basis="local" data-volume="0.9"></audio>
+        <audio id="s12-bl" src="assets/sfx/impactBell_heavy_000.ogg" data-start="7.98" data-duration="1.5" data-track-index="257" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s12-ar" src="assets/sfx/sparkle.wav" data-start="8.5" data-duration="1" data-track-index="258" data-hf-media-start-basis="local" data-volume="0.4"></audio>
+        <audio id="s12-tg" src="assets/sfx/swish.wav" data-start="9.05" data-duration="0.4" data-track-index="259" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s12-ur" src="assets/sfx/click_003.ogg" data-start="9.9" data-duration="0.2" data-track-index="260" data-hf-media-start-basis="local" data-volume="0.55"></audio>
+        <audio id="s12-cr" src="assets/sfx/bong_001.ogg" data-start="10.4" data-duration="0.5" data-track-index="261" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+      </div>
+
+      <script>
+        (function () {
+          const tiles = [
+            ["dashboard.png", "Dashboard"],
+            ["calendar.png", "Calendar"],
+            ["finance.png", "Finance"],
+            ["finance-Debts.png", "Debts"],
+            ["finance-Tools.png", "UAE tools"],
+            ["dashboard-child.png", "Child mode"],
+            ["AI.png", "Hayati AI"],
+            ["dark-calendar.png", "Dark mode"],
+          ];
+          const wall = document.getElementById("s12-wall");
+          tiles.forEach((t, i) => {
+            const x = (i % 4) * 2040;
+            const y = Math.floor(i / 4) * 1200;
+            wall.insertAdjacentHTML("beforeend", `<div class="tile" style="left:${x}px;top:${y}px"><img src="assets/shots/${t[0]}" alt="" /><div class="lbl disp" id="s12-l${i}">${t[1]}</div></div>`);
+          });
+
+          const tl = gsap.timeline({ paused: true });
+          // Camera pulls back from one screen to the whole wall
+          const S = 0.224;
+          tl.fromTo("#s12-wall", { x: 0, y: 0, scale: 1, rotation: 0 }, { x: (1920 - 8040 * S) / 2, y: 330, scale: S, rotation: -2, duration: 2.4, ease: "power3.inOut" }, 0.15);
+          tl.to("#s12-wall", { x: "-=40", rotation: 0, duration: 3.6, ease: "none" }, 2.55);
+          tiles.forEach((t, i) => {
+            tl.fromTo("#s12-l" + i, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)" }, 2.4 + i * 0.5);
+          });
+          tl.fromTo("#s12-top", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 2.9);
+
+          // Push into the wall, white out, end card on the phrase (beat-locked: 143.8s global)
+          tl.to("#s12-wall", { x: 960 - 4020 * 0.9, y: 540 - 1140 * 0.9, scale: 0.9, rotation: 4, filter: "blur(14px)", duration: 1.6, ease: "power3.in" }, 6.3);
+          tl.to("#s12-top", { opacity: 0, y: -40, duration: 0.4 }, 6.3);
+          tl.fromTo("#s12-white", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.in" }, 7.45);
+          tl.to("#s12-white", { opacity: 0.88, duration: 0.6, ease: "power2.out" }, 7.98);
+          tl.fromTo("#s12-mq1", { opacity: 0, x: 0 }, { opacity: 1, x: -700, duration: 6.2, ease: "none" }, 7.98);
+          tl.fromTo("#s12-mq2", { opacity: 0, x: -1000 }, { opacity: 1, x: -300, duration: 6.2, ease: "none" }, 7.98);
+          tl.fromTo("#s12-mark", { opacity: 0, scale: 2.4, filter: "blur(24px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 7.98);
+          tl.fromTo("#s12-ar", { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)", duration: 0.6, ease: "power3.out" }, 8.5);
+          tl.fromTo("#s12-tag", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" }, 9.05);
+          tl.fromTo("#s12-url", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 9.9);
+          tl.fromTo("#s12-cred", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 10.4);
+          tl.to("#s12-end", { scale: 1.03, duration: 5.6, ease: "none" }, 8.4);
+
+          window.__timelines["s12"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>
