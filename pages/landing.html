@@ -857,10 +857,12 @@
         transition: opacity 0.4s ease;
         z-index: 10;
       }
-      .ios-card:hover::after {
+      /* Hover is read from the wrapper, which never tilts. Reading it from the
+         card made the tilted edge slip out from under the pointer and flicker. */
+      .ai-float-wrap:hover .ios-card::after {
         opacity: 0.75;
       }
-      .ios-card:hover,
+      .ai-float-wrap:hover .ios-card,
       .ios-card:focus-within {
         --tilt-x: 3deg;
         --tilt-y: -3deg;
@@ -1188,6 +1190,21 @@
         color: transparent;
         -webkit-text-stroke: 1.5px var(--fg);
       }
+      /* Two identical copies slide by exactly one copy's width, so the loop is seamless.
+         The outer .mq still drifts with scroll from the script. */
+      .mq-in {
+        display: inline-flex;
+        direction: ltr;
+        animation: mq 48s linear infinite;
+      }
+      .mq.ar .mq-in {
+        animation-direction: reverse;
+      }
+      @keyframes mq {
+        to {
+          transform: translateX(-50%);
+        }
+      }
       .go {
         display: flex;
         gap: 16px;
@@ -1218,7 +1235,8 @@
         }
         .ai-float-wrap,
         .ios-orb,
-        .ios-orb::before {
+        .ios-orb::before,
+        .mq-in {
           animation: none;
         }
         .ios-card,
@@ -1404,8 +1422,12 @@
     </section>
 
     <section class="cta" id="cta">
-      <div class="mq" id="m1">Hayati Hayati Hayati Hayati</div>
-      <div class="mq ar" id="m2">حياتي حياتي حياتي حياتي حياتي حياتي</div>
+      <div class="mq" id="m1">
+        <div class="mq-in"><span>Hayati Hayati Hayati Hayati&nbsp;</span><span aria-hidden="true">Hayati Hayati Hayati Hayati&nbsp;</span></div>
+      </div>
+      <div class="mq ar" id="m2">
+        <div class="mq-in"><span>حياتي حياتي حياتي حياتي حياتي حياتي&nbsp;</span><span aria-hidden="true">حياتي حياتي حياتي حياتي حياتي حياتي&nbsp;</span></div>
+      </div>
       <div class="go">
         <a class="btn" href="/signin?role=adult">Continue as Adult</a
         ><a class="btn o" href="/signin?role=child">Continue as Child</a>
@@ -1681,7 +1703,7 @@
       const aiCard = document.getElementById("aiCard");
       const aiFloatWrap = document.getElementById("aiFloatWrap");
       if (aiCard) {
-        aiCard.addEventListener("pointerenter", (e) => {
+        aiFloatWrap.addEventListener("pointerenter", (e) => {
           if (e.pointerType === "touch") return;
           aiFloatWrap.classList.remove("is-returning");
           const r = aiCard.getBoundingClientRect();
@@ -1699,13 +1721,13 @@
             `${(-3 + px * 8).toFixed(2)}deg`,
           );
         });
-        aiCard.addEventListener("pointerleave", () => {
+        aiFloatWrap.addEventListener("pointerleave", () => {
           aiCard.style.removeProperty("--tilt-x");
           aiCard.style.removeProperty("--tilt-y");
           aiFloatWrap.classList.add("is-returning");
         });
         aiCard.addEventListener("transitionend", (e) => {
-          if (e.propertyName === "transform" && !aiCard.matches(":hover"))
+          if (e.propertyName === "transform" && !aiFloatWrap.matches(":hover"))
             aiFloatWrap.classList.remove("is-returning");
         });
       }
