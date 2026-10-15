@@ -44,12 +44,20 @@
           position: absolute;
           left: 0;
           top: 0;
-          font-size: 104px;
+          font-size: 96px;
           width: 780px;
         }
         #s02 .hl h2 .w {
           display: inline-block;
           opacity: 0;
+        }
+        #s02 .hl h2 .sub {
+          display: block;
+          margin-top: 30px;
+          font-size: 38px;
+          font-weight: 600;
+          letter-spacing: 0;
+          color: rgba(255, 255, 255, 0.72);
         }
         #s02 .frag {
           position: absolute;
@@ -227,9 +235,10 @@
           <div class="kicker">The problem</div>
           <div class="hl">
             <h2 class="disp" id="s02-h1">
-              <span class="w">My</span> <span class="w">family's</span> <span class="w">money</span> <span class="w">lived</span>
+              <span class="w">Our</span> <span class="w">families'</span> <span class="w">money</span> <span class="w">lived</span>
               <span class="w">in</span> <span class="w" style="color: var(--gold)">five</span> <span class="w" style="color: var(--gold)">different</span>
               <span class="w">places.</span>
+              <span class="w sub body" id="s02-sub">Other families told us the same.</span>
             </h2>
             <h2 class="disp" id="s02-h2">
               <span class="w">Nobody</span> <span class="w">could</span> <span class="w">see</span> <span class="w">the</span>
@@ -271,7 +280,8 @@
           tl.fromTo("#s02-chat .b", { opacity: 0, y: 16, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)", stagger: 0.35 }, 2.85);
 
           tl.fromTo("#s02 .kicker", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 0.25);
-          tl.fromTo("#s02-h1 .w", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.06 }, 0.35);
+          tl.fromTo("#s02-h1 .w:not(.sub)", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.06 }, 0.35);
+          tl.fromTo("#s02-sub", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 1.7);
 
           // Glitch: fragments split and shake
           ["#s02-sheet", "#s02-cal", "#s02-note", "#s02-sms", "#s02-chat"].forEach((sel, i) => {

@@ -56,9 +56,10 @@
           margin-top: 26px;
         }
         #s03 .arw {
-          font-size: 128px;
+          font-size: 210px;
           color: var(--lav-d);
-          line-height: 1.2;
+          line-height: 1.15;
+          margin-top: 6px;
         }
         #s03 .eq {
           font-size: 74px;
@@ -110,10 +111,7 @@
         <div class="ring" id="s03-ring2"></div>
         <div class="stack">
           <div class="mark disp" id="s03-mark">Hayati</div>
-          <div class="row">
-            <div class="arw ar" id="s03-ar">حياتي</div>
-            <div class="eq disp" id="s03-eq">means my life.</div>
-          </div>
+          <div class="arw ar" id="s03-ar">حياتي</div>
           <div class="tag disp" id="s03-tag">your family, <span class="lav">planned together.</span></div>
         </div>
         <div class="badge" id="s03-badge">
@@ -148,8 +146,7 @@
 
           // Arabic wipes in right to left, the way it is read
           tl.fromTo("#s03-ar", { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)", duration: 0.6, ease: "power3.out" }, 0.75);
-          tl.fromTo("#s03-eq", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 1.45);
-          tl.fromTo("#s03-tag", { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 2.45);
+          tl.fromTo("#s03-tag", { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 1.95);
 
           // Make room for the competition badge
           tl.to("#s03 .stack", { y: -70, scale: 0.9, duration: 0.6, ease: "power3.inOut" }, 4.05);

@@ -169,8 +169,8 @@
         <div class="scenehead kicker" id="s06-head"><span class="num">02</span>UAE family calendar</div>
 
         <div class="left">
-          <h2 class="disp"><span class="w">A</span> <span class="w">calendar</span> <span class="w">that</span> <span class="w">knows</span> <span class="w">what</span> <span class="w lav">Eid</span> <span class="w lav">will</span> <span class="w lav">cost.</span></h2>
-          <p class="cap body" id="s06-cap">Ramadan, both Eids, National Day and school breaks are already in. I give each one a budget. Moon-sighted dates stay tentative until announced.</p>
+          <h2 class="disp"><span class="w">A</span> <span class="w">calendar</span> <span class="w">that</span> <span class="w">knows</span> <span class="w">what</span> <span class="w lav">every</span> <span class="w lav">occasion</span> <span class="w lav">will</span> <span class="w lav">cost.</span></h2>
+          <p class="cap body" id="s06-cap">Eids, Ramadan, National Day, school terms and birthdays are already in. Each one can carry a budget, and moon-sighted dates stay tentative.</p>
         </div>
 
         <div id="s06-occs"></div>
@@ -199,10 +199,10 @@
         (function () {
           // Real upcoming occasions from assets/hayati-data.js: [day, month, name, tentative, budget, saved, color]
           const occ = [
+            ["14", "NOV", "Latifa's birthday", false, 600, 350, "#f07aa0"],
             ["2", "DEC", "UAE National Day", false, 1500, 600, "#3cc09b"],
-            ["8", "FEB", "Ramadan begins", true, 3400, 600, "#9f8fe0"],
+            ["19", "DEC", "Dubai Shopping Festival", false, 2000, 500, "#e8b765"],
             ["10", "MAR", "Eid Al Fitr", true, 4800, 900, "#9f8fe0"],
-            ["17", "MAY", "Eid Al Adha", true, 5400, 1200, "#9f8fe0"],
           ];
           const host = document.getElementById("s06-occs");
           occ.forEach((o, i) => {
@@ -233,7 +233,7 @@
           });
           tl.fromTo("#s06-alert", { opacity: 0, y: 40, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 7.5);
           tl.fromTo("#s06-alert i", { scale: 1 }, { scale: 1.5, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 7 }, 8.0);
-          tl.to("#s06-o2", { x: -16, borderColor: "rgba(159,143,224,0.9)", duration: 0.4, ease: "power2.out" }, 7.5);
+          tl.to("#s06-o3", { x: -16, borderColor: "rgba(159,143,224,0.9)", duration: 0.4, ease: "power2.out" }, 7.5);
 
           window.__timelines["s06"] = tl;
         })();
