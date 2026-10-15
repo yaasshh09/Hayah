@@ -829,8 +829,10 @@
         -webkit-backdrop-filter: blur(40px) saturate(180%);
         will-change: transform, box-shadow;
         transform-style: preserve-3d;
-        transform: perspective(1200px) rotateX(var(--tilt-x, 0deg))
-          rotateY(var(--tilt-y, 0deg)) scale(var(--card-scale, 1));
+        transform: perspective(1200px)
+          translate(var(--shift-x, 0px), var(--shift-y, 0px))
+          rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))
+          scale(var(--card-scale, 1));
         transition:
           transform 0.62s cubic-bezier(0.2, 0.75, 0.25, 1),
           box-shadow 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -859,6 +861,10 @@
       }
       /* Hover is read from the wrapper, which never tilts. Reading it from the
          card made the tilted edge slip out from under the pointer and flicker. */
+      /* While following the pointer, catch up quickly; the slower ease is kept for settling back. */
+      .ai-float-wrap.tracking .ios-card {
+        transition-duration: 0.22s, 0.55s, 0.45s;
+      }
       .ai-float-wrap:hover .ios-card::after {
         opacity: 0.75;
       }
@@ -1195,7 +1201,7 @@
       .mq-in {
         display: inline-flex;
         direction: ltr;
-        animation: mq 48s linear infinite;
+        animation: mq 30s linear infinite;
       }
       .mq.ar .mq-in {
         animation-direction: reverse;
@@ -1235,8 +1241,7 @@
         }
         .ai-float-wrap,
         .ios-orb,
-        .ios-orb::before,
-        .mq-in {
+        .ios-orb::before {
           animation: none;
         }
         .ios-card,
@@ -1703,27 +1708,41 @@
       const aiCard = document.getElementById("aiCard");
       const aiFloatWrap = document.getElementById("aiFloatWrap");
       if (aiCard) {
+        // The card leans and drifts toward the pointer while it moves over it.
+        // Measured against the wrapper, which stays still, so the card's own motion never feeds back.
+        let follow = 0,
+          fx = 0,
+          fy = 0;
+        const lean = () => {
+          follow = 0;
+          const r = aiFloatWrap.getBoundingClientRect(),
+            px = Math.max(-1, Math.min(1, (fx - (r.left + r.width / 2)) / (r.width / 2))),
+            py = Math.max(-1, Math.min(1, (fy - (r.top + r.height / 2)) / (r.height / 2)));
+          aiCard.style.setProperty("--tilt-x", `${(-py * 7).toFixed(2)}deg`);
+          aiCard.style.setProperty("--tilt-y", `${(px * 7).toFixed(2)}deg`);
+          aiCard.style.setProperty("--shift-x", `${(px * 14).toFixed(1)}px`);
+          aiCard.style.setProperty("--shift-y", `${(py * 10).toFixed(1)}px`);
+        };
+        const track = (e) => {
+          if (e.pointerType === "touch") return;
+          fx = e.clientX;
+          fy = e.clientY;
+          if (!follow) follow = requestAnimationFrame(lean);
+        };
         aiFloatWrap.addEventListener("pointerenter", (e) => {
           if (e.pointerType === "touch") return;
           aiFloatWrap.classList.remove("is-returning");
-          const r = aiCard.getBoundingClientRect();
-          const px = Math.max(
-            -1,
-            Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width / 2)),
-          );
-          const py = Math.max(
-            -1,
-            Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height / 2)),
-          );
-          aiCard.style.setProperty("--tilt-x", `${(3 - py * 8).toFixed(2)}deg`);
-          aiCard.style.setProperty(
-            "--tilt-y",
-            `${(-3 + px * 8).toFixed(2)}deg`,
-          );
+          aiFloatWrap.classList.add("tracking");
+          track(e);
         });
+        aiFloatWrap.addEventListener("pointermove", track, { passive: true });
         aiFloatWrap.addEventListener("pointerleave", () => {
-          aiCard.style.removeProperty("--tilt-x");
-          aiCard.style.removeProperty("--tilt-y");
+          cancelAnimationFrame(follow);
+          follow = 0;
+          ["--tilt-x", "--tilt-y", "--shift-x", "--shift-y"].forEach((p) =>
+            aiCard.style.removeProperty(p),
+          );
+          aiFloatWrap.classList.remove("tracking");
           aiFloatWrap.classList.add("is-returning");
         });
         aiCard.addEventListener("transitionend", (e) => {

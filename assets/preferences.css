@@ -11,42 +11,41 @@
 }
 
 
-/* The cursor box stays 32px and grows with `scale`, so hovering never triggers layout.
-   Resting scale 0.3125 shows a 10px dot; its shadow is drawn 3.2x larger to match. */
+/* The original ring cursor: a thin circle that opens into a soft lavender disc over links.
+   It grows by width/height (not scale) so the 1.5px outline stays crisp at every size;
+   it is a fixed, empty element, so that resize is cheap. */
 .c-cursor {
-  width: 32px !important;
-  height: 32px !important;
-  scale: 0.3125;
-  border: 1px solid #17171b !important;
+  width: 14px !important;
+  height: 14px !important;
+  border: 1.5px solid rgba(18, 18, 22, 0.7) !important;
   border-radius: 50%;
-  background: #17171b !important;
-  box-shadow: 0 3px 13px rgba(0, 0, 0, 0.2) !important;
+  background: rgba(18, 18, 22, 0.08) !important;
+  box-shadow: none !important;
   transition:
-    scale 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 160ms ease,
-    background-color 160ms ease,
-    box-shadow 160ms ease,
-    opacity 160ms ease !important;
-  will-change: transform, scale;
+    width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s,
+    background 0.25s,
+    opacity 0.2s !important;
+  will-change: transform;
 }
 
 .c-cursor.hover {
-  scale: 1;
-  border-color: #17171b !important;
-  background: rgba(23, 23, 27, 0.07) !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-color: #9f8fe0 !important;
+  background: rgba(159, 143, 224, 0.18) !important;
 }
 
 html[data-theme="dark"] .c-cursor {
-  border-color: #f7f6fa !important;
-  background: #f7f6fa !important;
-  box-shadow: 0 3px 13px rgba(0, 0, 0, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6) !important;
 }
 
 html[data-theme="dark"] .c-cursor.hover {
-  border-color: #f7f6fa !important;
-  background: rgba(247, 246, 250, 0.12) !important;
-  box-shadow: 0 0 0 1px rgba(20, 20, 24, 0.75) inset !important;
+  border-color: #d6ccff !important;
+  background: rgba(214, 204, 255, 0.22) !important;
 }
 
 html[data-theme="dark"] {
