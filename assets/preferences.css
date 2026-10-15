@@ -668,10 +668,16 @@ html[data-fx="lite"] *::before,
 html[data-fx="lite"] *::after {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
+}
+
+/* Bring the system cursor back only when the ring cursor is not running. */
+html[data-fx="lite"]:not([data-cursor="on"]) *,
+html[data-fx="lite"]:not([data-cursor="on"]) *::before,
+html[data-fx="lite"]:not([data-cursor="on"]) *::after {
   cursor: auto !important;
 }
 
-html[data-fx="lite"]
+html[data-fx="lite"]:not([data-cursor="on"])
   :is(a, button, label, select, summary, [role="button"], .cell, .wd, .cb) {
   cursor: pointer !important;
 }
@@ -694,9 +700,6 @@ html[data-fx="lite"] .rv {
   filter: none !important;
 }
 
-html[data-fx="lite"] .c-cursor {
-  display: none !important;
-}
 
 html[data-adhd="true"] :focus-visible {
   outline: 3px solid #6554c0 !important;

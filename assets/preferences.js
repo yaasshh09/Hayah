@@ -294,13 +294,15 @@
       );
     }
 
+    // The ring cursor runs in lite mode too: it only draws while catching up to the mouse,
+    // so it costs next to nothing. data-cursor tells the CSS when to bring the system cursor back.
     const cursor = document.querySelector(".c-cursor");
     if (
       cursor &&
-      root.dataset.fx === "full" &&
       root.dataset.adhd !== "true" &&
       window.matchMedia("(pointer: fine)").matches
     ) {
+      root.dataset.cursor = "on";
       if (cursor.showPopover && cursor.hasAttribute("popover")) {
         try {
           cursor.showPopover();
