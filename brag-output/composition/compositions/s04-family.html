@@ -123,18 +123,18 @@
 
         <audio id="s04-a0" src="assets/sfx/whoosh.wav" data-start="0.05" data-duration="0.7" data-track-index="130" data-hf-media-start-basis="local" data-volume="0.4"></audio>
         <audio id="s04-a1" src="assets/sfx/card-place-1.ogg" data-start="0.5" data-duration="0.5" data-track-index="131" data-hf-media-start-basis="local" data-volume="0.6"></audio>
-        <audio id="s04-a2" src="assets/sfx/card-place-2.ogg" data-start="1.0" data-duration="0.5" data-track-index="132" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-a2" src="assets/sfx/card-place-2.ogg" data-start="1" data-duration="0.5" data-track-index="132" data-hf-media-start-basis="local" data-volume="0.6"></audio>
         <audio id="s04-a3" src="assets/sfx/card-place-3.ogg" data-start="1.5" data-duration="0.5" data-track-index="131" data-hf-media-start-basis="local" data-volume="0.6"></audio>
-        <audio id="s04-a4" src="assets/sfx/card-place-4.ogg" data-start="2.0" data-duration="0.5" data-track-index="132" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-a4" src="assets/sfx/card-place-4.ogg" data-start="2" data-duration="0.5" data-track-index="132" data-hf-media-start-basis="local" data-volume="0.6"></audio>
         <audio id="s04-c1" src="assets/sfx/click_003.ogg" data-start="0.62" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
         <audio id="s04-c2" src="assets/sfx/click_003.ogg" data-start="1.12" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
         <audio id="s04-c3" src="assets/sfx/click_003.ogg" data-start="1.62" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
         <audio id="s04-c4" src="assets/sfx/click_003.ogg" data-start="2.12" data-duration="0.2" data-track-index="133" data-hf-media-start-basis="local" data-volume="0.5"></audio>
-        <audio id="s04-h1" src="assets/sfx/impactSoft_medium_004.ogg" data-start="2.5" data-duration="0.3" data-track-index="134" data-hf-media-start-basis="local" data-volume="0.6"></audio>
-        <audio id="s04-p1" src="assets/sfx/pop.wav" data-start="5.0" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
-        <audio id="s04-p2" src="assets/sfx/pop.wav" data-start="5.5" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
-        <audio id="s04-p3" src="assets/sfx/pop.wav" data-start="6.0" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
-        <audio id="s04-p4" src="assets/sfx/pop.wav" data-start="6.5" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-h1" src="assets/sfx/impactSoft_medium_004.ogg" data-start="2.25" data-duration="0.3" data-track-index="134" data-hf-media-start-basis="local" data-volume="0.6"></audio>
+        <audio id="s04-p1" src="assets/sfx/pop.wav" data-start="4.1" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-p2" src="assets/sfx/pop.wav" data-start="4.55" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-p3" src="assets/sfx/pop.wav" data-start="5" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
+        <audio id="s04-p4" src="assets/sfx/pop.wav" data-start="5.45" data-duration="0.22" data-track-index="135" data-hf-media-start-basis="local" data-volume="0.45"></audio>
       </div>
 
       <script>
@@ -169,12 +169,12 @@
             tl.fromTo("#s04-c" + i, { opacity: 0, y: -520, rotation: (i % 2 ? 1 : -1) * 24 }, { opacity: 1, y: 0, rotation: rest[i], duration: 1.1, ease: "elastic.out(1, 0.45)" }, t);
             tl.to("#s04-c" + i, { rotation: rest[i] * -0.6, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 2 }, t + 1.15);
           });
-          tl.fromTo("#s04 h2 span", { opacity: 0, y: 80, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)", stagger: 0.08 }, 2.45);
-          tl.fromTo("#s04-sub", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 3.4);
+          tl.fromTo("#s04 h2 span", { opacity: 0, y: 80, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)", stagger: 0.08 }, 2.2);
+          tl.fromTo("#s04-sub", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 2.9);
           F.forEach((p, i) => {
-            tl.fromTo("#s04-r" + i, { opacity: 0, scale: 0.5, xPercent: -50, y: 20 }, { opacity: 1, scale: 1, xPercent: -50, y: 0, duration: 0.4, ease: "back.out(2.4)" }, 5.0 + i * 0.5);
+            tl.fromTo("#s04-r" + i, { opacity: 0, scale: 0.5, xPercent: -50, y: 20 }, { opacity: 1, scale: 1, xPercent: -50, y: 0, duration: 0.4, ease: "back.out(2.4)" }, 4.1 + i * 0.45);
           });
-          tl.to("#s04 .copy", { y: -12, duration: 4.5, ease: "none" }, 3.4);
+          tl.to("#s04 .copy", { y: -12, duration: 4.5, ease: "none" }, 2.9);
 
           window.__timelines["s04"] = tl;
         })();
