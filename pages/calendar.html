@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -52,7 +52,7 @@
         background: #fff;
         color: var(--ink);
         font:
-          400 15px/1.6 "Instrument Sans",
+          400 15px/1.6 "Manrope",
           -apple-system,
           sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -64,8 +64,11 @@
       h2,
       h3,
       .d {
-        font-family: "Bricolage Grotesque", sans-serif;
+        font-family: "Manrope", sans-serif;
       }
+      body.calendar-page { background: #efedf3; }
+      body.calendar-page .au { display: none; }
+      body.calendar-page .top h1 { font-family: "Bricolage Grotesque", sans-serif !important; }
       a {
         color: inherit;
         text-decoration: none;
@@ -351,7 +354,7 @@
         color: var(--mut);
         margin-bottom: 12px;
         letter-spacing: 0;
-        font-family: "Instrument Sans";
+        font-family: "Manrope";
       }
       .category-legend {
         display: grid;
@@ -373,7 +376,7 @@
         background: var(--category-color);
       }
       .sd {
-        font: 600 32px/1.05 "Bricolage Grotesque";
+        font: 600 32px/1.05 "Manrope";
         letter-spacing: -0.045em;
       }
       .sh {
@@ -392,7 +395,7 @@
         animation: up 0.45s var(--ease) both;
       }
       .ev b {
-        font: 600 15px/1.2 "Bricolage Grotesque";
+        font: 600 15px/1.2 "Manrope";
         letter-spacing: -0.02em;
       }
       .ev small {
@@ -470,13 +473,13 @@
         display: grid;
         place-items: center;
         text-align: center;
-        font: 700 16px/1 "Bricolage Grotesque";
+        font: 700 16px/1 "Manrope";
         color: color-mix(in srgb, var(--c) 50%, #111);
         flex: none;
       }
       .up .dt small {
         display: block;
-        font: 500 9.5px "Instrument Sans";
+        font: 500 9.5px "Manrope";
         text-transform: uppercase;
         letter-spacing: 0.04em;
       }
@@ -693,7 +696,7 @@
         height: 16px;
       }
       .mt {
-        font: 600 clamp(20px, 2.2vw, 30px)/1.1 "Bricolage Grotesque";
+        font: 600 clamp(20px, 2.2vw, 30px)/1.1 "Manrope";
         letter-spacing: -0.04em;
         margin: 0 6px 0 8px;
         white-space: nowrap;
@@ -885,7 +888,7 @@
         border-radius: 50%;
         display: grid;
         place-items: center;
-        font: 700 27px "Bricolage Grotesque";
+        font: 700 27px "Manrope";
         letter-spacing: -0.04em;
         color: #2c2350;
         background: rgba(159, 143, 224, 0.32);
@@ -1195,7 +1198,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 0 2px 0 6px;
-        font: 600 17px "Bricolage Grotesque";
+        font: 600 17px "Manrope";
         letter-spacing: -0.03em;
       }
       @media (max-width: 1000px) {
@@ -1577,10 +1580,25 @@
       let V = { y: now.getFullYear(), m: now.getMonth() },
         sel = TODAY,
         on = new Set(Object.keys(CAT)),
-        role =
-          new URLSearchParams(location.search).get("role") === "child"
-            ? "child"
-            : "adult";
+        role = (() => {
+          const requestedRole = new URLSearchParams(location.search).get("role");
+          let savedRole;
+          try {
+            savedRole = localStorage.getItem("hayati.role");
+          } catch (e) {}
+          if (requestedRole === "child" || requestedRole === "adult") {
+            try {
+              localStorage.setItem("hayati.role", requestedRole);
+            } catch (e) {}
+            return requestedRole;
+          }
+          if (savedRole === "child" || savedRole === "adult") return savedRole;
+          const initialRole = requestedRole === "child" ? "child" : "adult";
+          try {
+            localStorage.setItem("hayati.role", initialRole);
+          } catch (e) {}
+          return initialRole;
+        })();
       const hjF = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", {
           day: "numeric",
           month: "long",
@@ -1919,6 +1937,9 @@
       };
       function setRole(r) {
         role = r;
+        try {
+          localStorage.setItem("hayati.role", r);
+        } catch (e) {}
         document.body.classList.toggle("child", r === "child");
         document
           .querySelectorAll(".seg button")
@@ -1970,7 +1991,6 @@
       addEventListener("keydown", (e) => {
         if (e.key === "Escape" && !$("#dlg").open) openD(false);
       });
-      // Keep the shared custom cursor above the modal dialog (top layer).
       const cur = $("#cur");
       const raise = () => {
         if (!cur.showPopover || !cur.hasAttribute("popover")) return;

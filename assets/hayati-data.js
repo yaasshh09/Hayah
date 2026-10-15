@@ -1,5 +1,3 @@
-// Shared family data for every Hayati page: occasions, family, and the finance store.
-// Everything lives in this browser's localStorage. Works in Node too (scripts/check-finance.js).
 (function (root) {
   const CAT = {
     religious: ["Religious", "#9F8FE0"],
@@ -8,16 +6,15 @@
     school: ["School", "#6F9BEA"],
     family: ["Family", "#EE7FAA"],
   };
-  // Household spending categories: [label, colour, default monthly limit in AED]
   const SPEND = {
-    groceries: ["Groceries", "#3FBF9C", 3500],
-    bills: ["Bills & utilities", "#6F9BEA", 2400],
-    school: ["School", "#9F8FE0", 2000],
-    transport: ["Transport", "#E8B765", 1200],
-    health: ["Health", "#EE7FAA", 600],
-    home: ["Home", "#B3A4F2", 800],
-    dining: ["Eating out", "#F29E6D", 900],
-    giving: ["Giving & Sadaqa", "#5FC9A8", 500],
+    groceries: ["Groceries", "#B97C73", 3500],
+    bills: ["Bills & utilities", "#BC9D72", 2400],
+    school: ["School", "#8C7FC1", 2000],
+    transport: ["Transport", "#75A963", 1200],
+    health: ["Health", "#6FA6B1", 600],
+    home: ["Home", "#5D87C4", 800],
+    dining: ["Eating out", "#AD8294", 900],
+    giving: ["Giving & Sadaqa", "#B08BAA", 500],
   };
   const FAM = [
     ["Ahmed", "Father", "#9F8FE0"],
@@ -98,8 +95,6 @@
   const aed = (n) =>
     "AED " + Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
-  // Demo data is generated relative to "now" so the prototype always looks current.
-  // [day of month, category, amount, who, note]
   const MONTH_TEMPLATE = [
     [1, "bills", 1150, "Ahmed", "DEWA electricity & water"],
     [1, "bills", 389, "Ahmed", "Home internet"],
@@ -217,7 +212,6 @@
     store.set(EVENTS_KEY, JSON.stringify(list));
   }
 
-  // All occasions with live budgets: planned (b), saved (s), spent from tagged expenses.
   function events(st = load()) {
     const spent = {};
     st.expenses.forEach((x) => {
@@ -279,7 +273,6 @@
     st.occ[k] = { b: money(b), s: e.s };
     return save(st);
   }
-  // Put money aside toward a goal or an occasion.
   function contribute(st, kind, ref, amt) {
     if (!validAmount(amt)) throw new Error("Enter an amount.");
     if (kind === "goal") {
@@ -304,7 +297,6 @@
     return save(st);
   }
 
-  // Kid jars are derived from the log, so they can never drift out of sync.
   function kidJars(st) {
     const j = { save: 0, spend: 0, give: 0, received: 0, given: 0, spent: 0 };
     st.kid.log.forEach((x) => {
@@ -341,7 +333,6 @@
     return save(st);
   }
 
-  // Compact family data for Hayati AI. Children never receive the parents' budgets.
   function aiContext(role, st = load()) {
     const t = today(),
       jars = kidJars(st),

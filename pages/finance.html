@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -47,10 +47,10 @@
         }
       }
       body {
-        background: #fff;
+        background: var(--hayati-page, #fff);
         color: var(--ink);
         font:
-          400 15px/1.6 "Instrument Sans",
+          400 15px/1.6 "Manrope",
           -apple-system,
           sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -58,11 +58,14 @@
         isolation: isolate;
         min-height: 100vh;
       }
+      body.finance-page { background: #efedf3; }
+      .finance-page .au { display: none; }
       h1,
       h2,
       h3 {
-        font-family: "Bricolage Grotesque", sans-serif;
+        font-family: "Manrope", sans-serif;
       }
+      body.finance-page #gr { font-family: "Bricolage Grotesque", sans-serif !important; }
       a {
         color: inherit;
         text-decoration: none;
@@ -124,7 +127,7 @@
         }
       }
 
-      /* Nav: same as the dashboard */
+      
       nav {
         position: fixed;
         top: env(safe-area-inset-top, 0px);
@@ -250,7 +253,7 @@
         }
       }
 
-      /* Page frame */
+      
       .page {
         padding: 80px 6vw 90px;
       }
@@ -269,7 +272,7 @@
         align-items: flex-end;
         gap: 24px;
         flex-wrap: wrap;
-        padding: clamp(40px, 4.4vw, 72px) 0 clamp(34px, 3.6vw, 58px);
+        padding: clamp(28px, 3vw, 44px) 0 clamp(24px, 2.4vw, 36px);
         animation: up 0.7s var(--ease) both;
       }
       @keyframes up {
@@ -311,7 +314,7 @@
       .mon b {
         min-width: 128px;
         text-align: center;
-        font: 600 15px "Bricolage Grotesque";
+        font: 600 15px "Manrope";
         letter-spacing: -0.02em;
       }
       .ic {
@@ -368,14 +371,14 @@
         background: rgba(0, 0, 0, 0.09);
       }
 
-      /* Stats strip */
+      
       .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         border-bottom: 1px solid var(--rule);
       }
       .sx {
-        padding: clamp(24px, 2.6vw, 40px) 24px clamp(24px, 2.6vw, 40px) 0;
+        padding: clamp(18px, 2vw, 28px) 20px clamp(18px, 2vw, 28px) 0;
         min-width: 0;
       }
       .sx + .sx {
@@ -387,7 +390,7 @@
         color: var(--mut);
       }
       .sn {
-        font: 600 clamp(26px, 3vw, 50px)/1.05 "Bricolage Grotesque";
+        font: 600 clamp(26px, 3vw, 50px)/1.05 "Manrope";
         letter-spacing: -0.05em;
         margin: 10px 0 6px;
         white-space: nowrap;
@@ -414,12 +417,12 @@
         }
       }
 
-      /* Section tabs */
+      
       .tabbar {
         display: flex;
         gap: 6px;
         padding: 4px;
-        margin-top: clamp(24px, 2.6vw, 38px);
+        margin-top: clamp(18px, 2vw, 26px);
         width: fit-content;
         max-width: 100%;
         overflow-x: auto;
@@ -442,12 +445,12 @@
         color: #fff;
       }
 
-      /* Cards */
+      
       .g12 {
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
-        gap: 18px;
-        padding: clamp(20px, 2.4vw, 34px) 0;
+        gap: 16px;
+        padding: 20px 0 30px;
         align-items: start;
         animation: up 0.5s var(--ease) both;
       }
@@ -463,18 +466,18 @@
       .c12 {
         grid-column: span 12;
       }
-      @media (max-width: 1100px) {
+      @media (max-width: 900px) {
         .c4 {
           grid-column: span 6;
         }
       }
-      @media (max-width: 1000px) {
+      @media (max-width: 760px) {
         .c5,
         .c7 {
           grid-column: span 12;
         }
       }
-      @media (max-width: 640px) {
+      @media (max-width: 560px) {
         .c4 {
           grid-column: span 12;
         }
@@ -482,8 +485,8 @@
       .card {
         position: relative;
         background: rgba(255, 255, 255, 0.72);
-        border-radius: 26px;
-        padding: clamp(20px, 2vw, 30px);
+        border-radius: 22px;
+        padding: clamp(18px, 1.6vw, 24px);
         backdrop-filter: blur(22px);
         -webkit-backdrop-filter: blur(22px);
         box-shadow:
@@ -493,27 +496,27 @@
       }
       .card h3 {
         font:
-          500 13px "Instrument Sans",
+          500 13px "Manrope",
           sans-serif;
         color: var(--mut);
-        margin-bottom: 18px;
+        margin-bottom: 14px;
         display: flex;
         justify-content: space-between;
         align-items: baseline;
         gap: 12px;
       }
       .card h3 em {
-        font: 600 13px "Instrument Sans";
+        font: 600 13px "Manrope";
         font-style: normal;
         color: var(--ink);
       }
       .big {
-        font: 600 clamp(26px, 2.6vw, 38px)/1 "Bricolage Grotesque";
+        font: 600 clamp(26px, 2.6vw, 38px)/1 "Manrope";
         letter-spacing: -0.05em;
         margin: -4px 0 18px;
       }
       .big small {
-        font: 400 13px "Instrument Sans";
+        font: 400 13px "Manrope";
         letter-spacing: 0;
         color: var(--mut);
         margin-left: 8px;
@@ -533,6 +536,12 @@
         background: linear-gradient(90deg, var(--lav), var(--mint));
         transform-origin: left;
         animation: grow 0.8s var(--ease) both;
+      }
+      .row .bf {
+        background: var(--c);
+      }
+      .row .bar.over .bf {
+        background: var(--c);
       }
       .bar.over .bf {
         background: linear-gradient(90deg, #f0a07a, var(--red));
@@ -599,7 +608,7 @@
         text-align: center;
       }
 
-      /* Share-of-spending strip */
+      
       .share {
         display: flex;
         height: 14px;
@@ -639,7 +648,7 @@
         color: #1f6f58;
       }
 
-      /* Expense list */
+      
       .filters {
         display: flex;
         gap: 10px;
@@ -675,7 +684,7 @@
       }
       .xd {
         text-align: center;
-        font: 700 17px/1 "Bricolage Grotesque";
+        font: 700 17px/1 "Manrope";
         padding: 8px 0;
         border-radius: 14px;
         background: color-mix(in srgb, var(--c) 16%, #fff);
@@ -683,7 +692,7 @@
       }
       .xd small {
         display: block;
-        font: 500 9.5px "Instrument Sans";
+        font: 500 9.5px "Manrope";
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-top: 2px;
@@ -701,7 +710,7 @@
         color: var(--mut);
       }
       .xa {
-        font: 600 15px "Bricolage Grotesque";
+        font: 600 15px "Manrope";
         white-space: nowrap;
       }
       .del {
@@ -723,12 +732,12 @@
         height: 15px;
       }
 
-      /* Goals */
+      
       .goal .big {
         margin: 6px 0 4px;
       }
       .goal-t {
-        font: 600 20px/1.2 "Bricolage Grotesque";
+        font: 600 20px/1.2 "Manrope";
         letter-spacing: -0.03em;
       }
       .acts {
@@ -752,7 +761,7 @@
         border-color: var(--lav);
       }
 
-      /* Occasions */
+      
       .oc {
         display: grid;
         grid-template-columns: 52px minmax(0, 1fr) auto;
@@ -782,7 +791,7 @@
         align-items: stretch;
       }
 
-      /* Child: jars */
+      
       .jars {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -827,7 +836,7 @@
         color: color-mix(in srgb, var(--c) 50%, #111);
       }
       .jar b {
-        font: 600 clamp(24px, 2.4vw, 34px)/1.1 "Bricolage Grotesque";
+        font: 600 clamp(24px, 2.4vw, 34px)/1.1 "Manrope";
         letter-spacing: -0.04em;
       }
       .jar span {
@@ -866,7 +875,7 @@
         text-align: center;
       }
       .rc b {
-        font: 600 38px/1 "Bricolage Grotesque";
+        font: 600 38px/1 "Manrope";
         letter-spacing: -0.05em;
       }
       .rc small {
@@ -877,7 +886,7 @@
         text-align: center;
       }
 
-      /* Ask Hayati */
+      
       .ask h2 {
         font-size: clamp(24px, 2.4vw, 36px);
         font-weight: 600;
@@ -914,7 +923,7 @@
         color: #fff;
       }
 
-      /* Dialog + toast */
+      
       dialog {
         width: min(440px, calc(100vw - 32px));
         max-height: calc(100dvh - 32px);
@@ -1008,6 +1017,15 @@
         border-color: var(--lav);
         background: rgba(159, 143, 224, 0.18);
       }
+      html[data-theme="dark"] .c-cursor {
+        border-color: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.16);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 8px rgba(255, 255, 255, 0.22);
+      }
+      html[data-theme="dark"] .c-cursor.hover {
+        border-color: #d6ccff;
+        background: rgba(214, 204, 255, 0.22);
+      }
       @media (max-width: 560px) {
         .tabbar {
           width: 100%;
@@ -1053,7 +1071,7 @@
         animation: none;
       }
 
-      /* Dark mode: shares the dashboard rules via body.dashboard-page; these cover finance-only parts. */
+      
       html[data-theme="dark"] body.dashboard-page #nav.s {
         background: var(--hayati-nav);
         border-color: transparent;
@@ -1123,6 +1141,510 @@
       html[data-theme="dark"] .finance-page .tent {
         color: #e3c47f;
         background: rgba(232, 183, 101, 0.14);
+      }
+      
+      .finance-page .ask {
+        display: grid;
+        grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+        align-items: center;
+        column-gap: 28px;
+        row-gap: 4px;
+        padding-block: 20px;
+      }
+      .finance-page .ask h2 { font-size: clamp(22px, 2vw, 30px); }
+      .finance-page .ask p { margin: 6px 0 0; }
+      .finance-page .ask .sg { grid-column: 2; grid-row: 1 / span 2; }
+      .finance-page .ask .sg a { height: 34px; padding-inline: 13px; }
+      .finance-page .feature-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 4px;
+      }
+      .finance-page .feature-heading h2 {
+        font: 600 20px/1.2 "Manrope";
+        letter-spacing: -.03em;
+      }
+      
+      .finance-page #app .card {
+        border: 0;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px -26px rgba(27, 36, 32, .38);
+      }
+      .finance-page #app .card h3 {
+        font-family: "Manrope", sans-serif !important;
+        font-weight: 500 !important;
+        letter-spacing: -.025em !important;
+      }
+      .finance-page #app .g12.tools-grid { align-items: stretch; }
+      .finance-page .tools-grid .tool-card { height: 100%; }
+      .finance-page .acts { margin-top: 14px; }
+      .finance-page .card .alert { margin-top: 14px; }
+      .finance-page .new { min-height: 160px; border-radius: 22px; }
+      .finance-page .jar { min-height: 148px; }
+      @media (max-width: 760px) {
+        .finance-page .ask { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+        .finance-page .ask .sg { grid-column: 1; grid-row: auto; }
+      }
+      @media (max-width: 560px) {
+        .finance-page .page { padding-inline: 16px; }
+        .finance-page .g12 { gap: 12px; padding-block: 16px 24px; }
+        .finance-page .card { border-radius: 18px; }
+      }
+      
+      .finance-page #app .budget-grid > .card {
+        position: relative;
+        padding: 20px 0;
+        border-top: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+      .finance-page #app .budget-grid > .card::before { display: none; }
+      .finance-page #app .budget-grid > .card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 12px;
+        left: 12px;
+        height: 1px;
+        background: var(--rule);
+        pointer-events: none;
+      }
+      .finance-page #app .budget-grid > .card h3 {
+        margin-bottom: 14px;
+        letter-spacing: .035em;
+      }
+      .finance-page #app .budget-grid > .card.c7 {
+        padding-right: 18px;
+      }
+      .finance-page #app .budget-grid > .card.c5 {
+        padding-left: 24px;
+        padding-right: 18px;
+        border-left: 0;
+      }
+      .finance-page #app .budget-grid > .card.c5::before {
+        content: "";
+        display: block;
+        position: absolute;
+        inset: 18px auto 18px 0;
+        width: 1px;
+        background: var(--rule);
+        opacity: 1;
+        pointer-events: none;
+      }
+      .finance-page #app .budget-grid > .card.ask {
+        padding-block: 20px;
+      }
+      .finance-page #app .budget-grid > .card.goal {
+        display: flex;
+        flex-direction: column;
+        min-height: 218px;
+        padding: 22px;
+        border: 1px solid rgba(24, 24, 38, .07);
+        border-radius: 20px;
+        background: rgba(249, 249, 251, .88);
+        box-shadow: 0 8px 24px -22px rgba(18, 18, 28, .4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      .finance-page #app .budget-grid > .card.goal::after { display: none; }
+      .finance-page #app .budget-grid > .card.goal h3 {
+        margin-bottom: 12px;
+        color: #777781;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+      .finance-page #app .budget-grid > .card.goal .goal-t {
+        min-height: 25px;
+        font-size: 19px;
+      }
+      .finance-page #app .budget-grid > .card.goal .big {
+        margin: 11px 0 8px;
+        font-size: clamp(25px, 2.2vw, 32px);
+      }
+      .finance-page #app .budget-grid > .card.goal .bar {
+        height: 6px;
+        margin-top: 4px;
+        background: rgba(0, 0, 0, .07);
+      }
+      .finance-page #app .budget-grid > .card.goal .bf {
+        background: #718b7d;
+      }
+      .finance-page #app .budget-grid > .card.goal .acts {
+        margin-top: auto;
+        padding-top: 18px;
+      }
+      .finance-page #app .budget-grid > .feature-heading {
+        position: relative;
+        margin-top: 4px;
+        padding-top: 18px;
+      }
+      .finance-page #app .budget-grid > .feature-heading::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 12px;
+        left: 12px;
+        height: 1px;
+        background: var(--rule);
+      }
+      .finance-page #app .budget-grid > .new {
+        min-height: 218px;
+        border: 1px dashed rgba(24, 24, 38, .16);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, .42);
+        color: #777781;
+        transition: background .2s ease, border-color .2s ease, color .2s ease;
+      }
+      .finance-page #app .budget-grid > .new:hover {
+        border-color: rgba(24, 24, 38, .3);
+        background: rgba(255, 255, 255, .72);
+        color: var(--ink);
+      }
+      @media (max-width: 760px) {
+        .finance-page #app .budget-grid > .card.c7 { padding-right: 0; }
+        .finance-page #app .budget-grid > .card.c5 {
+          padding-left: 0;
+          padding-right: 0;
+          border-left: 0;
+        }
+        .finance-page #app .budget-grid > .card.c5::before { display: none; }
+      }
+      
+      .finance-page .occasion-dashboard {
+        display: grid;
+        grid-template-columns: minmax(190px, .72fr) minmax(0, 1.8fr);
+        column-gap: 0;
+        align-items: center;
+        padding: clamp(20px, 2.4vw, 32px);
+        background: linear-gradient(120deg, rgba(255,255,255,.88), rgba(246,243,255,.72) 58%, rgba(236,250,245,.72));
+      }
+      .finance-page .occasion-fund {
+        position: relative;
+        min-width: 0;
+        padding-right: clamp(18px, 2vw, 30px);
+        text-align: center;
+        border-right: 1px solid var(--rule);
+      }
+      .finance-page .occasion-fund-head,
+      .finance-page .occasion-chart-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        text-align: left;
+      }
+      .finance-page .occasion-fund-head { transform: translateY(-4px); }
+      .finance-page .occasion-chart-wrap { padding-left: clamp(18px, 2vw, 30px); }
+      .finance-page .occasion-kicker {
+        color: var(--mut);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .finance-page .occasion-fund-head a {
+        color: #686575;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .finance-page .occasion-fund-head a:hover { color: var(--ink); }
+      .finance-page .occasion-ring {
+        width: 132px;
+        margin: 8px auto 0;
+      }
+      .finance-page .occasion-ring svg { display: block; width: 100%; overflow: visible; }
+      .finance-page .occasion-ring circle {
+        fill: none;
+        stroke-width: 9;
+      }
+      .finance-page .occasion-ring-track { stroke: rgba(159,143,224,.16); }
+      .finance-page .occasion-ring-value {
+        stroke: var(--lav);
+        stroke-linecap: round;
+        stroke-dasharray: 289.03;
+        stroke-dashoffset: var(--offset);
+        transform: rotate(-90deg);
+        transform-origin: 70px 70px;
+      }
+      .finance-page .occasion-ring-pct {
+        fill: var(--ink);
+        font: 600 26px "Manrope";
+        letter-spacing: -.05em;
+      }
+      .finance-page .occasion-ring-label {
+        fill: var(--mut);
+        font: 11px "Manrope";
+      }
+      .finance-page .occasion-total {
+        margin-top: -3px;
+        font: 600 22px/1.1 "Manrope";
+        letter-spacing: -.04em;
+      }
+      .finance-page .occasion-total span {
+        display: block;
+        margin-top: 5px;
+        color: var(--mut);
+        font: 12px "Manrope";
+        letter-spacing: 0;
+      }
+      .finance-page .occasion-remaining {
+        margin-top: 10px;
+        color: var(--mut);
+        font-size: 12px;
+      }
+      .finance-page .occasion-remaining span { color: var(--ink); font-weight: 600; }
+      .finance-page .occasion-chart-wrap { min-width: 0; }
+      .finance-page .occasion-chart-head h3 {
+        margin: 3px 0 0;
+        color: var(--ink);
+        font: 600 20px/1.15 "Manrope";
+        letter-spacing: -.03em;
+      }
+      .finance-page .occasion-legend {
+        display: flex;
+        gap: 14px;
+        color: var(--mut);
+        font-size: 11px;
+      }
+      .finance-page .occasion-legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .finance-page .occasion-legend i { width: 8px; height: 8px; border-radius: 3px; }
+      .finance-page .legend-plan { background: rgba(159,143,224,.28); }
+      .finance-page .legend-saved { background: #9f8fe0; }
+      .finance-page .occasion-chart {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        overflow: visible;
+      }
+      .finance-page .occasion-chart line { stroke: rgba(40,35,60,.08); stroke-width: 1; }
+      .finance-page .occasion-chart .plan-bar { fill: rgba(159,143,224,.28); }
+      .finance-page .occasion-chart .saved-bar { fill: #9f8fe0; }
+      .finance-page .occasion-chart .no-plan { fill: none; stroke: #c8c8c3; stroke-width: 1.5; }
+      .finance-page .occasion-chart .month-label { fill: #77747f; font: 11px "Manrope"; }
+      .finance-page .occasion-chart-note {
+        margin-top: -3px;
+        color: var(--mut);
+        font-size: 11px;
+      }
+      .finance-page .occasion-list > h3 { margin-bottom: 4px; }
+      .finance-page .oc.occasion-row {
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 14px;
+        padding: 13px 0;
+      }
+      .finance-page .occasion-detail { min-width: 0; }
+      .finance-page .occasion-detail .rt { align-items: center; }
+      .finance-page .occasion-category {
+        flex: none;
+        color: var(--mut);
+        font-size: 11px;
+      }
+      .finance-page .occasion-progress {
+        height: 5px;
+        margin-top: 8px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: rgba(0,0,0,.06);
+      }
+      .finance-page .occasion-progress span {
+        display: block;
+        width: var(--w);
+        height: 100%;
+        border-radius: inherit;
+        background: var(--c);
+      }
+      .finance-page .occasion-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 6px;
+        color: #55555c;
+        font-size: 11px;
+      }
+      .finance-page .occasion-meta i { color: #a09da8; font-style: normal; }
+      .finance-page .occasion-status { color: #98743b; }
+      .finance-page .occasion-row .acts {
+        flex-wrap: nowrap;
+        align-items: center;
+      }
+      @media (max-width: 760px) {
+        .finance-page .occasion-dashboard { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+        .finance-page .occasion-dashboard { row-gap: 22px; }
+        .finance-page .occasion-fund { padding: 0 0 18px; border-right: 0; border-bottom: 1px solid var(--rule); }
+        .finance-page .occasion-chart-wrap { padding-left: 0; }
+      }
+      @media (max-width: 560px) {
+        .finance-page .oc.occasion-row { grid-template-columns: 46px minmax(0, 1fr); gap: 10px; }
+        .finance-page .occasion-row .acts { grid-column: 2; }
+        .finance-page .occasion-category { display: none; }
+        .finance-page .occasion-meta { font-size: 10px; }
+        .finance-page .occasion-dashboard { padding: 18px; }
+        .finance-page .occasion-fund-head { align-items: flex-start; }
+      }
+      html[data-theme="dark"] .finance-page .occasion-dashboard {
+        background: linear-gradient(120deg, rgba(37,35,45,.94), rgba(48,43,66,.88) 58%, rgba(31,51,47,.9));
+      }
+      html[data-theme="dark"] .finance-page .occasion-ring-track { stroke: rgba(255,255,255,.1); }
+      html[data-theme="dark"] .finance-page .occasion-meta { color: #c6c4cf; }
+      html[data-theme="dark"] .finance-page .occasion-chart line { stroke: rgba(255,255,255,.07); }
+      html[data-theme="dark"] .finance-page .occasion-chart .plan-bar { fill: rgba(159,143,224,.25); }
+      html[data-theme="dark"] .finance-page .occasion-chart .saved-bar { fill: #9f8fe0; }
+      html[data-theme="dark"] .finance-page #app .budget-grid > .card.goal {
+        border-color: rgba(255,255,255,.08);
+        background: rgba(255,255,255,.045);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid > .new {
+        border-color: rgba(255,255,255,.16);
+        background: rgba(255,255,255,.025);
+        color: var(--hayati-muted);
+      }
+      
+      html[data-theme="dark"] .finance-page #app .budget-grid > .card:not(.goal) {
+        color: #f0eff3;
+        background: #17171b !important;
+        box-shadow: none !important;
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid .alert {
+        padding-inline: 0;
+        border-radius: 0;
+        background: #17171b !important;
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid > .card:not(.goal)::after,
+      html[data-theme="dark"] .finance-page #app .budget-grid > .card.c5::before,
+      html[data-theme="dark"] .finance-page #app .budget-grid .row {
+        border-color: rgba(255,255,255,.105);
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid > .card:not(.goal)::after,
+      html[data-theme="dark"] .finance-page #app .budget-grid > .card.c5::before {
+        background: rgba(255,255,255,.105);
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid .bar {
+        background: rgba(255,255,255,.11);
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid .bm {
+        color: #aaa8b2;
+      }
+      html[data-theme="dark"] .finance-page #app .budget-grid :is(.dot, .bf, .share i) {
+        filter: saturate(.78) brightness(.9);
+      }
+      
+      .finance-page #app .budget-grid > .card.goal {
+        position: relative;
+        grid-column: span 6;
+        min-height: 320px;
+        justify-content: flex-start;
+        overflow: hidden;
+        isolation: isolate;
+        padding: 30px clamp(24px, 4vw, 46px) 24px;
+        border: 0;
+        border-radius: 30px;
+        box-shadow: 0 18px 44px -32px rgba(31, 40, 33, .42);
+        text-align: center;
+      }
+      .finance-page #app .budget-grid > .card.goal.goal-0 {
+        background: linear-gradient(180deg, #f0d8c7 0%, #dcad97 48%, #b97c73 100%) !important;
+      }
+      .finance-page #app .budget-grid > .card.goal.goal-1 {
+        background: linear-gradient(180deg, #d8e9f1 0%, #9bcbe1 48%, #5d87c4 100%) !important;
+      }
+      .finance-page #app .budget-grid > .card.goal.goal-2 {
+        background: linear-gradient(180deg, #ebdce9 0%, #c8b9e4 48%, #8c7fc1 100%) !important;
+      }
+      .finance-page #app .budget-grid > .card.goal.goal-3 {
+        background: linear-gradient(180deg, #e8cfb1 0%, #c7d786 44%, #75b85d 100%) !important;
+      }
+      .finance-page #app .budget-grid > .card.goal::before {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: 0;
+        inset: auto 24px 12px;
+        height: 76px;
+        background-image: radial-gradient(rgba(255,255,255,.28) 1.25px, transparent 1.6px);
+        background-size: 14px 14px;
+        mask-image: linear-gradient(to bottom, transparent, #000 70%);
+        pointer-events: none;
+      }
+      .finance-page #app .budget-grid > .card.goal > * {
+        position: relative;
+        z-index: 1;
+      }
+      .finance-page #app .budget-grid > .card.goal h3 {
+        justify-content: center;
+        margin: 0 0 15px;
+        color: rgba(34, 43, 42, .76);
+        font: 500 14px/1.3 "Manrope", sans-serif;
+        letter-spacing: -.02em;
+        text-transform: none;
+      }
+      .finance-page #app .budget-grid > .card.goal .goal-t {
+        min-height: 0;
+        color: #202a29;
+        font: 400 clamp(21px, 2vw, 27px)/1.2 "Manrope", sans-serif;
+        letter-spacing: -.045em;
+      }
+      .finance-page #app .budget-grid > .card.goal .big {
+        margin: 28px 0 12px;
+        color: #fff;
+        font: 500 clamp(34px, 3.2vw, 44px)/1 "Manrope", sans-serif;
+        letter-spacing: -.055em;
+        text-shadow: 0 1px 12px rgba(28, 43, 39, .16);
+      }
+      .finance-page #app .budget-grid > .card.goal .big small {
+        color: rgba(255,255,255,.88);
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: -.01em;
+      }
+      .finance-page #app .budget-grid > .card.goal .bar {
+        width: min(100%, 520px);
+        height: 5px;
+        margin: 4px auto 0;
+        background: rgba(255,255,255,.34);
+      }
+      .finance-page #app .budget-grid > .card.goal .bf {
+        background: rgba(255,255,255,.94);
+      }
+      .finance-page #app .budget-grid > .card.goal .bm {
+        width: min(100%, 520px);
+        margin: 9px auto 0;
+        color: rgba(255,255,255,.92);
+        font-size: 11px;
+      }
+      .finance-page #app .budget-grid > .card.goal .bm span:first-child {
+        color: #17171b;
+      }
+      .finance-page #app .budget-grid > .card.goal .acts {
+        justify-content: center;
+        gap: 10px;
+        padding-top: 19px;
+      }
+      .finance-page #app .budget-grid > .card.goal .acts .btn.sm {
+        border: 0;
+        background: rgba(255,255,255,.82);
+        color: #24302f;
+        box-shadow: 0 4px 14px rgba(31,40,33,.1);
+      }
+      .finance-page #app .budget-grid > .card.goal .acts .ghost {
+        color: rgba(32,42,41,.78);
+      }
+      .finance-page #app .budget-grid > .new {
+        grid-column: span 6;
+        min-height: 320px;
+        border-radius: 30px;
+      }
+      @media (max-width: 760px) {
+        .finance-page #app .budget-grid > .card.goal,
+        .finance-page #app .budget-grid > .new { grid-column: span 12; }
       }
     </style>
     <link rel="stylesheet" href="/assets/preferences.css" />
@@ -1207,8 +1729,8 @@
           d.setMonth(d.getMonth() + n);
           return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
         },
-        bar = (p, over) =>
-          `<div class="bar${over ? " over" : ""}"><i class="bf" style="--w:${p}%"></i></div>`,
+        bar = (p, over, color) =>
+          `<div class="bar${over ? " over" : ""}"><i class="bf" style="--w:${p}%;${color ? `--c:${color};` : ""}"></i></div>`,
         ask = (q) => `/AI?role=${role}&q=${encodeURIComponent(q)}`,
         tile = (d, c) =>
           `<div class="xd" style="--c:${c}">${+d.slice(8)}<small>${fmt(d, { month: "short" })}</small></div>`,
@@ -1216,15 +1738,29 @@
         TABS = [
           ["budget", "Budget"],
           ["expenses", "Expenses"],
-          ["goals", "Goals"],
           ["occasions", "Occasions"],
         ];
 
       let st = H.load(),
-        role =
-          new URLSearchParams(location.search).get("role") === "child"
-            ? "child"
-            : "adult",
+        role = (() => {
+          const requestedRole = new URLSearchParams(location.search).get("role");
+          let savedRole;
+          try {
+            savedRole = localStorage.getItem("hayati.role");
+          } catch (e) {}
+          if (requestedRole === "child" || requestedRole === "adult") {
+            try {
+              localStorage.setItem("hayati.role", requestedRole);
+            } catch (e) {}
+            return requestedRole;
+          }
+          if (savedRole === "child" || savedRole === "adult") return savedRole;
+          const initialRole = requestedRole === "child" ? "child" : "adult";
+          try {
+            localStorage.setItem("hayati.role", initialRole);
+          } catch (e) {}
+          return initialRole;
+        })(),
         month = TODAY.slice(0, 7),
         tab = TABS.some((t) => t[0] === location.hash.slice(1))
           ? location.hash.slice(1)
@@ -1239,7 +1775,7 @@
         toast.t = setTimeout(() => el.classList.remove("on"), 2600);
       }
 
-      /* ---------- Adult view ---------- */
+      
       function header(sum) {
         if (role === "child") {
           $("#gr").innerHTML = `My <span>jars.</span>`;
@@ -1310,7 +1846,7 @@
         const rows = sum.cats
           .map((c) => {
             const p = pct(c.spent, c.limit);
-            return `<div class="row" style="--c:${c.color}"><div class="rt"><i class="dot"></i><span class="grow">${c.label}</span><button class="lnk" data-act="limit" data-k="${c.k}" aria-label="Edit ${c.label} limit">Edit limit</button></div>${bar(c.over ? 100 : p, c.over)}<div class="bm"><span>${aed(c.spent)} of ${aed(c.limit)}</span>${c.over ? `<span class="bad">Over by ${aed(c.spent - c.limit)}</span>` : `<span>${aed(Math.max(0, c.limit - c.spent))} left</span>`}</div></div>`;
+            return `<div class="row" style="--c:${c.color}"><div class="rt"><i class="dot"></i><span class="grow">${c.label}</span><button class="lnk" data-act="limit" data-k="${c.k}" aria-label="Edit ${c.label} limit">Edit limit</button></div>${bar(c.over ? 100 : p, c.over, c.color)}<div class="bm"><span>${aed(c.spent)} of ${aed(c.limit)}</span>${c.over ? `<span class="bad">Over by ${aed(c.spent - c.limit)}</span>` : `<span>${aed(Math.max(0, c.limit - c.spent))} left</span>`}</div></div>`;
           })
           .join("");
         const spentCats = sum.cats.filter((c) => c.spent > 0).sort((a, b) => b.spent - a.spent);
@@ -1334,7 +1870,9 @@
               ["Ramadan grocery plan", "Plan our grocery budget for Ramadan."],
             ],
             "Hayati AI reads this month's budgets and spending, so answers use your real numbers.",
-          )
+          ) +
+          `<div class="c12 feature-heading"><h2>Savings goals</h2></div>` +
+          goalCards()
         );
       }
 
@@ -1355,23 +1893,15 @@
         }</section>`;
       }
 
-      function goalsPanel() {
+      function goalCards() {
         return (
           st.goals
-            .map((g) => {
+            .map((g, index) => {
               const p = pct(g.saved, g.target);
-              return `<section class="card c4 goal"><h3>Savings goal ${p >= 100 ? "<em>Reached</em>" : ""}</h3><div class="goal-t">${esc(g.t)}</div><div class="big">${aed(g.saved)}<small>of ${aed(g.target)}</small></div>${bar(p)}<div class="bm"><span>${p}% saved</span><span>${aed(Math.max(0, g.target - g.saved))} to go</span></div><div class="acts"><button class="btn sm" data-act="save-goal" data-k="${g.id}">Add savings</button><button class="ghost" data-act="del-goal" data-k="${g.id}" aria-label="Remove goal ${esc(g.t)}">Remove</button></div></section>`;
+              return `<section class="card c4 goal goal-${index % 4}"><h3>Savings goal ${p >= 100 ? "<em>Reached</em>" : ""}</h3><div class="goal-t">${esc(g.t)}</div><div class="big">${aed(g.saved)}<small>of ${aed(g.target)}</small></div>${bar(p)}<div class="bm"><span>${p}% saved</span><span>${aed(Math.max(0, g.target - g.saved))} to go</span></div><div class="acts"><button class="btn sm" data-act="save-goal" data-k="${g.id}">Add savings</button><button class="ghost" data-act="del-goal" data-k="${g.id}" aria-label="Remove goal ${esc(g.t)}">Remove</button></div></section>`;
             })
             .join("") +
-          `<button class="c4 new" data-act="add-goal">+ New savings goal</button>` +
-          askCard(
-            "c12",
-            [
-              ["Reach a goal sooner", "How can we reach our savings goals sooner?"],
-              ["Hajj savings plan", "Make a monthly savings plan for Jiddo Khalid's Hajj."],
-            ],
-            "Ask for a month-by-month plan for any goal.",
-          )
+          `<button class="c4 new" data-act="add-goal">+ New savings goal</button>`
         );
       }
 
@@ -1382,21 +1912,41 @@
           list = H.events(st).filter((e) => e.d >= TODAY && e.d <= end),
           budgeted = list.filter((e) => e.b > 0),
           planned = budgeted.reduce((n, e) => n + e.b, 0),
-          saved = budgeted.reduce((n, e) => n + Math.min(e.s, e.b), 0);
+          saved = budgeted.reduce((n, e) => n + Math.min(e.s, e.b), 0),
+          fundedPct = pct(saved, planned),
+          months = Array.from({ length: 6 }, (_, i) => {
+            const d = new Date(TODAY.slice(0, 7) + "-01T00:00");
+            d.setMonth(d.getMonth() + i);
+            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+            const events = budgeted.filter((e) => e.d.slice(0, 7) === key);
+            return {
+              label: fmt(key + "-01", { month: "short" }),
+              plan: events.reduce((n, e) => n + e.b, 0),
+              saved: events.reduce((n, e) => n + Math.min(e.s, e.b), 0),
+            };
+          }),
+          chartMax = Math.max(1, ...months.map((m) => m.plan));
+        const chart = `<svg class="occasion-chart" viewBox="0 0 600 180" role="img" aria-label="Occasion budgets and saved amounts for the next six months">${months.map((m, i) => {
+          const x = 43 + i * 91,
+            planHeight = m.plan ? Math.max(4, Math.round((m.plan / chartMax) * 100)) : 0,
+            savedHeight = m.saved ? Math.max(4, Math.round((m.saved / chartMax) * 100)) : 0,
+            baseline = 136;
+          return `<g><title>${m.label}: ${aed(m.saved)} saved of ${aed(m.plan)} planned</title>${m.plan ? `<rect class="plan-bar" x="${x}" y="${baseline - planHeight}" width="36" height="${planHeight}"/><rect class="saved-bar" x="${x}" y="${baseline - savedHeight}" width="36" height="${savedHeight}"/>` : `<circle class="no-plan" cx="${x + 18}" cy="132" r="3"/>`}<text class="month-label" x="${x + 18}" y="165" text-anchor="middle">${m.label}</text></g>`;
+        }).join("")}</svg>`;
         const rows = list
           .map((e) => {
             const c = H.CAT[e.c] || ["Family", "#EE7FAA"],
               p = pct(e.s, e.b);
-            return `<div class="oc">${tile(e.d, c[1])}<div><div class="rt"><span class="grow">${esc(e.t)}${e.tent ? '<span class="tent">Tentative</span>' : ""}</span></div><div class="bm" style="margin-top:2px"><span>${c[0]}</span></div>${
+            return `<div class="oc occasion-row">${tile(e.d, c[1])}<div class="occasion-detail"><div class="rt"><span class="grow">${esc(e.t)}${e.tent ? '<span class="tent">Tentative</span>' : ""}</span><span class="occasion-category">${c[0]}</span></div>${
               e.b
-                ? `${bar(p)}<div class="bm"><span>${aed(e.s)} saved of ${aed(e.b)}${e.spent ? ` · ${aed(e.spent)} already spent` : ""}</span><span>${p >= 100 ? "Fully funded" : p + "%"}</span></div>`
-                : `<div class="bm"><span>No budget yet</span></div>`
+                ? `<div class="occasion-progress"><span style="--w:${p}%;--c:${c[1]}"></span></div><div class="occasion-meta"><span>${aed(e.s)} <i>of</i> ${aed(e.b)} saved${e.spent ? ` <i>·</i> ${aed(e.spent)} spent` : ""}</span><span>${p >= 100 ? "Funded" : p + "%"}</span></div>`
+                : `<div class="occasion-meta"><span>No budget set</span><span class="occasion-status">Needs a plan</span></div>`
             }</div><div class="acts"><button class="ghost" data-act="occ-budget" data-k="${esc(e.k)}">${e.b ? "Edit budget" : "Set budget"}</button>${e.b ? `<button class="btn sm" data-act="occ-save" data-k="${esc(e.k)}">Add savings</button>` : ""}</div></div>`;
           })
           .join("");
         return (
-          `<section class="card c7"><h3>Next 12 months <em>${list.length} occasions</em></h3>${rows || '<p class="empty">No upcoming occasions.</p>'}</section>` +
-          `<section class="card c5"><h3>Occasion funds</h3><div class="big">${aed(saved)}<small>saved of ${aed(planned)}</small></div>${bar(pct(saved, planned))}<div class="bm"><span>${budgeted.length} occasions with a budget</span><span>${aed(Math.max(0, planned - saved))} to go</span></div><p class="ss" style="margin-top:18px">Budgets here also appear on the Calendar and Dashboard. Add your own occasions from the <a href="/calendar" style="text-decoration:underline">Calendar</a>.</p></section>` +
+          `<section class="card c12 occasion-dashboard"><div class="occasion-fund"><div class="occasion-fund-head"><span class="occasion-kicker">Across ${budgeted.length} budgeted occasions</span><a href="/calendar">Manage calendar <span aria-hidden="true">↗</span></a></div><div class="occasion-ring"><svg viewBox="0 0 140 140" role="img" aria-label="${fundedPct}% of occasion budgets funded"><circle class="occasion-ring-track" cx="70" cy="70" r="46"/><circle class="occasion-ring-value" cx="70" cy="70" r="46" style="--offset:${289.03 * (1 - fundedPct / 100)}"/><text x="70" y="68" text-anchor="middle" class="occasion-ring-pct">${fundedPct}%</text><text x="70" y="86" text-anchor="middle" class="occasion-ring-label">funded</text></svg></div><div class="occasion-total">${aed(saved)}<span>saved of ${aed(planned)}</span></div><div class="occasion-remaining"><span>${aed(Math.max(0, planned - saved))}</span> left to fund</div></div><div class="occasion-chart-wrap"><div class="occasion-chart-head"><div><span class="occasion-kicker">Funding outlook</span><h3>Planned and saved</h3></div><div class="occasion-legend"><span><i class="legend-plan"></i>Planned</span><span><i class="legend-saved"></i>Saved</span></div></div>${chart}<p class="occasion-chart-note">Compare planned and saved funding for each month.</p></div></section>` +
+          `<section class="card c12 occasion-list"><h3>Upcoming occasions <em>${list.length} in the next 12 months</em></h3>${rows || '<p class="empty">No upcoming occasions.</p>'}</section>` +
           askCard(
             "c12",
             [
@@ -1408,7 +1958,7 @@
         );
       }
 
-      /* ---------- Child view ---------- */
+      
       function kidPanel() {
         const j = H.kidJars(st),
           g = st.kid.goal,
@@ -1451,11 +2001,11 @@
         const html =
           role === "child"
             ? kidPanel()
-            : { budget: budgetPanel, expenses: expensesPanel, goals: goalsPanel, occasions: occasionsPanel }[tab](sum);
-        $("#app").innerHTML = `<div class="g12">${html}</div>`;
+            : { budget: budgetPanel, expenses: expensesPanel, occasions: occasionsPanel }[tab](sum);
+        $("#app").innerHTML = `<div class="g12${tab === "budget" ? " budget-grid" : ""}">${html}</div>`;
       }
 
-      /* ---------- Forms ---------- */
+      
       const dlg = $("#dlg");
       let onSubmit = null;
       function field(f) {
@@ -1474,7 +2024,6 @@
         $("#ok").textContent = okLabel;
         onSubmit = submit;
         dlg.showModal();
-        // Keep the shared custom cursor above the modal (both live in the top layer).
         const cur = $("#cur");
         if (cur.showPopover && cur.hasAttribute("popover"))
           try {
@@ -1658,7 +2207,6 @@
         const sel = document.querySelector(`[data-filter="${f}"]`);
         if (sel) sel.focus();
       });
-      // Arrow keys move between section tabs.
       document.addEventListener("keydown", (e) => {
         if (!e.target.matches('[role="tab"]') || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
         const i = TABS.findIndex((t) => t[0] === tab),
@@ -1668,6 +2216,9 @@
 
       function setRole(r) {
         role = r;
+        try {
+          localStorage.setItem("hayati.role", r);
+        } catch (e) {}
         document
           .querySelectorAll(".seg button")
           .forEach((b) => b.setAttribute("aria-pressed", b.dataset.r === r));
@@ -1682,7 +2233,6 @@
             if (b.dataset.r !== role) setRole(b.dataset.r);
           }),
       );
-      // Pick up changes made in another tab (e.g. Calendar or Settings reset).
       addEventListener("storage", (e) => {
         if (e.key === H.KEY || e.key === "hayati-events" || e.key === null) {
           st = H.load();
@@ -1704,5 +2254,6 @@
       );
       setRole(role);
     </script>
+    <script src="/assets/finance-plus.js"></script>
   </body>
 </html>
